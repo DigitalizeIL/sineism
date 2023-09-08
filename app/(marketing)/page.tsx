@@ -1,6 +1,9 @@
 import Link from "next/link"
 import { TEXTS } from "@/app/(marketing)/consts"
-import { LOGIN_REDIRECT_URL } from "@/app/(authentication)/components/AuthForm/consts"
+import {
+    ADMIN_REDIRECT_URL,
+    LOGIN_REDIRECT_URL,
+} from "@/app/(authentication)/components/AuthForm/consts"
 import { Logo } from "@/components/Logo"
 import { USER_ROLES } from "@/app/(authentication)/lib/models/UserRole"
 import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
@@ -15,7 +18,7 @@ export default async function Page() {
 
                 <h1 className="text-4xl font-bold text-white">{TEXTS.title}</h1>
 
-                <div className="flex space-x-3">
+                <div className="flex space-3 gap-2">
                     <Link
                         href={LOGIN_REDIRECT_URL}
                         prefetch={false}
@@ -24,7 +27,7 @@ export default async function Page() {
                     </Link>
                     {session?.user?.role === USER_ROLES.admin ? (
                         <Link
-                            href={"/posts"}
+                            href={ADMIN_REDIRECT_URL}
                             prefetch={false}
                             className="text-xl text-stone-400 underline hover:text-stone-200 transition-all">
                             {TEXTS.admin}
