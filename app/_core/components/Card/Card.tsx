@@ -12,9 +12,20 @@ export const Card = (props: {
 }) => {
     return (
         <div className={clsx([Styles.card, props.style, props.className])}>
-            <div>
-                {props.title ? <h3>{props.title}</h3> : null}
-                {props.description ? <p>{props.description}</p> : null}
+            <div className={"flex flex-col items-start"}>
+                {props.title ? (
+                    <h3
+                        className={
+                            "text-lg font-medium text-stone-900 self-center"
+                        }>
+                        {props.title}
+                    </h3>
+                ) : null}
+                {props.description ? (
+                    <p className={"text-sm text-stone-700  ms-auto"}>
+                        {props.description}
+                    </p>
+                ) : null}
             </div>
             <div>{props.children}</div>
             {props.actions ? (

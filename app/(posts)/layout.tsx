@@ -1,5 +1,5 @@
 import { Metadata } from "next"
-import React from "react"
+import React, { ReactNode } from "react"
 import { METADATA } from "@/app/(posts)/consts"
 import { Header } from "@/components/Layout"
 import { UserProvider } from "@/app/(authentication)/context/UserProvider"
@@ -19,11 +19,12 @@ export const metadata: Metadata = {
     metadataBase: new URL(METADATA.base),
     themeColor: METADATA.themeColor,
 }
-export default async function Layout({
-    children,
-}: {
-    children: React.ReactNode
-}) {
+
+type LayoutProps = {
+    children: ReactNode
+}
+
+export default async function Layout({ children }: LayoutProps) {
     return (
         <UserProvider>
             <Header />

@@ -4,26 +4,39 @@ import { CrudRepository } from "@/lib/repositories/CrudRepository"
 import prisma from "@/lib/prisma"
 import { ICategory } from "@/app/(posts)/(modules)/categories/lib/interfaces/ICategory"
 
-export interface CategoriesDbRepository extends CrudRepository<ICategory> {}
+type CategoryWithoutPosts = Omit<ICategory, "posts">
+
+export interface CategoriesDbRepository extends CrudRepository<ICategory> {
+    get(id: number, withPosts?: boolean): Promise<ICategory | null>
+}
 
 export const createCategoriesDbRepository = (): CategoriesDbRepository => {
     const getAll = async (): Promise<ICategory[]> => {
         return prisma.category.findMany()
     }
 
-    const get = async (id: number): Promise<ICategory | null> => {
+    const get = async (
+        id: number,
+        withPosts?: boolean
+    ): Promise<ICategory | null> => {
         return prisma.category.findUnique({
             where: { id },
+            include: {
+                posts: withPosts,
+            },
         })
     }
 
-    const create = async (item: ICategory): Promise<ICategory> => {
+    const create = async (item: CategoryWithoutPosts): Promise<ICategory> => {
         return prisma.category.create({
             data: item,
         })
     }
 
-    const update = async (id: number, item: ICategory): Promise<ICategory> => {
+    const update = async (
+        id: number,
+        item: CategoryWithoutPosts
+    ): Promise<ICategory> => {
         return prisma.category.update({
             where: { id },
             data: item,
