@@ -9,7 +9,9 @@ export const CategoryItem = (props: CategoryItemProps) => {
     if (!props.category.id) return null
 
     return (
-        <div className={"flex gap-1"}>
+        <div
+            dir={"ltr"}
+            className={"flex gap-1"}>
             <span>{props.category.name}</span>
             <DeleteCategoryButton
                 className={"flex justify-center align-middle"}

@@ -1,7 +1,7 @@
 "use client"
 
 import { useQuery } from "@tanstack/react-query"
-import { getAllPosts } from "@/app/(posts)/(pages)/posts/queries/GetAllPosts"
+import { getAllPosts } from "@/app/(posts)/queries/GetAllPosts"
 import { Post } from "@/app/(posts)/lib/models/Post"
 import { useEffect, useState } from "react"
 

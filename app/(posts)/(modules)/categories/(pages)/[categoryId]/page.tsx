@@ -1,6 +1,6 @@
 import { categoriesService } from "@/app/(posts)/(modules)/categories/lib/services/CategoriesService"
 import { notFound } from "next/navigation"
-import { PostFeedItem } from "@/app/(posts)/(pages)/posts/components/PostsFeed/PostFeedItem"
+import { PostFeedItem } from "@/app/(posts)/components/PostsFeed/PostFeedItem"
 
 type PageProps = {
     params: {

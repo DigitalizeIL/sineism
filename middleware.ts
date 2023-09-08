@@ -26,5 +26,5 @@ export default withAuth({
 })
 
 export const config = {
-    matcher: ["/posts", "/management"],
+    matcher: ["/posts", "/categories/:categoryId*", "/management"],
 }
