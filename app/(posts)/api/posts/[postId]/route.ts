@@ -1,12 +1,7 @@
-import { createPostsService } from "@/app/(posts)/lib/services/PostsService"
-import { createPostsDbRepository } from "@/app/(posts)/lib/repositories/PostsDbRepository"
+import { postsService } from "@/app/(posts)/lib/services/PostsService"
 import { NextApiRequest } from "next"
 import { NextResponse } from "next/server"
 import { Post } from "@/app/(posts)/lib/models/Post"
-
-const postsService = createPostsService({
-    dbRepository: createPostsDbRepository(),
-})
 
 type ContextWithParams = NextApiRequest & {
     params: {

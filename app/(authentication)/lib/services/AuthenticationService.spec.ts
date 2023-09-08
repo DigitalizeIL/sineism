@@ -12,6 +12,7 @@ describe("AuthenticationService", () => {
         getUserByEmail: jest.fn(),
         createUser: jest.fn(),
         getUsers: jest.fn(),
+        getUserById: jest.fn(),
     }
 
     xit("should register", () => {
