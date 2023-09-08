@@ -9,7 +9,7 @@ import { Category } from "@/app/(posts)/(modules)/categories/lib/models/Category
 export interface CategoriesService {
     getAllCategories(): Promise<Category[]>
 
-    getCategory(id: number): Promise<Category | null>
+    getCategory(id: number, withPosts?: boolean): Promise<Category | null>
 
     createCategory(category: ICategory): Promise<Category>
 
@@ -31,9 +31,12 @@ export const createCategoriesService = (
         return categories.map((category) => Category.fromJson(category))
     }
 
-    const getCategory = async (id: number): Promise<Category | null> => {
-        const category = await dependencies.dbRepository.get(id)
-
+    const getCategory = async (
+        id: number,
+        withPosts?: boolean
+    ): Promise<Category | null> => {
+        const category = await dependencies.dbRepository.get(id, withPosts)
+        console.log(category)
         if (!category) return null
 
         return Category.fromJson(category)
