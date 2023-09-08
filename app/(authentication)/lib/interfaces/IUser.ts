@@ -1,7 +1,7 @@
 import { UserRole } from "@/app/(authentication)/lib/models/UserRole"
 
 export interface IUser {
-    id: string
+    id: number
     email: string
     name: string
     password?: string

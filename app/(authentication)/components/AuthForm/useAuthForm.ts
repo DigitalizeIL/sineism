@@ -26,12 +26,15 @@ export const useAuthForm = () => {
 
         try {
             const res = await NextSignIt("credentials", {
-                redirect: false,
                 ...credentials,
+                redirect: false,
+                callbackUrl: LOGIN_REDIRECT_URL,
             })
 
-            if (res?.error) {
-                return errorHandler(res.error)
+            if (!res || res?.error) {
+                return errorHandler(
+                    res?.error || "There was an error logging in"
+                )
             }
 
             router.refresh()

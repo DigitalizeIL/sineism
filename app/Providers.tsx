@@ -4,9 +4,8 @@ import React from "react"
 import axios from "axios"
 import { SessionProvider } from "next-auth/react"
 import { Session } from "next-auth"
-import { UserProvider } from "@/app/(authentication)/context/UserProvider"
 
-axios.defaults.baseURL = process.env.NEXT_PUBLIC_API_URL
+axios.defaults.baseURL = process.env.NEXT_PUBLIC_API_PREFIX
 
 type ProvidersProps = {
     children: React.ReactNode
