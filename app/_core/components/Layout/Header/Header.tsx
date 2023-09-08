@@ -3,13 +3,18 @@ import Styles from "./Header.module.css"
 import Link from "next/link"
 import clsx from "clsx"
 import { LINKS } from "@/components/Layout/Header/consts"
-import SignOut from "@/app/(authentication)/components/SignOut"
+import AuthStatus from "@/app/(authentication)/components/AuthStatus"
+import { Logo } from "@/components/Logo"
 
 export const Header = () => {
     const pathname = "disabled"
 
     return (
-        <div className={Styles.header}>
+        <div
+            className={
+                "flex justify-between items-center p-4 bg-primary shadow"
+            }>
+            <Logo />
             <nav className={Styles.menu}>
                 {LINKS.map((link) => (
                     <Link
@@ -24,7 +29,7 @@ export const Header = () => {
                 ))}
             </nav>
             <div>
-                <SignOut />
+                <AuthStatus />
             </div>
         </div>
     )
