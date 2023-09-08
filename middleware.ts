@@ -15,6 +15,7 @@ export default withAuth({
             const path = new URL(req.url).pathname
 
             switch (path) {
+                case "/posts":
                 case "/management":
                     return token?.role === USER_ROLES.admin
                 default:

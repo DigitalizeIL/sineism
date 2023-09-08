@@ -31,7 +31,10 @@ export default async function RootLayout({
     const session = await getServerSession()
 
     return (
-        <html lang="en">
+        <html
+            lang="en"
+            // dir={"rtl"}
+        >
             <body
                 className={inter.variable}
                 suppressHydrationWarning={true}>

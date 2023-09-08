@@ -12,20 +12,20 @@ export default function AuthStatus() {
     }, [session])
 
     return (
-        <div className={"flex items-center"}>
+        <div className={"text-end"}>
             {session?.data?.user?.name ? (
                 <>
-                    <span className={"text-sm me-2 text-slate-500"}>
+                    <span className={"text-sm text-slate-500"}>
                         {TEXTS.usernamePrefix} {session.data.user.name}
                     </span>
-                    <span className={"text-sm me-2 text-slate-500"}>-</span>
+                    <span className={"text-sm mx-2 text-slate-500"}>-</span>
                 </>
             ) : null}
-            <button
-                className="text-sm text-slate-400 hover:text-slate-200 transition-all"
+            <span
+                className="text-sm text-slate-400 hover:text-slate-200 transition-all whitespace-nowrap"
                 onClick={() => signOut({ callbackUrl: "/" })}>
                 {TEXTS.signOut}
-            </button>
+            </span>
         </div>
     )
 }

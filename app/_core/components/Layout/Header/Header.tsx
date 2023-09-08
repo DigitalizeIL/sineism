@@ -10,11 +10,13 @@ export const Header = async () => {
 
     return (
         <div
-            className={
-                "flex justify-between items-center px-4 bg-primary shadow h-14"
-            }>
-            <Logo />
-            <nav className={"h-14 flex items-center justify-center flex-1"}>
+            dir={"ltr"}
+            className={"grid grid-cols-3 px-4 bg-primary shadow h-14"}>
+            <div className={"flex items-center justify-start"}>
+                <Logo />
+            </div>
+
+            <nav className={"h-14 flex items-center justify-center"}>
                 {LINKS.map((link) => (
                     <HeaderLink
                         key={link.href}
@@ -32,7 +34,7 @@ export const Header = async () => {
                     />
                 ))}
             </nav>
-            <div>
+            <div className={"flex items-center justify-end"}>
                 <AuthStatus />
             </div>
         </div>

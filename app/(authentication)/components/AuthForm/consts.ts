@@ -15,5 +15,5 @@ export const TEXTS = {
 
 export const REGISTER_URL = "/register"
 export const LOGIN_URL = "/login"
-export const LOGIN_REDIRECT_URL = "/posts"
+export const LOGIN_REDIRECT_URL = "/categories/1"
 export const REGISTER_API_URL = "/api/register"

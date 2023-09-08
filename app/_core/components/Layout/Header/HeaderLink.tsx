@@ -17,8 +17,8 @@ export const HeaderLink = (props: {
     return (
         <Link
             className={clsx([
-                isActive && "border-b-2 border-b-secondary",
-                "hover:border-b-secondary hover:border-b-2",
+                isActive && "border-b-2 border-b-secondary text-secondary",
+                "hover:border-b-secondary hover:border-b-2 transition-all",
                 "h-full p-2 flex items-center justify-center",
                 "text-xs",
                 props.className,

@@ -16,7 +16,7 @@ export const PostFeedItem = async ({ post }: { post: Post }) => {
 
     return (
         <Card
-            className={"w-full max-w-lg"}
+            className={"w-full max-w-lg flex-col"}
             title={post.title}
             description={post.content}
             actions={
