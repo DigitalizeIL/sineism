@@ -1,10 +1,10 @@
 import "server-only"
 import {
     commentsDbRepository,
-    CommentsDbRepository
-} from "@/app/(posts)/(modules)/comments/lib/repositories/CommentsDbRepository";
-import {Comment} from "@/app/(posts)/(modules)/comments/lib/models/Comment";
-import {IComment} from "@/app/(posts)/(modules)/comments/lib/interfaces/IComment";
+    CommentsDbRepository,
+} from "@/app/(posts)/(modules)/comments/lib/repositories/CommentsDbRepository"
+import { Comment } from "@/app/(posts)/(modules)/comments/lib/models/Comment"
+import { IComment } from "@/app/(posts)/(modules)/comments/lib/interfaces/IComment"
 
 export interface CommentsService {
     getAllComments(postId: number): Promise<Comment[]>
@@ -34,8 +34,7 @@ export const createCommentsService = (
     const getComment = async (id: number): Promise<Comment | null> => {
         const comment = await dependencies.dbRepository.get(id)
 
-        if (!comment)
-            return null
+        if (!comment) return null
 
         return Comment.fromJson(comment)
     }
@@ -46,7 +45,10 @@ export const createCommentsService = (
         return Comment.fromJson(createdComment)
     }
 
-    const updateComment = async (id: number, comment: Comment): Promise<Comment> => {
+    const updateComment = async (
+        id: number,
+        comment: Comment
+    ): Promise<Comment> => {
         const updatedComment = await dependencies.dbRepository.update(
             id,
             comment.toJson()
@@ -70,4 +72,4 @@ export const createCommentsService = (
 
 export const commentsService = createCommentsService({
     dbRepository: commentsDbRepository,
-});
+})

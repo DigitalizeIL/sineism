@@ -13,7 +13,7 @@ export const Modal = (props: {
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.key === "Escape") {
-                handleOnClose()
+                props.onClose?.()
             }
         }
 
@@ -22,11 +22,7 @@ export const Modal = (props: {
         return () => {
             window.removeEventListener("keydown", handleKeyDown)
         }
-    }, [])
-
-    const handleOnClose = () => {
-        props.onClose?.()
-    }
+    }, [props])
 
     return (
         <div
@@ -43,7 +39,7 @@ export const Modal = (props: {
                         onClick={() => {
                             if (props.preventCloseOnOutsideClick) return
 
-                            handleOnClose()
+                            props.onClose?.()
                         }}
                     />
                 </div>
@@ -53,7 +49,7 @@ export const Modal = (props: {
                 </div>
 
                 <button
-                    onClick={handleOnClose}
+                    onClick={props.onClose}
                     className="absolute top-0 right-0 m-4">
                     <CgClose size={40} />
                 </button>

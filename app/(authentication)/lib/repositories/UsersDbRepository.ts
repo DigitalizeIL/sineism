@@ -1,8 +1,8 @@
 import "server-only"
 
-import {User} from "@/app/(authentication)/lib/models/User"
+import { User } from "@/app/(authentication)/lib/models/User"
 import prisma from "@/app/_core/lib/prisma"
-import {LoginCredentials} from "@/app/(authentication)/lib/types/AuthenticationTypes"
+import { LoginCredentials } from "@/app/(authentication)/lib/types/AuthenticationTypes"
 
 export interface UsersDbRepository {
     getUsers: () => Promise<User[]>
@@ -63,4 +63,3 @@ export const createUsersDbRepository = (): UsersDbRepository => {
 }
 
 export const usersDbRepository = createUsersDbRepository()
-

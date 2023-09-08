@@ -1,11 +1,6 @@
-import { createAuthenticationService } from "@/app/(authentication)/lib/services/AuthenticationService"
-import { createUsersDbRepository } from "@/app/(authentication)/lib/repositories/UsersDbRepository"
+import { authenticationService } from "@/app/(authentication)/lib/services/AuthenticationService"
 import CredentialsProvider from "next-auth/providers/credentials"
 import type { NextAuthOptions } from "next-auth"
-
-const authenticationService = createAuthenticationService({
-    dbRepository: createUsersDbRepository(),
-})
 
 export const authOptions: NextAuthOptions = {
     providers: [

@@ -1,5 +1,8 @@
-import {User} from "@/app/(authentication)/lib/models/User";
-import {usersDbRepository, UsersDbRepository} from "@/app/(authentication)/lib/repositories/UsersDbRepository";
+import { User } from "@/app/(authentication)/lib/models/User"
+import {
+    usersDbRepository,
+    UsersDbRepository,
+} from "@/app/(authentication)/lib/repositories/UsersDbRepository"
 
 export interface UsersService {
     getAllUsers(): Promise<User[]>
@@ -25,8 +28,7 @@ export const createUsersService = (
     const getUserById = async (id: number): Promise<User | null> => {
         const user = await dependencies.dbRepository.getUserById(id)
 
-        if (!user)
-            return null
+        if (!user) return null
 
         return User.fromJson(user)
     }
@@ -34,8 +36,7 @@ export const createUsersService = (
     const getUserByEmail = async (email: string): Promise<User | null> => {
         const user = await dependencies.dbRepository.getUserByEmail(email)
 
-        if (!user)
-            return null
+        if (!user) return null
 
         return User.fromJson(user)
     }
@@ -43,10 +44,10 @@ export const createUsersService = (
     return {
         getAllUsers,
         getUserById,
-        getUserByEmail
+        getUserByEmail,
     }
 }
 
 export const usersService = createUsersService({
-    dbRepository: usersDbRepository
-});
+    dbRepository: usersDbRepository,
+})

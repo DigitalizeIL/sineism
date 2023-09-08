@@ -1,8 +1,11 @@
 import "server-only"
-import {compare, hash} from "bcrypt"
-import {User as NextUser} from "next-auth"
-import {IUser} from "@/app/(authentication)/lib/interfaces/IUser"
-import {USER_ROLES, UserRole,} from "@/app/(authentication)/lib/models/UserRole"
+import { compare, hash } from "bcrypt"
+import { User as NextUser } from "next-auth"
+import { IUser } from "@/app/(authentication)/lib/interfaces/IUser"
+import {
+    USER_ROLES,
+    UserRole,
+} from "@/app/(authentication)/lib/models/UserRole"
 
 export class User implements NextUser, IUser {
     constructor(

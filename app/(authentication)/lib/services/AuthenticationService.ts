@@ -1,13 +1,19 @@
 import "server-only"
 
-import {usersDbRepository, UsersDbRepository} from "@/app/(authentication)/lib/repositories/UsersDbRepository"
-import {NoUserFoundError} from "@/app/(authentication)/lib/errors/NoUserFoundError"
-import {PasswordsDontMatch} from "@/app/(authentication)/lib/errors/PasswordsDontMatch"
-import {User} from "@/app/(authentication)/lib/models/User"
-import {LoginCredentials, RegisterArgs,} from "@/app/(authentication)/lib/types/AuthenticationTypes"
-import {UserAlreadyExists} from "@/app/(authentication)/lib/errors/UserAlreadyExists"
-import {USER_ROLES} from "@/app/(authentication)/lib/models/UserRole"
-import {getServerSession} from "next-auth";
+import {
+    usersDbRepository,
+    UsersDbRepository,
+} from "@/app/(authentication)/lib/repositories/UsersDbRepository"
+import { NoUserFoundError } from "@/app/(authentication)/lib/errors/NoUserFoundError"
+import { PasswordsDontMatch } from "@/app/(authentication)/lib/errors/PasswordsDontMatch"
+import { User } from "@/app/(authentication)/lib/models/User"
+import {
+    LoginCredentials,
+    RegisterArgs,
+} from "@/app/(authentication)/lib/types/AuthenticationTypes"
+import { UserAlreadyExists } from "@/app/(authentication)/lib/errors/UserAlreadyExists"
+import { USER_ROLES } from "@/app/(authentication)/lib/models/UserRole"
+import { getServerSession } from "next-auth"
 
 export type AuthenticationServiceDependencies = {
     dbRepository: UsersDbRepository
@@ -23,7 +29,7 @@ export const createAuthenticationService = (
     dependencies: AuthenticationServiceDependencies
 ): AuthenticationService => {
     const authenticate = async (credentials: LoginCredentials) => {
-        const {email, password} = credentials
+        const { email, password } = credentials
         const user = await dependencies.dbRepository.getUserByEmail(email)
 
         if (!user) {
@@ -71,10 +77,10 @@ export const createAuthenticationService = (
         authenticate,
         register,
 
-        getCurrentUser
+        getCurrentUser,
     }
 }
 
 export const authenticationService = createAuthenticationService({
-    dbRepository: usersDbRepository
-});
+    dbRepository: usersDbRepository,
+})
