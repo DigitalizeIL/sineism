@@ -1,5 +1,6 @@
 import { categoriesService } from "@/app/(posts)/(modules)/categories/lib/services/CategoriesService"
 import { notFound } from "next/navigation"
+import { PostFeedItem } from "@/app/(posts)/(pages)/posts/components/PostsFeed/PostFeedItem"
 
 type PageProps = {
     params: {
@@ -13,22 +14,18 @@ export default async function Page(props: PageProps) {
         true
     )
 
-    console.log(category)
-
     if (!category) {
         return notFound()
     }
 
     return (
-        <div>
-            <h1>{category.name}</h1>
+        <>
             {category.posts?.map((post) => (
-                <div key={post.id}>
-                    <h2>{post.title}</h2>
-                    <p>{post.content}</p>
-                    <hr />
-                </div>
+                <PostFeedItem
+                    post={post}
+                    key={post.id}
+                />
             ))}
-        </div>
+        </>
     )
 }
