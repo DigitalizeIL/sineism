@@ -1,4 +1,3 @@
-import { Post } from "@/app/(posts)/lib/models/Post"
 import { Card } from "@/components/Card"
 import { DeletePostButton } from "@/app/(posts)/components/DeletePostButton"
 import { getServerSession } from "next-auth"
@@ -9,11 +8,12 @@ import { CreateCommentForm } from "@/app/(posts)/(modules)/comments/components/C
 import { PostCreateOrEditForm } from "@/app/(posts)/components/PostCreateOrEditForm"
 import { categoriesService } from "@/app/(posts)/(modules)/categories/lib/services/CategoriesService"
 import { ModalWithButton } from "@/components/Modal"
+import { IPost } from "@/app/(posts)/lib/interfaces/IPost"
 
-export const PostFeedItem = async ({ post }: { post: Post }) => {
+export const PostFeedItem = async ({ post }: { post: IPost }) => {
     const session = await getServerSession()
-
     if (!session?.user) return null
+
     const user = await usersService.getUserByEmail(session.user.email!)
     if (!user) return null
 

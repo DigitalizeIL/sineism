@@ -1,12 +1,12 @@
 import "server-only"
 import { ICategory } from "@/app/(posts)/(modules)/categories/lib/interfaces/ICategory"
-import { Post } from "@/app/(posts)/lib/models/Post"
+import { IPost } from "@/app/(posts)/lib/interfaces/IPost"
 
 export class Category implements ICategory {
     constructor(
         public id: number,
         public name: string,
-        public posts?: Post[]
+        public posts?: IPost[]
     ) {}
 
     public static fromJson(json: ICategory): Category {

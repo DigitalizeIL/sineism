@@ -1,7 +1,7 @@
-import { Post } from "@/app/(posts)/lib/models/Post"
+import { IPost } from "@/app/(posts)/lib/interfaces/IPost"
 
 export interface ICategory {
     id?: number
     name: string
-    posts?: Post[]
+    posts?: IPost[]
 }
