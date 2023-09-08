@@ -10,10 +10,7 @@ module.exports = {
             },
             colors: {
                 white: "#EAEBED",
-                red: "#BC2C1A",
-                black: "#001A23",
-                yellow: "#FFB30F",
-                "blue-light": "#4A7B9D",
+                primary: "#b5d9e7",
             },
             fontFamily: {
                 primary: ["Roboto", "sans-serif"],
