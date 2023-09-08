@@ -11,6 +11,7 @@ module.exports = {
             colors: {
                 white: "#EAEBED",
                 primary: "#b5d9e7",
+                secondary: "#8102ce",
             },
             fontFamily: {
                 primary: ["Roboto", "sans-serif"],
