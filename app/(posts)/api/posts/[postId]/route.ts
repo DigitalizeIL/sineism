@@ -14,7 +14,9 @@ export const DELETE = async (req: Request, ctx: ContextWithParams) => {
 
     await postsService.deletePost(id)
 
-    return NextResponse.json({ success: true })
+    return NextResponse.json({
+        success: true,
+    })
 }
 
 export const PATCH = async (req: Request, ctx: ContextWithParams) => {
@@ -24,5 +26,8 @@ export const PATCH = async (req: Request, ctx: ContextWithParams) => {
 
     const post = await postsService.updatePost(id, Post.fromJson(body))
 
-    return NextResponse.json({ success: true, post })
+    return NextResponse.json({
+        success: true,
+        post,
+    })
 }

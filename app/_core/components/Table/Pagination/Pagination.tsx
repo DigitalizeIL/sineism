@@ -1,5 +1,5 @@
 import Styles from "./Pagination.module.css"
-import { useState } from "react"
+import { ChangeEvent, useState } from "react"
 import clsx from "clsx"
 import { PAGINATION_PER_PAGE } from "./consts"
 import { useRouter } from "next/router"
@@ -28,12 +28,19 @@ export const Pagination = (props: PaginationProps) => {
     const onPageChange = (page: number) => {
         router.push({
             pathname: router.pathname,
-            query: { ...router.query, page, perPage },
+            query: {
+                ...router.query,
+                page,
+                perPage,
+            },
         })
-        props.onChange({ page, count: perPage })
+        props.onChange({
+            page,
+            count: perPage,
+        })
     }
 
-    const onChangePerPage = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const onChangePerPage = (e: ChangeEvent<HTMLSelectElement>) => {
         let page = currentPage
         const perPage = Number(e.target.value)
 
@@ -44,9 +51,16 @@ export const Pagination = (props: PaginationProps) => {
         setPerPage(perPage)
         router.push({
             pathname: router.pathname,
-            query: { ...router.query, perPage, page },
+            query: {
+                ...router.query,
+                perPage,
+                page,
+            },
         })
-        props.onChange({ count: perPage, page })
+        props.onChange({
+            count: perPage,
+            page,
+        })
     }
 
     return (
