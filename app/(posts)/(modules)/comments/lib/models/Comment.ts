@@ -1,5 +1,5 @@
-import "server-only";
-import {IComment} from "@/app/(posts)/(modules)/comments/lib/interfaces/IComment";
+import "server-only"
+import { IComment } from "@/app/(posts)/(modules)/comments/lib/interfaces/IComment"
 
 export class Comment implements IComment {
     constructor(
@@ -7,13 +7,12 @@ export class Comment implements IComment {
         public postId: number,
         public userId: number,
         public id: number
-    ) {
-    }
+    ) {}
 
     public static fromJson(json: IComment): Comment {
-        const {content, postId, userId, id} = json;
-        if (!id) throw new Error("Comment must have an id");
-        return new Comment(content, postId, userId, id);
+        const { content, postId, userId, id } = json
+        if (!id) throw new Error("Comment must have an id")
+        return new Comment(content, postId, userId, id)
     }
 
     public toJson(): any {
@@ -21,7 +20,7 @@ export class Comment implements IComment {
             content: this.content,
             postId: this.postId,
             authorId: this.userId,
-            id: this.id
+            id: this.id,
         }
     }
 }
