@@ -36,7 +36,7 @@ export const createCategoriesService = (
         withPosts?: boolean
     ): Promise<Category | null> => {
         const category = await dependencies.dbRepository.get(id, withPosts)
-        console.log(category)
+
         if (!category) return null
 
         return Category.fromJson(category)
