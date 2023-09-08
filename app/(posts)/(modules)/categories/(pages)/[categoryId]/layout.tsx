@@ -1,6 +1,7 @@
 import { categoriesService } from "@/app/(posts)/(modules)/categories/lib/services/CategoriesService"
 import { notFound } from "next/navigation"
 import { ReactNode } from "react"
+import { CategoryHeader } from "@/app/(posts)/(modules)/categories/components/CategoryHeader"
 
 type LayoutProps = {
     params: {
@@ -18,9 +19,11 @@ export default async function Layout(props: LayoutProps) {
     }
 
     return (
-        <div>
-            <h1>{category.name}</h1>
-            {props.children}
+        <div className={"w-full"}>
+            <CategoryHeader category={category} />
+            <div className={"flex flex-col justify-center items-center w-full"}>
+                {props.children}
+            </div>
         </div>
     )
 }
