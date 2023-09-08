@@ -1,9 +1,6 @@
-# Nextjs Starter
+# Sineism
 
-This is a starter template for [Next.js](https://nextjs.org/).
-
-**This is a unique starter template. It trys to be as much seperated from the framework as possible, but still taking
-advantage of it.**
+Special blog
 
 It includes:
 

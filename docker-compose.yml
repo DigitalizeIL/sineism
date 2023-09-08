@@ -6,7 +6,7 @@ services:
     environment:
       POSTGRES_USER: default
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: blogdb
+      POSTGRES_DB: sineism
     ports:
       - 5432:5432
     volumes:
