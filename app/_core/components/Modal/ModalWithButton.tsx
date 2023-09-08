@@ -1,14 +1,19 @@
 "use client"
 
 import { Button } from "@/components/Button"
-import { ReactNode, useState } from "react"
+import { ReactNode, useEffect, useState } from "react"
 import { Modal } from "@/components/Modal/Modal"
 
 export const ModalWithButton = (props: {
     children: ReactNode
     buttonText: string
+    isOpen?: boolean
 }) => {
-    const [isOpen, setIsOpen] = useState(false)
+    const [isOpen, setIsOpen] = useState(props.isOpen || false)
+
+    useEffect(() => {
+        setIsOpen(!!props.isOpen)
+    }, [props.isOpen])
 
     return (
         <div>
