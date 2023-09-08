@@ -33,19 +33,21 @@ export const CreateCategoryForm = async (props: CreateCategoryButtonProps) => {
     }
 
     return (
-        <form
-            action={createCategory}
-            className={clsx(["flex flex-col space-y-2 p-4", props.className])}>
-            <Input
-                name="name"
-                className="w-full"
-                placeholder={"Category on the post"}
-            />
-            <Button
-                type="ghost"
-                className={"text-3xl text-black"}>
-                Create Category
-            </Button>
+        <div className={" space-y-2 p-4"}>
+            <form
+                action={createCategory}
+                className={clsx(["flex flex-col space-y-2", props.className])}>
+                <Input
+                    name="name"
+                    className="w-full"
+                    placeholder={"Category on the post"}
+                />
+                <Button
+                    type="ghost"
+                    className={"text-3xl text-black"}>
+                    Create Category
+                </Button>
+            </form>
             <div className={"flex gap-2"}>
                 {categories.map((category, index) => (
                     <CategoryItem
@@ -54,6 +56,6 @@ export const CreateCategoryForm = async (props: CreateCategoryButtonProps) => {
                     />
                 ))}
             </div>
-        </form>
+        </div>
     )
 }
