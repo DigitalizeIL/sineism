@@ -25,7 +25,7 @@ export const PostCreateOrEditForm = async (props: { post?: IPost }) => {
         await postsService.createPost(
             Post.fromJson({
                 ...postData,
-                authorId: Number(user.id),
+                authorId: user.id,
             })
         )
     }

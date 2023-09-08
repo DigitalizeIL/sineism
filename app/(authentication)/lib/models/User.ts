@@ -9,7 +9,7 @@ import {
 
 export class User implements NextUser, IUser {
     constructor(
-        public id: string,
+        public id: number,
         public name: string,
         public email: string,
         private _password?: string,
