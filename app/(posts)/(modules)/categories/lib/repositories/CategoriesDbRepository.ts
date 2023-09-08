@@ -22,7 +22,7 @@ export const createCategoriesDbRepository = (): CategoriesDbRepository => {
         return prisma.category.findUnique({
             where: { id },
             include: {
-                Post: withPosts,
+                posts: withPosts,
             },
         })
     }
