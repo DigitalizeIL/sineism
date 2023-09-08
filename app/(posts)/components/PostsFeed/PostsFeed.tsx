@@ -1,6 +1,6 @@
 import React from "react"
 import { Post } from "@/app/(posts)/lib/models/Post"
-import { PostFeedItem } from "@/app/(posts)/(pages)/posts/components/PostsFeed/PostFeedItem"
+import { PostFeedItem } from "@/app/(posts)/components/PostsFeed/PostFeedItem"
 import { postsService } from "@/app/(posts)/lib/services/PostsService"
 
 export const PostsFeed = async () => {

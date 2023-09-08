@@ -5,7 +5,7 @@ import { Toaster } from "react-hot-toast"
 import React from "react"
 import { METADATA } from "@/app/consts"
 import { Providers } from "@/app/Providers"
-import { getServerSession } from "next-auth"
+import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
 
 const inter = Inter({
     variable: "--font-inter",
@@ -28,13 +28,12 @@ export default async function RootLayout({
 }: {
     children: React.ReactNode
 }) {
-    const session = await getServerSession()
+    const session = await getAppServerSession()
 
     return (
         <html
             lang="en"
-            // dir={"rtl"}
-        >
+            dir={"rtl"}>
             <body
                 className={inter.variable}
                 suppressHydrationWarning={true}>

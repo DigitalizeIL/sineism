@@ -13,7 +13,7 @@ import {
 } from "@/app/(authentication)/lib/types/AuthenticationTypes"
 import { UserAlreadyExists } from "@/app/(authentication)/lib/errors/UserAlreadyExists"
 import { USER_ROLES } from "@/app/(authentication)/lib/models/UserRole"
-import { getServerSession } from "next-auth"
+import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
 
 export type AuthenticationServiceDependencies = {
     dbRepository: UsersDbRepository
@@ -65,7 +65,7 @@ export const createAuthenticationService = (
     }
 
     const getCurrentUser = async () => {
-        const session = await getServerSession()
+        const session = await getAppServerSession()
         if (!session?.user?.email) return null
 
         return await dependencies.dbRepository.getUserByEmail(

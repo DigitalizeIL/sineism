@@ -2,8 +2,8 @@
 
 import Styles from "./PostsSearch.module.css"
 import { Post } from "@/app/(posts)/lib/models/Post"
-import { TEXTS } from "@/app/(posts)/(pages)/posts/components/PostsSearch/texts"
-import { usePostsSearch } from "@/app/(posts)/(pages)/posts/components/PostsSearch/usePostsSearch"
+import { TEXTS } from "@/app/(posts)/components/PostsSearch/texts"
+import { usePostsSearch } from "@/app/(posts)/components/PostsSearch/usePostsSearch"
 import React, { ReactNode, useEffect } from "react"
 
 export const PostsSearch = (props: {

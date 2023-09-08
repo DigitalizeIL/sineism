@@ -7,16 +7,16 @@ import { revalidatePath } from "next/cache"
 import { ICategory } from "@/app/(posts)/(modules)/categories/lib/interfaces/ICategory"
 import { categoriesService } from "@/app/(posts)/(modules)/categories/lib/services/CategoriesService"
 import { Select } from "@/components/Form/Select"
-import { getServerSession } from "next-auth"
 import { usersService } from "@/app/(authentication)/lib/services/UsersService"
 import { Post } from "@/app/(posts)/lib/models/Post"
+import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
 
 export const PostCreateOrEditForm = async (props: { post?: IPost }) => {
     const categories = await categoriesService.getAllCategories()
 
     const createPost = async (postData: Omit<IPost, "authorId" | "id">) => {
         "use server"
-        const session = await getServerSession()
+        const session = await getAppServerSession()
         const user = await usersService.getUserByEmail(
             session?.user?.email || ""
         )
