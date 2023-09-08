@@ -1,4 +1,3 @@
-import { Post } from "@/app/(posts)/lib/models/Post"
 import { Card } from "@/components/Card"
 import { DeletePostButton } from "@/app/(posts)/components/DeletePostButton"
 import { getServerSession } from "next-auth"
@@ -6,8 +5,11 @@ import { usersService } from "@/app/(authentication)/lib/services/UsersService"
 import { USER_ROLES } from "@/app/(authentication)/lib/models/UserRole"
 import { PostCreateOrEditForm } from "@/app/(posts)/components/PostCreateOrEditForm"
 import { ModalWithButton } from "@/components/Modal"
+import { IPost } from "@/app/(posts)/lib/interfaces/IPost"
 
-export const PostFeedItem = async ({ post }: { post: Post }) => {
+type PostFeedItemProps = { post: IPost }
+
+export const PostFeedItem = async ({ post }: PostFeedItemProps) => {
     const session = await getServerSession()
     if (!session?.user) return null
 
