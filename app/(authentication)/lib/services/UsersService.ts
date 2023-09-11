@@ -3,6 +3,7 @@ import {
     usersDbRepository,
     UsersDbRepository,
 } from "@/app/(authentication)/lib/repositories/UsersDbRepository"
+import { getServerSession } from "next-auth"
 
 export interface UsersService {
     getAllUsers(): Promise<User[]>
@@ -10,6 +11,8 @@ export interface UsersService {
     getUserById(id: number): Promise<User | null>
 
     getUserByEmail(email: string): Promise<User | null>
+
+    getCurrentUser(): Promise<User | null>
 }
 
 export interface UsersServiceDependencies {
@@ -41,7 +44,16 @@ export const createUsersService = (
         return User.fromJson(user)
     }
 
+    const getCurrentUser = async (): Promise<User | null> => {
+        const session = await getServerSession()
+
+        if (!session?.user?.email) return null
+
+        return getUserByEmail(session.user.email)
+    }
+
     return {
+        getCurrentUser,
         getAllUsers,
         getUserById,
         getUserByEmail,
