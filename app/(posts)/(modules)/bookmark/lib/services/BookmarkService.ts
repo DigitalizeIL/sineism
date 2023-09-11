@@ -6,7 +6,7 @@ import prisma from "@/lib/prisma"
 export interface BookmarkService {
     getBookmark(id: number): Promise<IBookmark | null>
 
-    createOrUpdateBookmark(category: Partial<IBookmark>): Promise<IBookmark>
+    upsertBookmark(category: Partial<IBookmark>): Promise<IBookmark>
 
     deleteBookmark(id: number): Promise<void>
 }
@@ -18,17 +18,14 @@ export const createBookmarkService = (): BookmarkService => {
     ): Promise<IBookmark | null> => {
         return prisma.bookmark.findUnique({
             where: { id },
-            include: {
-                posts: withPosts,
-            },
         })
     }
 
-    const createOrUpdateBookmark = async (
-        item: IBookmark
-    ): Promise<IBookmark> => {
-        return prisma.bookmark.update({
-            data: item,
+    const upsertBookmark = async (item: IBookmark): Promise<IBookmark> => {
+        return prisma.bookmark.upsert({
+            where: { id: item.id },
+            update: item,
+            create: item,
         })
     }
 
@@ -40,7 +37,7 @@ export const createBookmarkService = (): BookmarkService => {
 
     return {
         getBookmark,
-        createOrUpdateBookmark,
+        upsertBookmark,
         deleteBookmark,
     }
 }

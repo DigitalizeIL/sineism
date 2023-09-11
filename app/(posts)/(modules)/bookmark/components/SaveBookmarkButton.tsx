@@ -11,14 +11,9 @@ export const SaveBookmarkButton = async (props: {
     const saveBookmark = async () => {
         "use server"
 
-        if (!user) {
-            // throw new Error("You must be logged in to bookmark a post")
-            return
-        }
-
-        await bookmarkService.createOrUpdateBookmark({
+        await bookmarkService.upsertBookmark({
             postId: props.postId,
-            userId: user?.id,
+            userId: user.id,
             page: props.page,
         })
     }
