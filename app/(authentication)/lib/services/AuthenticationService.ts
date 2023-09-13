@@ -21,9 +21,9 @@ export type AuthenticationServiceDependencies = {
 }
 
 export interface AuthenticationService {
-    authenticate: (credentials: LoginCredentials) => Promise<User>
-    register: (user: RegisterArgs) => Promise<User | null>
-    getCurrentUser: () => Promise<User | null>
+    authenticate: (credentials: LoginCredentials) => Promise<IUser>
+    register: (user: RegisterArgs) => Promise<IUser | null>
+    getCurrentUser: () => Promise<IUser | null>
 }
 
 export const createAuthenticationService = (
@@ -80,7 +80,6 @@ export const createAuthenticationService = (
     return {
         authenticate,
         register,
-
         getCurrentUser,
     }
 }
