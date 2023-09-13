@@ -5,7 +5,7 @@ import { PostCreateOrEditForm } from "@/app/(posts)/components/PostCreateOrEditF
 import { ModalWithButton } from "@/components/Modal"
 import { IPost } from "@/app/(posts)/lib/interfaces/IPost"
 import { SaveBookmarkButton } from "@/app/(posts)/(modules)/bookmark/components/SaveBookmarkButton"
-import { getServerSession } from "next-auth"
+import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
 
 type PostFeedItemProps = {
     post: IPost
@@ -13,7 +13,7 @@ type PostFeedItemProps = {
 }
 
 export const PostFeedItem = async ({ post }: PostFeedItemProps) => {
-    const session = await getServerSession()
+    const session = await getAppServerSession()
 
     return (
         <Card
