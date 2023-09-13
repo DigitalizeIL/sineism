@@ -10,10 +10,17 @@ type PageProps = {
 }
 
 export default async function Page(props: PageProps) {
-    const category = await categoriesService.getCategory(
-        Number(props.params.categoryId),
-        true
-    )
+    const page = Number(props.searchParams?.page || 1)
+    const limit = 3
+
+    const category = await categoriesService.getCategory({
+        id: Number(props.params.categoryId),
+        withPosts: true,
+        pagination: {
+            page,
+            perPage: limit,
+        },
+    })
 
     if (!category) {
         return notFound()
@@ -23,7 +30,7 @@ export default async function Page(props: PageProps) {
         <>
             {category.posts?.map((post) => (
                 <PostFeedItem
-                    page={Number(props.searchParams?.page || 1)}
+                    page={page}
                     post={post}
                     key={post.id}
                 />

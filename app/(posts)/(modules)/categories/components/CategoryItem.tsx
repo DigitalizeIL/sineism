@@ -12,7 +12,9 @@ export const CategoryItem = (props: CategoryItemProps) => {
         <div
             dir={"ltr"}
             className={"flex gap-1"}>
-            <span>{props.category.name}</span>
+            <span>
+                {props.category.name} ({props.category.id})
+            </span>
             <DeleteCategoryButton
                 className={"flex justify-center align-middle"}
                 categoryId={props.category.id}

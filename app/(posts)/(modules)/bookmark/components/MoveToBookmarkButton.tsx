@@ -18,7 +18,9 @@ export const MoveToBookmarkButton = async (props: { categoryId: number }) => {
     }
 
     return (
-        <form action={moveToCategory}>
+        <form
+            action={moveToCategory}
+            className={"flex items-center justify-center h-full px-4"}>
             <Button
                 type={"ghost"}
                 className="bg-blue-500 hover:bg-blue-600">

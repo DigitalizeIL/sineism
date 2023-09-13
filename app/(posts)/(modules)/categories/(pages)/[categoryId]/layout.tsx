@@ -10,9 +10,9 @@ type LayoutProps = {
     children: ReactNode
 }
 export default async function Layout(props: LayoutProps) {
-    const category = await categoriesService.getCategory(
-        Number(props.params.categoryId)
-    )
+    const category = await categoriesService.getCategory({
+        id: Number(props.params.categoryId),
+    })
 
     if (!category) {
         return notFound()
