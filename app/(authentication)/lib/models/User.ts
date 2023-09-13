@@ -1,5 +1,5 @@
 import "server-only"
-import { compare, hash } from "bcrypt"
+import { compare, hash } from "bcryptjs"
 import { User as NextUser } from "next-auth"
 import { IUser } from "@/app/(authentication)/lib/interfaces/IUser"
 import {
