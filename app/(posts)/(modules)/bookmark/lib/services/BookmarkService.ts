@@ -4,7 +4,12 @@ import { IBookmark } from "@/app/(posts)/(modules)/bookmark/lib/interfaces/IBook
 import prisma from "@/lib/prisma"
 
 export interface BookmarkService {
-    getBookmark(id: number): Promise<IBookmark | null>
+    getBookmarkById(id: number): Promise<IBookmark | null>
+
+    getBookmarkByUserAndCategory(
+        userId: number,
+        categoryId: number
+    ): Promise<IBookmark | null>
 
     upsertBookmark(category: Partial<IBookmark>): Promise<IBookmark>
 
@@ -12,18 +17,34 @@ export interface BookmarkService {
 }
 
 export const createBookmarkService = (): BookmarkService => {
-    const getBookmark = async (
-        id: number,
-        withPosts?: boolean
-    ): Promise<IBookmark | null> => {
+    const getBookmarkById = async (id: number): Promise<IBookmark | null> => {
         return prisma.bookmark.findUnique({
             where: { id },
         })
     }
 
+    const getBookmarkByUserAndCategory = async (
+        userId: number,
+        categoryId: number
+    ): Promise<IBookmark | null> => {
+        return prisma.bookmark.findUnique({
+            where: {
+                userCategory: {
+                    userId,
+                    categoryId,
+                },
+            },
+        })
+    }
+
     const upsertBookmark = async (item: IBookmark): Promise<IBookmark> => {
         return prisma.bookmark.upsert({
-            where: { id: item.id },
+            where: {
+                userCategory: {
+                    userId: item.userId,
+                    categoryId: item.categoryId,
+                },
+            },
             update: item,
             create: item,
         })
@@ -36,7 +57,8 @@ export const createBookmarkService = (): BookmarkService => {
     }
 
     return {
-        getBookmark,
+        getBookmarkById,
+        getBookmarkByUserAndCategory,
         upsertBookmark,
         deleteBookmark,
     }
