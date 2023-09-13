@@ -9,25 +9,27 @@ datasource db {
 }
 
 model User {
-  id       Int       @id @default(autoincrement())
+  id       Int        @id @default(autoincrement())
   name     String
-  email    String    @unique
+  email    String     @unique
   password String
   posts    Post[]
-  role     String    @default("GUEST")
+  role     String     @default("GUEST")
   comments Comment[]
+  Bookmark Bookmark[]
 }
 
 model Post {
-  id         Int       @id @default(autoincrement())
+  id         Int        @id @default(autoincrement())
   title      String
   content    String
   metadata   Json?
   authorId   Int
-  author     User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  author     User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
   comments   Comment[]
   categoryId Int
-  category   Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  category   Category   @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  Bookmark   Bookmark[]
 }
 
 model Comment {
@@ -40,7 +42,21 @@ model Comment {
 }
 
 model Category {
-  id    Int    @id @default(autoincrement())
-  name  String
-  posts Post[]
+  id       Int        @id @default(autoincrement())
+  name     String
+  posts    Post[]
+  Bookmark Bookmark[]
+}
+
+model Bookmark {
+  id         Int      @id @default(autoincrement())
+  userId     Int
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  postId     Int
+  post       Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  categoryId Int
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  page       Int
+
+  @@unique(fields: [userId, categoryId], name: "userCategory")
 }

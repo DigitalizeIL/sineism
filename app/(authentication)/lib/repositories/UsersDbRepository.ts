@@ -3,55 +3,48 @@ import "server-only"
 import { User } from "@/app/(authentication)/lib/models/User"
 import prisma from "@/app/_core/lib/prisma"
 import { LoginCredentials } from "@/app/(authentication)/lib/types/AuthenticationTypes"
+import { IUser } from "@/app/(authentication)/lib/interfaces/IUser"
 
 export interface UsersDbRepository {
-    getUsers: () => Promise<User[]>
-    getUserByEmail: (email: string) => Promise<User | null>
-    getUserById: (id: number) => Promise<User | null>
+    getUsers: () => Promise<IUser[]>
+    getUserByEmail: (email: string) => Promise<IUser | null>
+    getUserById: (id: number) => Promise<IUser | null>
     createUser: (
-        user: User,
+        user: IUser,
         credentials: LoginCredentials
-    ) => Promise<User | null>
+    ) => Promise<IUser | null>
 }
 
 export const createUsersDbRepository = (): UsersDbRepository => {
     const getUsers = async () => {
-        const users = await prisma.user.findMany()
-
-        return users.map((user) => User.fromJson(user))
+        return prisma.user.findMany()
     }
 
     const getUserByEmail = async (email: string) => {
-        const user = await prisma.user.findUnique({
+        return await prisma.user.findUnique({
             where: {
                 email,
             },
         })
-
-        return user ? User.fromJson(user) : null
     }
 
     const getUserById = async (id: number) => {
-        const user = await prisma.user.findUnique({
+        return await prisma.user.findUnique({
             where: {
                 id,
             },
         })
-
-        return user ? User.fromJson(user) : null
     }
 
-    const createUser = async (user: User, credentials: LoginCredentials) => {
+    const createUser = async (user: IUser, credentials: LoginCredentials) => {
         const password = await User.hashPassword(credentials.password)
 
-        const dbUser = await prisma.user.create({
+        return await prisma.user.create({
             data: {
-                ...user.toJson(),
+                ...user,
                 password,
             },
         })
-
-        return dbUser ? User.fromJson(dbUser) : null
     }
 
     return {

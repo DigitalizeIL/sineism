@@ -13,13 +13,12 @@ import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
 
 export const PostCreateOrEditForm = async (props: { post?: IPost }) => {
     const categories = await categoriesService.getAllCategories()
+    const session = await getAppServerSession()
 
     const createPost = async (postData: Omit<IPost, "authorId" | "id">) => {
         "use server"
-        const session = await getAppServerSession()
-        const user = await usersService.getUserByEmail(
-            session?.user?.email || ""
-        )
+        const user = await usersService.getCurrentUser(session)
+
         if (!user) return console.log("NO USER")
 
         await postsService.createPost(
