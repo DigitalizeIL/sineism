@@ -10,10 +10,10 @@ import { bookmarkService } from "@/app/(posts)/(modules)/bookmark/lib/services/B
 
 type PostFeedItemProps = {
     post: IPost
-    page: number
+    page?: number
 }
 
-export const PostFeedItem = async ({ post }: PostFeedItemProps) => {
+export const PostFeedItem = async ({ post, page }: PostFeedItemProps) => {
     const session = await getAppServerSession()
 
     let activeBookmark
@@ -35,7 +35,7 @@ export const PostFeedItem = async ({ post }: PostFeedItemProps) => {
                     key={"bookmark"}
                     categoryId={post.categoryId}
                     postId={post.id}
-                    page={post.id}
+                    page={page || 1}
                     isActive={activeBookmark?.postId === post.id}
                 />,
                 ...(session?.user?.role === USER_ROLES.admin

@@ -6,6 +6,7 @@ type PageProps = {
     params: {
         categoryId: string
     }
+    searchParams?: { [key: string]: string }
 }
 
 export default async function Page(props: PageProps) {
@@ -22,6 +23,7 @@ export default async function Page(props: PageProps) {
         <>
             {category.posts?.map((post) => (
                 <PostFeedItem
+                    page={Number(props.searchParams?.page || 1)}
                     post={post}
                     key={post.id}
                 />
