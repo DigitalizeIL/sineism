@@ -3,11 +3,16 @@ import "server-only"
 import { CrudRepository } from "@/lib/repositories/CrudRepository"
 import prisma from "@/lib/prisma"
 import { ICategory } from "@/app/(posts)/(modules)/categories/lib/interfaces/ICategory"
+import { DBPagination } from "@/lib/types/pagination"
 
 type CategoryWithoutPosts = Omit<ICategory, "posts">
 
 export interface CategoriesDbRepository extends CrudRepository<ICategory> {
-    get(id: number, withPosts?: boolean): Promise<ICategory | null>
+    get(
+        id: number,
+        withPosts?: boolean,
+        pagination?: DBPagination
+    ): Promise<ICategory | null>
 }
 
 export const createCategoriesDbRepository = (): CategoriesDbRepository => {
@@ -17,12 +22,20 @@ export const createCategoriesDbRepository = (): CategoriesDbRepository => {
 
     const get = async (
         id: number,
-        withPosts?: boolean
+        withPosts?: boolean,
+        pagination?: DBPagination
     ): Promise<ICategory | null> => {
         return prisma.category.findUnique({
             where: { id },
             include: {
-                posts: withPosts,
+                posts: withPosts
+                    ? {
+                          ...(pagination && {
+                              skip: pagination.skip,
+                              take: pagination.take,
+                          }),
+                      }
+                    : false,
             },
         })
     }

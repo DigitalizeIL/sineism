@@ -5,11 +5,16 @@ import {
 } from "@/app/(posts)/(modules)/categories/lib/repositories/CategoriesDbRepository"
 import { ICategory } from "@/app/(posts)/(modules)/categories/lib/interfaces/ICategory"
 import { Category } from "@/app/(posts)/(modules)/categories/lib/models/Category"
+import { Pagination } from "@/lib/types/pagination"
 
 export interface CategoriesService {
     getAllCategories(): Promise<Category[]>
 
-    getCategory(id: number, withPosts?: boolean): Promise<Category | null>
+    getCategory(data: {
+        id: number
+        withPosts?: boolean
+        pagination?: Pagination
+    }): Promise<Category | null>
 
     createCategory(category: ICategory): Promise<Category>
 
@@ -31,11 +36,21 @@ export const createCategoriesService = (
         return categories.map((category) => Category.fromJson(category))
     }
 
-    const getCategory = async (
-        id: number,
+    const getCategory = async (data: {
+        id: number
         withPosts?: boolean
-    ): Promise<Category | null> => {
-        const category = await dependencies.dbRepository.get(id, withPosts)
+        pagination?: Pagination
+    }): Promise<Category | null> => {
+        if (!data.id) return null
+
+        const category = await dependencies.dbRepository.get(
+            data.id,
+            data.withPosts,
+            data.pagination && {
+                skip: (data.pagination.page - 1) * data.pagination.perPage,
+                take: data.pagination.perPage,
+            }
+        )
 
         if (!category) return null
 
