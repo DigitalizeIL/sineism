@@ -1,8 +1,12 @@
 import { ICategory } from "@/app/(posts)/(modules)/categories/lib/interfaces/ICategory"
+import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
+import { MoveToBookmarkButton } from "@/app/(posts)/(modules)/bookmark/components/MoveToBookmarkButton"
 
 type CategoryHeaderProps = { category: ICategory }
 
 export const CategoryHeader = async ({ category }: CategoryHeaderProps) => {
+    const session = await getAppServerSession()
+
     return (
         <div
             className={
@@ -14,6 +18,10 @@ export const CategoryHeader = async ({ category }: CategoryHeaderProps) => {
                 }>
                 {category.name}
             </h2>
+
+            {category.id ? (
+                <MoveToBookmarkButton categoryId={category.id} />
+            ) : null}
         </div>
     )
 }
