@@ -1,30 +1,33 @@
 import { Button } from "@/components/Button"
 import { bookmarkService } from "@/app/(posts)/(modules)/bookmark/lib/services/BookmarkService"
-import { usersService } from "@/app/(authentication)/lib/services/UsersService"
+import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
 
 export const SaveBookmarkButton = async (props: {
     postId: number
     page: number
 }) => {
-    const user = (await usersService.getCurrentUser())?.toJson()
+    const session = await getAppServerSession()
 
     const saveBookmark = async () => {
         "use server"
+        if (!session) return console.log("no user")
 
-        await bookmarkService.upsertBookmark({
+        const res = await bookmarkService.upsertBookmark({
             postId: props.postId,
-            userId: user.id,
+            userId: session.user?.id,
             page: props.page,
         })
+
+        console.log("res", res)
     }
 
-    if (!user) return null
+    if (!session) return null
 
     return (
         <form action={saveBookmark}>
             <Button
                 type={"ghost"}
-                className="bg-blue-500 hover:bg-blue-600 text-white">
+                className="bg-blue-500 hover:bg-blue-600">
                 Bookmark
             </Button>
         </form>
