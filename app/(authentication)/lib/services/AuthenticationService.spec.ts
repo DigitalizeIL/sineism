@@ -7,7 +7,7 @@ import { User } from "@/app/(authentication)/lib/models/User"
 
 describe("AuthenticationService", () => {
     const userPassword = "password"
-    const user = new User("0", "John Doe", "john@gmail.com", userPassword)
+    const user = new User(0, "John Doe", "john@gmail.com", userPassword)
     const usersDbRepository: UsersDbRepository = {
         getUserByEmail: jest.fn(),
         createUser: jest.fn(),
