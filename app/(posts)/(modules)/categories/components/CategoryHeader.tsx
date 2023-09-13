@@ -23,8 +23,6 @@ export const CategoryHeader = async ({
     const prevPage = async () => {
         "use server"
 
-        console.log(page - 1)
-
         redirect(`/categories/${category.id}?page=${page - 1}`)
     }
 

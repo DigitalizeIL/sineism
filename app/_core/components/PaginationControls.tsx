@@ -11,7 +11,6 @@ type PaginationButtonsProps = {
 export const PaginationControls = async (props: PaginationButtonsProps) => {
     const isFirstPage = props.page === 1
     const isLastPage = props.page === props.totalPages
-    console.log(props.totalPages, props.page, isFirstPage, isLastPage)
 
     return (
         <div className={"flex items-center justify-center h-full px-4"}>
