@@ -2,7 +2,9 @@ import { categoriesService } from "@/app/(posts)/(modules)/categories/lib/servic
 import { redirect } from "next/navigation"
 
 export default async function CategoriesPage() {
-    const categories = await categoriesService.getAllCategories()
+    const categories = (await categoriesService.getAllCategories()).map(
+        (category) => category.toJson()
+    )
 
     if (!categories.length)
         return (
