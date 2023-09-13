@@ -21,6 +21,10 @@ export interface CategoriesService {
     updateCategory(id: number, category: Category): Promise<Category>
 
     deleteCategory(id: number): Promise<void>
+
+    countCategories(): Promise<number>
+
+    countCategoryPosts(categoryId: number): Promise<number>
 }
 
 export type CategoriesServiceDependencies = {
@@ -79,7 +83,17 @@ export const createCategoriesService = (
         await dependencies.dbRepository.deleteItem(id)
     }
 
+    const countCategories = async (): Promise<number> => {
+        return await dependencies.dbRepository.count()
+    }
+
+    const countCategoryPosts = async (categoryId: number): Promise<number> => {
+        return await dependencies.dbRepository.countPosts(categoryId)
+    }
+
     return {
+        countCategoryPosts,
+        countCategories,
         getAllCategories,
         getCategory,
         createCategory,

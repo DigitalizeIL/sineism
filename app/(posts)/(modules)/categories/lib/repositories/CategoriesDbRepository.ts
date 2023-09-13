@@ -13,6 +13,10 @@ export interface CategoriesDbRepository extends CrudRepository<ICategory> {
         withPosts?: boolean,
         pagination?: DBPagination
     ): Promise<ICategory | null>
+
+    count(): Promise<number>
+
+    countPosts(categoryId: number): Promise<number>
 }
 
 export const createCategoriesDbRepository = (): CategoriesDbRepository => {
@@ -62,7 +66,19 @@ export const createCategoriesDbRepository = (): CategoriesDbRepository => {
         })
     }
 
+    const count = async (): Promise<number> => {
+        return prisma.category.count()
+    }
+
+    const countPosts = async (categoryId: number): Promise<number> => {
+        return prisma.post.count({
+            where: { categoryId },
+        })
+    }
+
     return {
+        countPosts,
+        count,
         getAll,
         get,
         create,
