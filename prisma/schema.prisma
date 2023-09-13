@@ -55,5 +55,5 @@ model Bookmark {
   post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
   page   Int
 
-  @@unique([userId, postId])
+  @@unique(fields: [userId, postId], name: "userPost")
 }
