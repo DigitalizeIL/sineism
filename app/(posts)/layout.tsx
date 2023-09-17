@@ -26,7 +26,7 @@ type LayoutProps = {
 
 export default async function Layout({ children }: LayoutProps) {
     return (
-        <UserProvider>
+        <>
             <Header />
             {children}
             <PostsFloatingQuickActions>
@@ -37,6 +37,6 @@ export default async function Layout({ children }: LayoutProps) {
                     <CreateCategoryForm />
                 </ModalWithButton>
             </PostsFloatingQuickActions>
-        </UserProvider>
+        </>
     )
 }

@@ -4,6 +4,11 @@ import React from "react"
 import axios from "axios"
 import { SessionProvider } from "next-auth/react"
 import { Session } from "next-auth"
+import {
+    PayPalScriptProvider,
+    ReactPayPalScriptOptions,
+} from "@paypal/react-paypal-js"
+import { UserProvider } from "@/app/(authentication)/context/UserProvider"
 
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_API_PREFIX
 
@@ -12,13 +17,21 @@ type ProvidersProps = {
     session: Session | null
 }
 
+const initialOptions: ReactPayPalScriptOptions = {
+    clientId: "test",
+    currency: "USD",
+    intent: "capture",
+}
+
 export const Providers = ({ children, session }: ProvidersProps) => {
     const [queryClient] = React.useState(() => new QueryClient())
 
     return (
         <SessionProvider session={session}>
             <QueryClientProvider client={queryClient}>
-                {children}
+                <PayPalScriptProvider options={initialOptions}>
+                    <UserProvider>{children}</UserProvider>
+                </PayPalScriptProvider>
             </QueryClientProvider>
         </SessionProvider>
     )
