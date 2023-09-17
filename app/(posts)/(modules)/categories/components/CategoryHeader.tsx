@@ -4,6 +4,8 @@ import { PaginationControls } from "@/components/PaginationControls"
 import { redirect } from "next/navigation"
 import { categoriesService } from "@/app/(posts)/(modules)/categories/lib/services/CategoriesService"
 import { DEFAULT_PAGE_SIZE } from "@/app/(posts)/(modules)/categories/consts/pagination"
+import { PaymentForm } from "@/app/(payment)/components/PaymentForm"
+import { PaymentModal } from "@/app/(payment)/components/PaymentModal"
 
 type CategoryHeaderProps = { category: ICategory; page: number }
 
@@ -42,6 +44,9 @@ export const CategoryHeader = async ({
                 {category.id ? (
                     <MoveToBookmarkButton categoryId={category.id} />
                 ) : null}
+            </div>
+            <div className={"flex items-center justify-end"}>
+                <PaymentModal />
             </div>
             <div className={"flex items-center justify-end"}>
                 <PaginationControls
