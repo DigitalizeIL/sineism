@@ -2,31 +2,40 @@ import { Button } from "@/components/Button"
 import { commentsService } from "@/app/(posts)/(modules)/comments/lib/services/CommentsService"
 import { IComment } from "@/app/(posts)/(modules)/comments/lib/interfaces/IComment"
 import { IPost } from "@/app/(posts)/lib/interfaces/IPost"
-import { authenticationService } from "@/app/(authentication)/lib/services/AuthenticationService"
 import { TextArea } from "@/components/Form/TextArea"
 import { revalidatePath } from "next/cache"
 import clsx from "clsx"
+import { Select } from "@/components/Form/Select"
+import { postsService } from "@/app/(posts)/lib/services/PostsService"
+import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
 
 type CreateCommentButtonProps = {
-    post: IPost
+    post?: IPost
     className?: string
 }
 
 export const CreateCommentForm = async (props: CreateCommentButtonProps) => {
+    let posts: IPost[] = []
+
+    if (!props.post) {
+        posts = await postsService.getAllPosts()
+    }
+
     async function createComment(formData: FormData) {
         "use server"
-        const author = await authenticationService.getCurrentUser()
+        const session = await getAppServerSession()
         const content = formData.get("content") as string
+        const postId = Number(formData.get("postId") as string)
 
-        if (!author || !content || !props.post.id) {
+        if (!session?.user || !content || isNaN(postId)) {
             // TODO: show error
-            console.log("no content", author, content, props.post)
+            console.log("no content", session, content, props.post)
             return
         }
 
         const newComment: IComment = {
-            postId: props.post.id,
-            userId: author.id,
+            userId: session.user.id,
+            postId,
             content,
         }
 
@@ -43,6 +52,21 @@ export const CreateCommentForm = async (props: CreateCommentButtonProps) => {
                     className="w-full"
                     placeholder={"Comment on the post"}
                 />
+                {props.post ? (
+                    <input
+                        type={"hidden"}
+                        name={"postId"}
+                        value={props.post.id}
+                    />
+                ) : (
+                    <Select
+                        name={"postId"}
+                        options={posts?.map((post) => ({
+                            value: post.id,
+                            label: post.title,
+                        }))}
+                    />
+                )}
                 <Button
                     type="ghost"
                     className={"text-3xl text-black"}>
