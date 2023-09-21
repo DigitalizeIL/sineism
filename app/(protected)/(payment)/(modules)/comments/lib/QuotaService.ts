@@ -1,7 +1,7 @@
 import "server-only"
 
 import prisma from "@/lib/prisma"
-import { IQuota } from "@/app/(protected)/(payment)/lib/IQuota"
+import { IQuota } from "@/app/(protected)/(payment)/(modules)/comments/lib/IQuota"
 
 export interface QuotaService {
     getQuota(userId: number): Promise<IQuota | null>

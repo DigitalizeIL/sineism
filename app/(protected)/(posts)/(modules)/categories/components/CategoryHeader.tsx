@@ -4,9 +4,7 @@ import { PaginationControls } from "@/components/PaginationControls"
 import { redirect } from "next/navigation"
 import { categoriesService } from "@/app/(protected)/(posts)/(modules)/categories/lib/services/CategoriesService"
 import { DEFAULT_PAGE_SIZE } from "@/app/(protected)/(posts)/(modules)/categories/consts/pagination"
-import { PaymentForm } from "@/app/(protected)/(payment)/components/PaymentForm"
-import { PaymentModal } from "@/app/(protected)/(payment)/components/PaymentModal"
-import { CommentWithPaymentContainer } from "@/app/(protected)/(payment)/components/CommentWithPaymentContainer"
+import { CommentWithPaymentContainer } from "@/app/(protected)/(payment)/(modules)/comments/components/CommentWithPaymentContainer"
 
 type CategoryHeaderProps = { category: ICategory; page: number }
 

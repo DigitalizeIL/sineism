@@ -5,7 +5,7 @@ import { useState } from "react"
 import { Modal } from "@/components/Modal"
 import { Button } from "@/components/Button"
 import { BiComment } from "react-icons/bi"
-import { PaymentForm } from "@/app/(protected)/(payment)/components/PaymentForm"
+import { PaymentForm } from "@/app/(protected)/(payment)/(modules)/comments/components/PaymentForm"
 
 export const PaymentModal = () => {
     const [{ isPending }] = usePayPalScriptReducer()

@@ -1,6 +1,6 @@
-import { PaymentModal } from "@/app/(protected)/(payment)/components/PaymentModal"
+import { PaymentModal } from "@/app/(protected)/(payment)/(modules)/comments/components/PaymentModal"
 import { CreateCommentForm } from "@/app/(protected)/(posts)/(modules)/comments/components/CreateCommentForm"
-import { quotaService } from "@/app/(protected)/(payment)/lib/QuotaService"
+import { quotaService } from "@/app/(protected)/(payment)/(modules)/comments/lib/QuotaService"
 import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
 
 export const CommentWithPaymentContainer = async () => {
@@ -8,7 +8,7 @@ export const CommentWithPaymentContainer = async () => {
     if (!session?.user) return
 
     const quota = await quotaService.getQuota(session.user.id)
-    console.log(quota)
+
     return (
         <div>
             <div className={"flex items-center justify-end"}>
