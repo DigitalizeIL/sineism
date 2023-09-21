@@ -1,7 +1,7 @@
 import React from "react"
 import AuthStatus from "@/app/(authentication)/components/AuthStatus"
 import { Logo } from "@/components/Logo"
-import { categoriesService } from "@/app/(posts)/(modules)/categories/lib/services/CategoriesService"
+import { categoriesService } from "@/app/(protected)/(posts)/(modules)/categories/lib/services/CategoriesService"
 import { LINKS } from "@/components/Layout/Header/consts"
 import { HeaderLink } from "@/components/Layout/Header/HeaderLink"
 
