@@ -6,6 +6,7 @@ import { categoriesService } from "@/app/(posts)/(modules)/categories/lib/servic
 import { DEFAULT_PAGE_SIZE } from "@/app/(posts)/(modules)/categories/consts/pagination"
 import { PaymentForm } from "@/app/(payment)/components/PaymentForm"
 import { PaymentModal } from "@/app/(payment)/components/PaymentModal"
+import { CommentWithPaymentContainer } from "@/app/(payment)/components/CommentWithPaymentContainer"
 
 type CategoryHeaderProps = { category: ICategory; page: number }
 
@@ -46,7 +47,7 @@ export const CategoryHeader = async ({
                 ) : null}
             </div>
             <div className={"flex items-center justify-end"}>
-                <PaymentModal />
+                <CommentWithPaymentContainer />
             </div>
             <div className={"flex items-center justify-end"}>
                 <PaginationControls
