@@ -30,7 +30,7 @@ export const Providers = ({ children, session }: ProvidersProps) => {
         <SessionProvider session={session}>
             <QueryClientProvider client={queryClient}>
                 <PayPalScriptProvider options={initialOptions}>
-                    <UserProvider>{children}</UserProvider>
+                    {children}
                 </PayPalScriptProvider>
             </QueryClientProvider>
         </SessionProvider>
