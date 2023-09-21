@@ -9,14 +9,15 @@ datasource db {
 }
 
 model User {
-  id       Int        @id @default(autoincrement())
-  name     String
-  email    String     @unique
-  password String
-  posts    Post[]
-  role     String     @default("GUEST")
-  comments Comment[]
-  Bookmark Bookmark[]
+  id               Int                @id @default(autoincrement())
+  name             String
+  email            String             @unique
+  password         String
+  posts            Post[]
+  role             String             @default("GUEST")
+  comments         Comment[]
+  Bookmark         Bookmark[]
+  userCommentQuota UserCommentQuota[]
 }
 
 model Post {
@@ -59,4 +60,11 @@ model Bookmark {
   page       Int
 
   @@unique(fields: [userId, categoryId], name: "userCategory")
+}
+
+model UserCommentQuota {
+  id     Int  @id @default(autoincrement())
+  userId Int  @unique
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  quota  Int
 }
