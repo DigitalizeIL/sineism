@@ -18,7 +18,8 @@ type ProvidersProps = {
 }
 
 const initialOptions: ReactPayPalScriptOptions = {
-    clientId: "test",
+    clientId:
+        "AdszmSp9iVcX6btzBfXxBOTCuhQa8arlHJbY9kjSUzuZkh1iLRVhiqHimVAL-ZmCnYDvTL6wspu1u_zW",
     currency: "USD",
     intent: "capture",
 }
