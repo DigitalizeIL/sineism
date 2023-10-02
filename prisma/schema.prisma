@@ -16,8 +16,9 @@ model User {
   posts            Post[]
   role             String             @default("GUEST")
   comments         Comment[]
-  Bookmark         Bookmark[]
+  bookmark         Bookmark[]
   userCommentQuota UserCommentQuota[]
+  orders           Orders[]
 }
 
 model Post {
@@ -67,4 +68,13 @@ model UserCommentQuota {
   userId Int  @unique
   user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
   quota  Int
+}
+
+model Orders {
+  id      Int    @id @default(autoincrement())
+  userId  Int
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  orderId Int
+  product String
+  price   Int
 }
