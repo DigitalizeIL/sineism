@@ -16,5 +16,6 @@ export const createOrder = async (
         ...order,
         userId,
     })
-    quotaService.addQuota(userId, 3)
+    await quotaService.addQuota(userId, 3)
+    console.log("DONEEE", order)
 }
