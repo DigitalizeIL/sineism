@@ -1,7 +1,7 @@
 import "server-only"
 
 import prisma from "@/lib/prisma"
-import { IQuota } from "@/app/(protected)/(payment)/(modules)/comments/lib/IQuota"
+import { IOrder } from "@/app/(protected)/(payment)/lib/IOrder"
 
 export interface OrderService {
     createOrder(orderData: {
@@ -9,17 +9,14 @@ export interface OrderService {
         userId: number
         product: string
         price: number
-    }): void
+    }): Promise<void>
 }
 
 export const createOrderService = (): OrderService => {
-    const createOrder = async (orderData: {
-        orderId: string
-        userId: number
-        product: string
-        price: number
-    }): Promise<IQuota | null> => {
-        return prisma.orders.create(orderData)
+    const createOrder = async (orderData: IOrder): Promise<void> => {
+        prisma.orders.create({
+            data: orderData,
+        })
     }
 
     return {

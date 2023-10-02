@@ -71,10 +71,10 @@ model UserCommentQuota {
 }
 
 model Orders {
-  id      Int    @id @default(autoincrement())
+  id      Int     @id @default(autoincrement())
   userId  Int
-  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  orderId Int
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  orderId String
   product String
-  price   Int
+  price   Decimal
 }
