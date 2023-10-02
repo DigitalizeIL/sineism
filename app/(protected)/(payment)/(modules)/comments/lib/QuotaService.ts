@@ -6,9 +6,9 @@ import { IQuota } from "@/app/(protected)/(payment)/(modules)/comments/lib/IQuot
 export interface QuotaService {
     getQuota(userId: number): Promise<IQuota | null>
 
-    addQuota(userId: number, amount: number): void
+    addQuota(userId: number, amount: number): Promise<any>
 
-    consumeQuota(userId: number, amount?: number): void
+    consumeQuota(userId: number, amount?: number): Promise<any>
 }
 
 export const createQuotaService = (): QuotaService => {
@@ -19,9 +19,13 @@ export const createQuotaService = (): QuotaService => {
     }
 
     const addQuota = async (userId: number, amount: number) => {
-        return prisma.userCommentQuota.update({
+        return prisma.userCommentQuota.upsert({
             where: { userId },
-            data: {
+            create: {
+                userId,
+                quota: amount,
+            },
+            update: {
                 quota: {
                     increment: amount,
                 },
