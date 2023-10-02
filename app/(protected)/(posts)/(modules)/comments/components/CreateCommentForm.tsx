@@ -45,7 +45,7 @@ export const CreateCommentForm = async (props: CreateCommentButtonProps) => {
     }
 
     return (
-        <div className={clsx(["flex flex-col space-y-2", props.className])}>
+        <div className={clsx(["flex flex-col space-y-2 p-3", props.className])}>
             <form action={createComment}>
                 <TextArea
                     name="content"
