@@ -1,6 +1,6 @@
 "use client"
 
-import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js"
+import { usePayPalScriptReducer } from "@paypal/react-paypal-js"
 import { useEffect, useState, useTransition } from "react"
 import {
     CreateOrderActions,
@@ -10,6 +10,7 @@ import {
 } from "@paypal/paypal-js"
 import { createOrder } from "@/app/(protected)/(payment)/(modules)/comments/actions/CreateOrder"
 import { useUser } from "@/app/(authentication)/context"
+import { Button } from "@/components/Button"
 
 export const PaymentForm = () => {
     const [{ isPending }] = usePayPalScriptReducer()
@@ -30,9 +31,9 @@ export const PaymentForm = () => {
     const [orderId, setOrderId] = useState<string>()
 
     const product = "Comments"
-    const price = 0.01
+    const price = 0.1
 
-    // creates a paypal order
+    // creates a PayPal order
     const createPaypalOrder = async (
         data: CreateOrderData,
         actions: CreateOrderActions
@@ -92,16 +93,52 @@ export const PaymentForm = () => {
         }
     }, [user, orderId, success])
 
+    const demo = async () => {
+        await createPaypalOrder(
+            {
+                paymentSource: "card",
+            },
+            {
+                order: {
+                    create: async (options) => {
+                        return "OrderIDDD"
+                    },
+                },
+            }
+        )
+
+        await onApprove(
+            {
+                facilitatorAccessToken: "asdads",
+                orderID: "OrderIDDD",
+            },
+            {
+                order: {
+                    async capture() {
+                        return {
+                            payer: {
+                                name: "Neri",
+                            },
+                            id: 123,
+                            intent: "CAPTURE",
+                        }
+                    },
+                },
+            } as any
+        )
+    }
+
     return (
-        <PayPalButtons
-            createOrder={createPaypalOrder}
-            onApprove={onApprove}
-            style={{
-                shape: "pill",
-                label: "buynow",
-                layout: "horizontal",
-                tagline: false,
-            }}
-        />
+        <Button onClick={demo}>Purchase</Button>
+        // <PayPalButtons
+        //     createOrder={createPaypalOrder}
+        //     onApprove={onApprove}
+        //     style={{
+        //         shape: "pill",
+        //         label: "buynow",
+        //         layout: "horizontal",
+        //         tagline: false,
+        //     }}
+        // />
     )
 }
