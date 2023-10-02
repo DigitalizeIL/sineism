@@ -8,11 +8,13 @@ import {
     OnApproveActions,
     OnApproveData,
 } from "@paypal/paypal-js"
+import { createOrder } from "@/app/(protected)/(payment)/(modules)/comments/actions/CreateOrder"
+import { useUser } from "@/app/(authentication)/context"
 
 export const PaymentForm = () => {
     const [{ isPending }] = usePayPalScriptReducer()
     let [isTransitionPending, startTransition] = useTransition()
-
+    const user = useUser()
     // const onApprove = async (
     //     data: OnApproveData,
     //     actions: OnApproveActions
@@ -25,20 +27,23 @@ export const PaymentForm = () => {
 
     const [success, setSuccess] = useState(false)
     const [ErrorMessage, setErrorMessage] = useState("")
-    const [orderID, setOrderID] = useState<string>()
+    const [orderId, setOrderId] = useState<string>()
+
+    const product = "Comments"
+    const price = 0.01
 
     // creates a paypal order
-    const createOrder = async (
+    const createPaypalOrder = async (
         data: CreateOrderData,
         actions: CreateOrderActions
     ) => {
         const order = await actions.order.create({
             purchase_units: [
                 {
-                    description: "Comments",
+                    description: product,
                     amount: {
                         currency_code: "USD",
-                        value: "0.01",
+                        value: price.toString(),
                     },
                 },
             ],
@@ -51,7 +56,7 @@ export const PaymentForm = () => {
             return ""
         }
 
-        setOrderID(order)
+        setOrderId(order)
 
         return order
     }
@@ -66,19 +71,30 @@ export const PaymentForm = () => {
             console.log(capture)
             const { payer } = capture
             setSuccess(true)
+
+            if (!orderId) return console.error("No order id!")
+
+            await createOrder(
+                {
+                    price,
+                    product,
+                    orderId,
+                },
+                user.id
+            )
         }
     }
 
     useEffect(() => {
         if (success) {
             alert("Payment successful!!")
-            console.log("Order successful . Your order id is--", orderID)
+            console.log("Order successful . Your order id is--", orderId)
         }
-    }, [orderID, success])
+    }, [user, orderId, success])
 
     return (
         <PayPalButtons
-            createOrder={createOrder}
+            createOrder={createPaypalOrder}
             onApprove={onApprove}
             style={{
                 shape: "pill",
