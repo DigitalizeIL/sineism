@@ -9,12 +9,12 @@ export interface OrderService {
         userId: number
         product: string
         price: number
-    }): Promise<void>
+    }): Promise<any>
 }
 
 export const createOrderService = (): OrderService => {
-    const createOrder = async (orderData: IOrder): Promise<void> => {
-        prisma.orders.create({
+    const createOrder = async (orderData: IOrder): Promise<any> => {
+        return prisma.orders.create({
             data: orderData,
         })
     }
