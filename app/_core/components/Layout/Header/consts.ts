@@ -1,6 +1,10 @@
 export const LINKS = [
     {
         href: "/",
-        label: "Home",
+        label: "בית",
+    },
+    {
+        href: "/comments",
+        label: "תגובות",
     },
 ]

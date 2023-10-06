@@ -1,5 +1,5 @@
 export const TEXTS = {
-    signedInAs: "Signed in as",
-    signOut: "Sign me out",
-    usernamePrefix: "Welcome,",
+    signedInAs: "מחובר כ",
+    signOut: "התנתקות",
+    usernamePrefix: "ברוך הבא,",
 }
