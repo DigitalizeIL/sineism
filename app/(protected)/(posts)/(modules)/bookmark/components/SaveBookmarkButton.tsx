@@ -25,7 +25,7 @@ export const SaveBookmarkButton = async (props: {
         if (!session) return console.log("no user")
 
         if (isActive && activeBookmark?.id) {
-            await bookmarkService.deleteBookmark(activeBookmark.id)
+            await bookmarkService.deleteBookmark(activeBookmark?.id)
         } else {
             await bookmarkService.upsertBookmark({
                 postId: props.postId,
