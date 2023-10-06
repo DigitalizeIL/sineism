@@ -9,14 +9,16 @@ datasource db {
 }
 
 model User {
-  id       Int        @id @default(autoincrement())
-  name     String
-  email    String     @unique
-  password String
-  posts    Post[]
-  role     String     @default("GUEST")
-  comments Comment[]
-  Bookmark Bookmark[]
+  id               Int                @id @default(autoincrement())
+  name             String
+  email            String             @unique
+  password         String
+  posts            Post[]
+  role             String             @default("GUEST")
+  comments         Comment[]
+  bookmark         Bookmark[]
+  userCommentQuota UserCommentQuota[]
+  orders           Orders[]
 }
 
 model Post {
@@ -29,7 +31,7 @@ model Post {
   comments   Comment[]
   categoryId Int
   category   Category   @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  Bookmark   Bookmark[]
+  bookmark   Bookmark[]
 }
 
 model Comment {
@@ -45,7 +47,7 @@ model Category {
   id       Int        @id @default(autoincrement())
   name     String
   posts    Post[]
-  Bookmark Bookmark[]
+  bookmark Bookmark[]
 }
 
 model Bookmark {
@@ -59,4 +61,20 @@ model Bookmark {
   page       Int
 
   @@unique(fields: [userId, categoryId], name: "userCategory")
+}
+
+model UserCommentQuota {
+  id     Int  @id @default(autoincrement())
+  userId Int  @unique
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  quota  Int
+}
+
+model Orders {
+  id      Int     @id @default(autoincrement())
+  userId  Int
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  orderId String
+  product String
+  price   Decimal
 }
