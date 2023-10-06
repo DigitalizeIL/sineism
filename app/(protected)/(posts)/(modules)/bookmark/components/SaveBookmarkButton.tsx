@@ -8,22 +8,32 @@ export const SaveBookmarkButton = async (props: {
     categoryId: number
     postId: number
     page: number
-    isActive?: boolean
 }) => {
     const session = await getAppServerSession()
 
     if (!session?.user) return null
 
+    const activeBookmark = await bookmarkService.getBookmarkByUserAndCategory(
+        session.user.id,
+        props.categoryId
+    )
+
+    const isActive = activeBookmark?.postId === props.postId
+
     const saveBookmark = async () => {
         "use server"
         if (!session) return console.log("no user")
 
-        await bookmarkService.upsertBookmark({
-            postId: props.postId,
-            categoryId: props.categoryId,
-            userId: session.user?.id,
-            page: props.page,
-        })
+        if (isActive && activeBookmark?.id) {
+            await bookmarkService.deleteBookmark(activeBookmark.id)
+        } else {
+            await bookmarkService.upsertBookmark({
+                postId: props.postId,
+                categoryId: props.categoryId,
+                userId: session.user?.id,
+                page: props.page,
+            })
+        }
 
         revalidatePath(`/categories/${props.categoryId}`)
     }
@@ -31,7 +41,7 @@ export const SaveBookmarkButton = async (props: {
     return (
         <form action={saveBookmark}>
             <Button
-                type={props.isActive ? "primary" : "ghost"}
+                type={isActive ? "primary" : "ghost"}
                 className="bg-blue-500 hover:bg-blue-600">
                 <BsBookmarkPlus />
             </Button>

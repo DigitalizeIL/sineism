@@ -6,8 +6,8 @@ import { ModalWithButton } from "@/components/Modal"
 import { IPost } from "@/app/(protected)/(posts)/lib/interfaces/IPost"
 import { SaveBookmarkButton } from "@/app/(protected)/(posts)/(modules)/bookmark/components/SaveBookmarkButton"
 import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
-import { bookmarkService } from "@/app/(protected)/(posts)/(modules)/bookmark/lib/services/BookmarkService"
 import { AiOutlineEdit } from "react-icons/ai"
+import React from "react"
 
 type PostFeedItemProps = {
     post: IPost
@@ -17,42 +17,32 @@ type PostFeedItemProps = {
 export const PostFeedItem = async ({ post, page }: PostFeedItemProps) => {
     const session = await getAppServerSession()
 
-    let activeBookmark
-
-    if (session?.user) {
-        activeBookmark = await bookmarkService.getBookmarkByUserAndCategory(
-            session.user.id,
-            post.categoryId
-        )
-    }
-
     return (
         <Card
             className={"w-full max-w-lg flex-col"}
-            title={post.title}
             description={post.content}
-            actions={[
-                <SaveBookmarkButton
-                    key={"bookmark"}
-                    categoryId={post.categoryId}
-                    postId={post.id}
-                    page={page || 1}
-                    isActive={activeBookmark?.postId === post.id}
-                />,
-                ...(session?.user?.role === USER_ROLES.admin
-                    ? [
-                          <DeletePostButton
-                              key={"delete"}
-                              postId={post.id}
-                          />,
-                          <ModalWithButton
-                              key={"edit"}
-                              buttonText={<AiOutlineEdit />}>
-                              <PostCreateOrEditForm post={post} />
-                          </ModalWithButton>,
-                      ]
-                    : []),
-            ]}
+            title={
+                <div className="flex flex-row justify-between items-center w-full mb-4">
+                    <SaveBookmarkButton
+                        categoryId={post.categoryId}
+                        postId={post.id}
+                        page={page || 1}
+                    />
+                    <div className="flex flex-row justify-center w-full">
+                        <h3 className="text-lg font-medium text-stone-900 self-center !mb-0">
+                            {post.title}
+                        </h3>
+                    </div>
+                    {session?.user?.role === USER_ROLES.admin ? (
+                        <>
+                            <DeletePostButton postId={post.id} />
+                            <ModalWithButton buttonText={<AiOutlineEdit />}>
+                                <PostCreateOrEditForm post={post} />
+                            </ModalWithButton>
+                        </>
+                    ) : null}
+                </div>
+            }
         />
     )
 }
