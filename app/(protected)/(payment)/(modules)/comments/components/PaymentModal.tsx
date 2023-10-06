@@ -25,6 +25,7 @@ export const PaymentModal = () => {
             </Modal>
             <Button
                 type={"ghost"}
+                className="bg-blue-500 hover:bg-blue-600"
                 onClick={() => setIsModalOpen(true)}>
                 <BiComment />
             </Button>

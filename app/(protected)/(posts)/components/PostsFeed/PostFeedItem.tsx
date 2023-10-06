@@ -7,6 +7,7 @@ import { IPost } from "@/app/(protected)/(posts)/lib/interfaces/IPost"
 import { SaveBookmarkButton } from "@/app/(protected)/(posts)/(modules)/bookmark/components/SaveBookmarkButton"
 import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
 import { bookmarkService } from "@/app/(protected)/(posts)/(modules)/bookmark/lib/services/BookmarkService"
+import { AiOutlineEdit } from "react-icons/ai"
 
 type PostFeedItemProps = {
     post: IPost
@@ -46,7 +47,7 @@ export const PostFeedItem = async ({ post, page }: PostFeedItemProps) => {
                           />,
                           <ModalWithButton
                               key={"edit"}
-                              buttonText={"Edit"}>
+                              buttonText={<AiOutlineEdit />}>
                               <PostCreateOrEditForm post={post} />
                           </ModalWithButton>,
                       ]

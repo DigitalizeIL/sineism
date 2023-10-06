@@ -2,6 +2,7 @@ import { Button } from "@/components/Button"
 import { bookmarkService } from "@/app/(protected)/(posts)/(modules)/bookmark/lib/services/BookmarkService"
 import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
 import { revalidatePath } from "next/cache"
+import { BsBookmarkPlus } from "react-icons/bs"
 
 export const SaveBookmarkButton = async (props: {
     categoryId: number
@@ -32,7 +33,7 @@ export const SaveBookmarkButton = async (props: {
             <Button
                 type={props.isActive ? "primary" : "ghost"}
                 className="bg-blue-500 hover:bg-blue-600">
-                Bookmark
+                <BsBookmarkPlus />
             </Button>
         </form>
     )
