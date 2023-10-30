@@ -41,7 +41,6 @@ export const createUsersDbRepository = (): UsersDbRepository => {
         credentials: LoginCredentials
     ) => {
         const password = await User.hashPassword(credentials.password)
-        console.log(user)
 
         return await prisma.user.create({
             data: {
