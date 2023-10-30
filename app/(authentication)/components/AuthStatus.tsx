@@ -12,7 +12,9 @@ export default function AuthStatus() {
     }, [session])
 
     return (
-        <div className={"text-end"}>
+        <div
+            className={"text-end"}
+            dir={"rtl"}>
             {session?.data?.user?.name ? (
                 <>
                     <span className={"text-sm text-slate-500"}>

@@ -14,7 +14,7 @@ import {
 import { UserAlreadyExists } from "@/app/(authentication)/lib/errors/UserAlreadyExists"
 import { USER_ROLES } from "@/app/(authentication)/lib/models/UserRole"
 import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
-import { IUser } from "@/app/(authentication)/lib/interfaces/IUser"
+import { INewUser, IUser } from "@/app/(authentication)/lib/interfaces/IUser"
 
 export type AuthenticationServiceDependencies = {
     dbRepository: UsersDbRepository
@@ -55,10 +55,9 @@ export const createAuthenticationService = (
         if (user) {
             throw new UserAlreadyExists()
         } else {
-            let newUser: IUser = {
+            let newUser: INewUser = {
                 ...credentials,
                 role: USER_ROLES.user,
-                id: 0,
             }
 
             if (process.env.ADMIN_EMAILS?.indexOf(credentials.email) !== -1)

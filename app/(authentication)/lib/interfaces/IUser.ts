@@ -9,3 +9,5 @@ export interface IUser {
     updated_at?: Date
     role?: UserRole
 }
+
+export type INewUser = Omit<IUser, "id">

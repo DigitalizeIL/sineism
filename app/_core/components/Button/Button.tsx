@@ -47,7 +47,7 @@ export const Button = ({
 }
 
 const typesStyle = {
-    primary: "border-black bg-black text-white hover:bg-white hover:text-black",
+    primary: "bg-black text-white hover:bg-white hover:text-black",
     ghost: "border-transparent bg-transparent text-black hover:bg-black hover:text-white",
     slim: "p-0 h-auto",
 }

@@ -3,7 +3,7 @@ import Styles from "./Card.module.css"
 import clsx from "clsx"
 
 export const Card = (props: {
-    title: string
+    title: ReactNode
     description: string
     children?: ReactNode
     actions?: ReactNode[]
@@ -13,14 +13,16 @@ export const Card = (props: {
     return (
         <div className={clsx([Styles.card, props.style, props.className])}>
             <div className={"flex flex-col items-start"}>
-                {props.title ? (
+                {typeof props.title === "string" ? (
                     <h3
                         className={
                             "text-lg font-medium text-stone-900 self-center"
                         }>
                         {props.title}
                     </h3>
-                ) : null}
+                ) : (
+                    props.title
+                )}
                 {props.description ? (
                     <p className={"text-sm text-stone-700  ms-auto"}>
                         {props.description}
