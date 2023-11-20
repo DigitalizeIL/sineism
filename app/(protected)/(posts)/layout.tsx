@@ -2,11 +2,10 @@ import { Metadata } from "next"
 import React, { ReactNode } from "react"
 import { METADATA } from "@/app/(protected)/(posts)/consts"
 import { Header } from "@/components/Layout"
-import { UserProvider } from "@/app/(authentication)/context/UserProvider"
 import { PostsFloatingQuickActions } from "@/app/(protected)/(posts)/components/PostsFloatingQuickActions"
 import { CreateCategoryForm } from "@/app/(protected)/(posts)/(modules)/categories/components/CreateCategoryForm"
 import { ModalWithButton } from "@/components/Modal"
-import { PostCreateOrEditForm } from "@/app/(protected)/(posts)/components/PostCreateOrEditForm"
+import { PostCreateOrEditFormServer } from "@/app/(protected)/(posts)/components/PostCreateOrEditFormServer"
 
 export const metadata: Metadata = {
     title: METADATA.title,
@@ -30,9 +29,7 @@ export default async function Layout({ children }: LayoutProps) {
             <Header />
             {children}
             <PostsFloatingQuickActions>
-                <ModalWithButton buttonText={"Create Post"}>
-                    <PostCreateOrEditForm />
-                </ModalWithButton>
+                <PostCreateOrEditFormServer />
                 <ModalWithButton buttonText={"Create Category"}>
                     <CreateCategoryForm />
                 </ModalWithButton>
