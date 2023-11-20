@@ -6,3 +6,6 @@ export interface IPost {
     postNumber: number
     id: number
 }
+
+export type CreatePostDto = Omit<IPost, "id" | "postNumber">
+export type EditPostDto = Omit<IPost, "authorId" | "id" | "postNumber">

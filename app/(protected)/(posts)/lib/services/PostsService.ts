@@ -4,15 +4,19 @@ import {
     postsDbRepository,
     PostsDbRepository,
 } from "@/app/(protected)/(posts)/lib/repositories/PostsDbRepository"
+import {
+    CreatePostDto,
+    EditPostDto,
+} from "@/app/(protected)/(posts)/lib/interfaces/IPost"
 
 export interface PostsService {
     getAllPosts(): Promise<Post[]>
 
     getPost(id: number): Promise<Post>
 
-    createPost(post: Post): Promise<Post>
+    createPost(post: CreatePostDto): Promise<Post>
 
-    updatePost(id: number, post: Partial<Post>): Promise<Post>
+    updatePost(id: number, post: EditPostDto): Promise<Post>
 
     deletePost(id: number): Promise<void>
 }
@@ -36,13 +40,13 @@ export const createPostsService = (
         return Post.fromJson(post)
     }
 
-    const createPost = async (post: Post): Promise<Post> => {
+    const createPost = async (post: CreatePostDto): Promise<Post> => {
         const createdPost = await dependencies.dbRepository.create(post)
 
         return Post.fromJson(createdPost)
     }
 
-    const updatePost = async (id: number, post: Post): Promise<Post> => {
+    const updatePost = async (id: number, post: EditPostDto): Promise<Post> => {
         const updatedPost = await dependencies.dbRepository.update(
             id,
             JSON.parse(JSON.stringify(post))

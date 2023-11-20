@@ -1,11 +1,18 @@
 import "server-only"
-
-import { CrudRepository } from "@/lib/repositories/CrudRepository"
 import { Post } from "@/app/(protected)/(posts)/lib/models/Post"
 import prisma from "@/lib/prisma"
-import { IPost } from "@/app/(protected)/(posts)/lib/interfaces/IPost"
+import {
+    CreatePostDto,
+    EditPostDto,
+} from "@/app/(protected)/(posts)/lib/interfaces/IPost"
 
-export interface PostsDbRepository extends CrudRepository<Post> {}
+export interface PostsDbRepository {
+    getAll: () => Promise<Post[]>
+    get: (id: number) => Promise<Post>
+    create: (item: CreatePostDto) => Promise<Post>
+    update: (id: number, item: EditPostDto) => Promise<Post>
+    deleteItem: (id: number) => Promise<void>
+}
 
 export const createPostsDbRepository = (): PostsDbRepository => {
     const getAll = async (): Promise<Post[]> => {
@@ -22,7 +29,7 @@ export const createPostsDbRepository = (): PostsDbRepository => {
         return Post.fromJson(postResult)
     }
 
-    const create = async (item: IPost): Promise<Post> => {
+    const create = async (item: CreatePostDto): Promise<Post> => {
         const postResult = await prisma.post.create({
             data: {
                 content: item.content || "",
@@ -35,7 +42,7 @@ export const createPostsDbRepository = (): PostsDbRepository => {
         return Post.fromJson(postResult)
     }
 
-    const update = async (id: number, item: IPost): Promise<Post> => {
+    const update = async (id: number, item: EditPostDto): Promise<Post> => {
         const postResult = await prisma.post.update({
             where: { id },
             data: item,
