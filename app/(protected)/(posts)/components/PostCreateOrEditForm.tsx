@@ -87,7 +87,7 @@ export const PostCreateOrEditForm = (props: {
                         name={"content"}
                         value={content}
                         onChange={(value) => setContent(value)}
-                        rows={5}
+                        rows={10}
                     />
                     <Select
                         name={"category"}
