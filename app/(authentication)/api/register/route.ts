@@ -1,9 +1,9 @@
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 import { authenticationService } from "@/app/(authentication)/lib/services/AuthenticationService"
 import { UserAlreadyExists } from "@/app/(authentication)/lib/errors/UserAlreadyExists"
 import { RegisterArgs } from "@/app/(authentication)/lib/types/AuthenticationTypes"
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
     const registerData: RegisterArgs = await req.json()
 
     try {
