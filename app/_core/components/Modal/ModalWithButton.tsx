@@ -8,6 +8,8 @@ export const ModalWithButton = (props: {
     children: ReactNode
     buttonText: ReactNode
     isOpen?: boolean
+    onClose?: () => void
+    onOpen?: () => void
 }) => {
     const [isOpen, setIsOpen] = useState(props.isOpen || false)
 
@@ -15,10 +17,20 @@ export const ModalWithButton = (props: {
         setIsOpen(!!props.isOpen)
     }, [props.isOpen])
 
+    const close = () => {
+        props.onClose?.()
+        setIsOpen(false)
+    }
+
+    const open = () => {
+        props.onOpen?.()
+        setIsOpen(true)
+    }
+
     return (
         <div>
             <Button
-                onClick={() => setIsOpen(true)}
+                onClick={open}
                 type="ghost"
                 className={"text-3xl text-black"}>
                 {props.buttonText}
@@ -26,7 +38,7 @@ export const ModalWithButton = (props: {
 
             <Modal
                 isOpen={isOpen}
-                onClose={() => setIsOpen(false)}>
+                onClose={close}>
                 {props.children}
             </Modal>
         </div>
