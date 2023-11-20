@@ -17,7 +17,7 @@ export const PostFeedItem = async ({ post, page }: PostFeedItemProps) => {
 
     return (
         <Card
-            className={"w-full max-w-lg flex-col"}
+            className={"w-3/4 flex-col"}
             description={post.content}
             title={
                 <div className="flex flex-row justify-between items-center w-full mb-4">
