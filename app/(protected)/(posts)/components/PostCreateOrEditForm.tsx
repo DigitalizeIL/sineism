@@ -10,7 +10,7 @@ import {
 import { ICategory } from "@/app/(protected)/(posts)/(modules)/categories/lib/interfaces/ICategory"
 import { Select } from "@/components/Form/Select"
 import { ModalWithButton } from "@/components/Modal"
-import React, { FormEvent, useState } from "react"
+import React, { FormEvent, useEffect, useState } from "react"
 import { useSession } from "next-auth/react"
 import { AiOutlineEdit } from "react-icons/ai"
 
@@ -27,6 +27,14 @@ export const PostCreateOrEditForm = (props: {
     const [title, setTitle] = useState(props.post?.title)
     const [content, setContent] = useState(props.post?.content)
     const [category, setCategory] = useState(props.post?.categoryId)
+
+    useEffect(() => {
+        if (props.post) {
+            setTitle(props.post.title)
+            setContent(props.post.content)
+            setCategory(props.post.categoryId)
+        }
+    }, [props.post])
 
     const confirm = async (e: FormEvent) => {
         e.preventDefault()
