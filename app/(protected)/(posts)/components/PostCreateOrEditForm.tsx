@@ -24,29 +24,40 @@ export const PostCreateOrEditForm = (props: {
     const [isOpen, setIsOpen] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
 
+    const [title, setTitle] = useState(props.post?.title)
+    const [content, setContent] = useState(props.post?.content)
+    const [category, setCategory] = useState(props.post?.categoryId)
+
     const confirm = async (e: FormEvent) => {
-        const formData = new FormData(e.target as HTMLFormElement)
         e.preventDefault()
 
         try {
+            if (!(title && content && category)) {
+                throw new Error("title, content, and category are required")
+            }
+
             setIsLoading(true)
 
             if (props.post?.id) {
                 await props.editPost(props.post.id, {
-                    title: formData.get("title") as string,
-                    content: formData.get("content") as string,
-                    categoryId: Number(formData.get("category") as string),
+                    title,
+                    content,
+                    categoryId: category,
                 })
             } else if (data?.user?.id) {
                 await props.createPost({
-                    title: formData.get("title") as string,
-                    content: formData.get("content") as string,
-                    categoryId: Number(formData.get("category") as string),
+                    title,
+                    content,
+                    categoryId: category,
                     authorId: data?.user?.id,
                 })
             } else {
                 throw new Error("User not logged in")
             }
+
+            setTitle("")
+            setContent("")
+            setCategory(undefined)
 
             setIsOpen(false)
             return false
@@ -66,18 +77,22 @@ export const PostCreateOrEditForm = (props: {
                 <div className="flex flex-col space-y-2 p-3">
                     <Input
                         placeholder={"Title"}
-                        defaultValue={props.post?.title}
                         type="text"
                         name={"title"}
+                        value={title}
+                        onChange={(value) => setTitle(value)}
                     />
                     <TextArea
                         placeholder={"Content"}
-                        defaultValue={props.post?.content}
                         name={"content"}
+                        value={content}
+                        onChange={(value) => setContent(value)}
                         rows={5}
                     />
                     <Select
                         name={"category"}
+                        value={category}
+                        onChange={(value) => setCategory(Number(value))}
                         options={
                             props.categories?.map((category: ICategory) => ({
                                 label: category.name,
