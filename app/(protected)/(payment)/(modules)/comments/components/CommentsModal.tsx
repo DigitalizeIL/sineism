@@ -15,7 +15,9 @@ export const CommentsModal = ({ children }: { children: ReactNode }) => {
                 onClose={() => setIsCommentModalOpen(false)}>
                 {children}
             </Modal>
-            <Button onClick={() => setIsCommentModalOpen(true)}>
+            <Button
+                type={"ghost"}
+                onClick={() => setIsCommentModalOpen(true)}>
                 <BiComment />
             </Button>
         </div>

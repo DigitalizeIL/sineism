@@ -2,6 +2,7 @@ import { bookmarkService } from "@/app/(protected)/(posts)/(modules)/bookmark/li
 import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
 import { Button } from "@/components/Button"
 import { redirect } from "next/navigation"
+import { BiBookBookmark } from "react-icons/bi"
 
 export const MoveToBookmarkButton = async (props: { categoryId: number }) => {
     const session = await getAppServerSession()
@@ -14,8 +15,11 @@ export const MoveToBookmarkButton = async (props: { categoryId: number }) => {
 
     const moveToCategory = async () => {
         "use server"
+        if (!activeCategory?.page) return
         redirect(`/categories/${props.categoryId}?page=${activeCategory?.page}`)
     }
+
+    if (!activeCategory) return null
 
     return (
         <form
@@ -24,7 +28,7 @@ export const MoveToBookmarkButton = async (props: { categoryId: number }) => {
             <Button
                 type={"ghost"}
                 className="bg-blue-500 hover:bg-blue-600">
-                GoTo Bookmark
+                <BiBookBookmark />
             </Button>
         </form>
     )

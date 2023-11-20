@@ -1,6 +1,8 @@
 import { Button } from "@/components/Button"
 import { postsService } from "@/app/(protected)/(posts)/lib/services/PostsService"
 import { revalidatePath } from "next/cache"
+import { FiDelete } from "react-icons/fi"
+import { AiOutlineDelete } from "react-icons/ai"
 
 export const DeletePostButton = (props: { postId: number }) => {
     const deletePost = async () => {
@@ -15,7 +17,7 @@ export const DeletePostButton = (props: { postId: number }) => {
                 <Button
                     type="ghost"
                     className={"text-3xl text-black"}>
-                    Delete
+                    <AiOutlineDelete />
                 </Button>
             </form>
         </div>

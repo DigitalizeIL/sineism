@@ -6,7 +6,7 @@ import { Modal } from "@/components/Modal/Modal"
 
 export const ModalWithButton = (props: {
     children: ReactNode
-    buttonText: string
+    buttonText: ReactNode
     isOpen?: boolean
 }) => {
     const [isOpen, setIsOpen] = useState(props.isOpen || false)
