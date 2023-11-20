@@ -1,16 +1,12 @@
 import { Button } from "@/components/Button"
 import { Input } from "@/components/Form/Input/Input"
 import { TextArea } from "@/components/Form/TextArea"
-import {
-    EditPostDto,
-    IPost,
-} from "@/app/(protected)/(posts)/lib/interfaces/IPost"
+import { IPost } from "@/app/(protected)/(posts)/lib/interfaces/IPost"
 import { postsService } from "@/app/(protected)/(posts)/lib/services/PostsService"
 import { revalidatePath } from "next/cache"
 import { ICategory } from "@/app/(protected)/(posts)/(modules)/categories/lib/interfaces/ICategory"
 import { categoriesService } from "@/app/(protected)/(posts)/(modules)/categories/lib/services/CategoriesService"
 import { Select } from "@/components/Form/Select"
-import { Post } from "@/app/(protected)/(posts)/lib/models/Post"
 import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
 
 export const PostCreateOrEditForm = async (props: { post?: IPost }) => {
@@ -23,21 +19,22 @@ export const PostCreateOrEditForm = async (props: { post?: IPost }) => {
 
     const confirm = async (formData: FormData) => {
         "use server"
-        const postData: EditPostDto = {
-            title: formData.get("title") as string,
-            content: formData.get("content") as string,
-            categoryId: Number(formData.get("category") as string),
-        }
 
         if (props.post?.id) {
-            await postsService.updatePost(props.post?.id, postData)
+            await postsService.updatePost(props.post?.id, {
+                title: formData.get("title") as string,
+                content: formData.get("content") as string,
+                categoryId: Number(formData.get("category") as string),
+            })
+        } else if (session?.user?.id) {
+            await postsService.createPost({
+                title: formData.get("title") as string,
+                content: formData.get("content") as string,
+                categoryId: Number(formData.get("category") as string),
+                authorId: session?.user?.id,
+            })
         } else {
-            await postsService.createPost(
-                Post.fromJson({
-                    ...postData,
-                    authorId: session?.user?.id,
-                })
-            )
+            throw new Error("User not logged in")
         }
 
         revalidatePath("/posts")
