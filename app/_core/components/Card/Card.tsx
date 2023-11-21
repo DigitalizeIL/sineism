@@ -11,7 +11,7 @@ export const Card = (props: {
     className?: string
 }) => {
     return (
-        <div className={clsx([Styles.card, props.style, props.className])}>
+        <div className={clsx(["relative p-1 m-10", props.className])}>
             <div className={"flex flex-col items-start"}>
                 {typeof props.title === "string" ? (
                     <h3
@@ -24,7 +24,10 @@ export const Card = (props: {
                     props.title
                 )}
                 {props.description ? (
-                    <p className={"text-sm text-stone-700  ms-auto"}>
+                    <p
+                        className={
+                            "text-sm text-stone-700 me-auto whitespace-pre-wrap"
+                        }>
                         {props.description}
                     </p>
                 ) : null}

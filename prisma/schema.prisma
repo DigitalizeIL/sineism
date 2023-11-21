@@ -32,6 +32,7 @@ model Post {
   categoryId Int
   category   Category   @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   bookmark   Bookmark[]
+  postNumber Int        @default(autoincrement())
 }
 
 model Comment {

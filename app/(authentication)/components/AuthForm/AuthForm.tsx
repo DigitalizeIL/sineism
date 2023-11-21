@@ -39,12 +39,12 @@ export const AuthForm = ({ type }: { type: "login" | "register" }) => {
     return (
         <form
             onSubmit={submitForm}
-            className="flex flex-col space-y-4 bg-gray-50 px-4 py-8 sm:px-16">
+            className="flex flex-col space-y-4 px-4 py-8 sm:px-16">
             {type === "register" ? (
                 <div>
                     <label
                         htmlFor="fullName"
-                        className="block text-xs text-gray-600 uppercase">
+                        className="block text-xs uppercase">
                         {TEXTS.fields.name}
                     </label>
                     <input
@@ -61,14 +61,14 @@ export const AuthForm = ({ type }: { type: "login" | "register" }) => {
             <div>
                 <label
                     htmlFor="email"
-                    className="block text-xs text-gray-600 uppercase">
+                    className="block text-xs uppercase">
                     {TEXTS.fields.email}
                 </label>
                 <input
                     id="email"
                     name="email"
                     type="email"
-                    placeholder="panic@dance.co"
+                    placeholder="email@gmail.com"
                     autoComplete="email"
                     required
                     className="mt-1 block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-black focus:outline-none focus:ring-black sm:text-sm"
@@ -77,7 +77,7 @@ export const AuthForm = ({ type }: { type: "login" | "register" }) => {
             <div>
                 <label
                     htmlFor="password"
-                    className="block text-xs text-gray-600 uppercase">
+                    className="block text-xs  uppercase">
                     {TEXTS.fields.password}
                 </label>
                 <input
@@ -88,25 +88,27 @@ export const AuthForm = ({ type }: { type: "login" | "register" }) => {
                     className="mt-1 block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-black focus:outline-none focus:ring-black sm:text-sm"
                 />
             </div>
-            <Button loading={loading}>
+            <Button
+                loading={loading}
+                className={"text-white"}>
                 <p>{type === "login" ? TEXTS.signIn : TEXTS.signUp}</p>
             </Button>
             {type === "login" ? (
-                <p className="text-center text-sm text-gray-600">
+                <p className="text-center text-sm text-white">
                     {TEXTS.noAccount}
                     <Link
                         href={REGISTER_URL}
-                        className="font-semibold text-gray-800 pl-1">
+                        className="font-semibold text-white pl-1">
                         {TEXTS.signUp}
                     </Link>{" "}
                     {TEXTS.forFree}
                 </p>
             ) : (
-                <p className="text-center text-sm text-gray-600">
+                <p className="text-center text-sm text-white">
                     {TEXTS.alreadyHaveAccount}
                     <Link
                         href={LOGIN_URL}
-                        className="font-semibold text-gray-800 pl-1">
+                        className="font-semibold text-white pl-1">
                         {TEXTS.signIn}
                     </Link>{" "}
                     {TEXTS.instead}

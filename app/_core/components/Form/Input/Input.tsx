@@ -32,7 +32,7 @@ export const Input = (props: {
                 "focus:border-transparent",
                 props.className,
             ])}
-            value={props.value}
+            value={props.value || ""}
             onChange={onChange}
         />
     )

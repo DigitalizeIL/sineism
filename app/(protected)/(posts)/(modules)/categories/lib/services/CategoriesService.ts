@@ -8,7 +8,7 @@ import { Category } from "@/app/(protected)/(posts)/(modules)/categories/lib/mod
 import { Pagination } from "@/lib/types/pagination"
 
 export interface CategoriesService {
-    getAllCategories(): Promise<Category[]>
+    getAllCategories(): Promise<ICategory[]>
 
     getCategory(data: {
         id: number
@@ -34,10 +34,8 @@ export type CategoriesServiceDependencies = {
 export const createCategoriesService = (
     dependencies: CategoriesServiceDependencies
 ): CategoriesService => {
-    const getAllCategories = async (): Promise<Category[]> => {
-        const categories = await dependencies.dbRepository.getAll()
-
-        return categories.map((category) => Category.fromJson(category))
+    const getAllCategories = async (): Promise<ICategory[]> => {
+        return await dependencies.dbRepository.getAll()
     }
 
     const getCategory = async (data: {

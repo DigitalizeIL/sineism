@@ -1,88 +1,122 @@
+"use client"
 import { Button } from "@/components/Button"
 import { Input } from "@/components/Form/Input/Input"
 import { TextArea } from "@/components/Form/TextArea"
-import { IPost } from "@/app/(protected)/(posts)/lib/interfaces/IPost"
-import { postsService } from "@/app/(protected)/(posts)/lib/services/PostsService"
-import { revalidatePath } from "next/cache"
+import {
+    CreatePostDto,
+    EditPostDto,
+    IPost,
+} from "@/app/(protected)/(posts)/lib/interfaces/IPost"
 import { ICategory } from "@/app/(protected)/(posts)/(modules)/categories/lib/interfaces/ICategory"
-import { categoriesService } from "@/app/(protected)/(posts)/(modules)/categories/lib/services/CategoriesService"
 import { Select } from "@/components/Form/Select"
-import { usersService } from "@/app/(authentication)/lib/services/UsersService"
-import { Post } from "@/app/(protected)/(posts)/lib/models/Post"
-import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
+import { ModalWithButton } from "@/components/Modal"
+import React, { FormEvent, useEffect, useState } from "react"
+import { useSession } from "next-auth/react"
+import { AiOutlineEdit } from "react-icons/ai"
 
-export const PostCreateOrEditForm = async (props: { post?: IPost }) => {
-    const categories = await categoriesService.getAllCategories()
-    const session = await getAppServerSession()
+export const PostCreateOrEditForm = (props: {
+    post?: IPost
+    categories: ICategory[]
+    createPost: (post: CreatePostDto) => Promise<void>
+    editPost: (postId: number, post: EditPostDto) => Promise<void>
+}) => {
+    const { data } = useSession()
+    const [isOpen, setIsOpen] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
 
-    const createPost = async (postData: Omit<IPost, "authorId" | "id">) => {
-        "use server"
-        const user = await usersService.getCurrentUser(session)
+    const [title, setTitle] = useState(props.post?.title)
+    const [content, setContent] = useState(props.post?.content)
+    const [category, setCategory] = useState(props.post?.categoryId)
 
-        if (!user) return console.log("NO USER")
-
-        await postsService.createPost(
-            Post.fromJson({
-                ...postData,
-                authorId: user.id,
-            })
-        )
-    }
-
-    const editPost = async (postData: Omit<IPost, "authorId">) => {
-        "use server"
-        await postsService.updatePost(postData.id, postData)
-    }
-
-    const confirm = async (formData: FormData) => {
-        "use server"
-        const postData: Omit<IPost, "authorId" | "id"> = {
-            title: formData.get("title") as string,
-            content: formData.get("content") as string,
-            categoryId: Number(formData.get("category") as string),
+    useEffect(() => {
+        if (props.post) {
+            setTitle(props.post.title)
+            setContent(props.post.content)
+            setCategory(props.post.categoryId)
         }
+    }, [props.post])
 
-        if (props.post?.id) {
-            await editPost({
-                ...postData,
-                id: props.post?.id,
-            })
-        } else {
-            await createPost(postData)
+    const confirm = async (e: FormEvent) => {
+        e.preventDefault()
+
+        try {
+            if (!(title && content && category)) {
+                throw new Error("title, content, and category are required")
+            }
+
+            setIsLoading(true)
+
+            if (props.post?.id) {
+                await props.editPost(props.post.id, {
+                    title,
+                    content,
+                    categoryId: category,
+                })
+            } else if (data?.user?.id) {
+                await props.createPost({
+                    title,
+                    content,
+                    categoryId: category,
+                    authorId: data?.user?.id,
+                })
+            } else {
+                throw new Error("User not logged in")
+            }
+
+            setTitle("")
+            setContent("")
+            setCategory(undefined)
+
+            setIsOpen(false)
+            return false
+        } catch (error) {
+            console.error(error)
+        } finally {
+            setIsLoading(false)
         }
-
-        revalidatePath("/posts")
     }
-
     return (
-        <form action={confirm}>
-            <div className="flex flex-col space-y-2 p-3">
-                <Input
-                    placeholder={"Title"}
-                    defaultValue={props.post?.title}
-                    type="text"
-                    name={"title"}
-                />
-                <TextArea
-                    placeholder={"Content"}
-                    defaultValue={props.post?.content}
-                    name={"content"}
-                    rows={5}
-                />
-                <Select
-                    name={"category"}
-                    options={categories.map((category: ICategory) => ({
-                        label: category.name,
-                        value: category.id,
-                    }))}
-                />
-                <hr />
-                <Button
-                    type="ghost"
-                    className={"text-3xl text-black"}>
-                    {props.post?.id ? "Edit" : "Create"}
-                </Button>
-            </div>
-        </form>
+        <ModalWithButton
+            onClose={() => setIsOpen(false)}
+            onOpen={() => setIsOpen(true)}
+            buttonText={props.post ? <AiOutlineEdit /> : "Create Post"}
+            isOpen={isOpen}>
+            <form onSubmit={confirm}>
+                <div className="flex flex-col space-y-2 p-3">
+                    <Input
+                        placeholder={"Title"}
+                        type="text"
+                        name={"title"}
+                        value={title}
+                        onChange={(value) => setTitle(value)}
+                    />
+                    <TextArea
+                        placeholder={"Content"}
+                        name={"content"}
+                        value={content}
+                        onChange={(value) => setContent(value)}
+                        rows={10}
+                    />
+                    <Select
+                        name={"category"}
+                        value={category}
+                        onChange={(value) => setCategory(Number(value))}
+                        options={
+                            props.categories?.map((category: ICategory) => ({
+                                label: category.name,
+                                value: category.id,
+                            })) || []
+                        }
+                    />
+                    <hr />
+                    <Button
+                        loading={isLoading}
+                        type="ghost"
+                        className={"text-3xl text-black"}>
+                        {props.post?.id ? "Edit" : "Create"}
+                    </Button>
+                </div>
+            </form>
+        </ModalWithButton>
     )
 }
