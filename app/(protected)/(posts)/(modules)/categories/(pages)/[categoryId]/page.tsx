@@ -1,8 +1,7 @@
 import { categoriesService } from "@/app/(protected)/(posts)/(modules)/categories/lib/services/CategoriesService"
 import { notFound } from "next/navigation"
-import { PostFeedItem } from "@/app/(protected)/(posts)/components/PostsFeed/PostFeedItem"
 import { DEFAULT_PAGE_SIZE } from "@/app/(protected)/(posts)/(modules)/categories/consts/pagination"
-import { CategoryHeader } from "@/app/(protected)/(posts)/(modules)/categories/components/CategoryHeader"
+import { CategoryFeed } from "@/app/(protected)/(posts)/(modules)/categories/components/CategoryFeed"
 
 type PageProps = {
     params: {
@@ -29,20 +28,9 @@ export default async function Page(props: PageProps) {
     }
 
     return (
-        <>
-            <CategoryHeader
-                category={category}
-                page={page}
-            />
-            <div className={"flex flex-col justify-center items-center w-full"}>
-                {category.posts?.map((post) => (
-                    <PostFeedItem
-                        page={page}
-                        post={post}
-                        key={post.id}
-                    />
-                ))}
-            </div>
-        </>
+        <CategoryFeed
+            category={category}
+            page={page}
+        />
     )
 }
