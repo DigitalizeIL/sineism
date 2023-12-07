@@ -12,4 +12,14 @@ export const UTTERANCES_CATEGORY: CategoryData = {
     path: "/categories/utterances",
 }
 
-export const CATEGORIES: CategoryData[] = [UTTERANCES_CATEGORY]
+export const EDITED_UTTERANCES_CATEGORY: CategoryData = {
+    id: 2,
+    name: "EditedUtterances",
+    label: "אמרות ערוכות",
+    path: "/categories/edited-utterances",
+}
+
+export const CATEGORIES: CategoryData[] = [
+    UTTERANCES_CATEGORY,
+    EDITED_UTTERANCES_CATEGORY,
+]
