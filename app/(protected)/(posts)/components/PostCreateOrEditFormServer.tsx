@@ -3,10 +3,10 @@ import {
     EditPostDto,
     IPost,
 } from "@/app/(protected)/(posts)/lib/interfaces/IPost"
-import { categoriesService } from "@/app/(protected)/(posts)/(modules)/categories/lib/services/CategoriesService"
 import { PostCreateOrEditForm } from "@/app/(protected)/(posts)/components/PostCreateOrEditForm"
 import { postsService } from "@/app/(protected)/(posts)/lib/services/PostsService"
 import { revalidatePath } from "next/cache"
+import { categoriesService } from "@/app/(protected)/(posts)/(modules)/categories/lib/services/CategoriesService"
 
 export const PostCreateOrEditFormServer = async (props: { post?: IPost }) => {
     const categories = await categoriesService.getAllCategories()
