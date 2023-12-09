@@ -3,18 +3,24 @@
 import { ChangeEvent } from "react"
 import clsx from "clsx"
 
-export const Input = (props: {
-    value?: string
+export function Input<T extends string | number>(props: {
+    value?: T
     defaultValue?: string
     className?: string
     name?: string
-    onChange?: (value: string, event: ChangeEvent<HTMLInputElement>) => void
-    type?: string
+    onChange?: (value: T, event: ChangeEvent<HTMLInputElement>) => void
+    type?: "text" | "number" | string
     placeholder?: string
-}) => {
+}) {
     const onChange = (event: ChangeEvent<HTMLInputElement>) => {
         if (props.onChange) {
-            props.onChange(event.target.value, event)
+            let value: string | number = event.target.value
+
+            if (props.type === "number") {
+                value = value === "" ? "" : Number(value)
+            }
+
+            props.onChange(value as T, event)
         }
     }
 
@@ -32,7 +38,7 @@ export const Input = (props: {
                 "focus:border-transparent",
                 props.className,
             ])}
-            value={props.value || ""}
+            value={props.value}
             onChange={onChange}
         />
     )

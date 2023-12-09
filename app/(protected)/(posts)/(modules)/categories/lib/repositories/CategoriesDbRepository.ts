@@ -38,6 +38,9 @@ export const createCategoriesDbRepository = (): CategoriesDbRepository => {
                               skip: pagination.skip,
                               take: pagination.take,
                           }),
+                          orderBy: {
+                              postNumber: "asc",
+                          },
                       }
                     : false,
             },
