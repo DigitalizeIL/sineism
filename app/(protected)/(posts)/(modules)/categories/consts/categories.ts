@@ -1,21 +1,18 @@
-export type CategoryData = {
-    id: number
-    name: string
-    label: string
+import { ICategory } from "@/app/(protected)/(posts)/(modules)/categories/lib/interfaces/ICategory"
+
+export type CategoryData = Omit<ICategory, "posts"> & {
     path: string
 }
 
 export const UTTERANCES_CATEGORY: CategoryData = {
     id: 1,
-    name: "Utterances",
-    label: "אמרות",
+    name: "אמרות",
     path: "/categories/utterances",
 }
 
 export const EDITED_UTTERANCES_CATEGORY: CategoryData = {
     id: 2,
-    name: "EditedUtterances",
-    label: "אמרות ערוכות",
+    name: "אמרות ערוכות",
     path: "/categories/edited-utterances",
 }
 

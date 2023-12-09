@@ -27,7 +27,7 @@ export const Header = async () => {
                     <HeaderLink
                         key={category.id}
                         href={category.path}
-                        label={category.label}
+                        label={category.name}
                         className={"h-full p-2"}
                     />
                 ))}

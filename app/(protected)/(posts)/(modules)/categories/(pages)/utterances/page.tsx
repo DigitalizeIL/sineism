@@ -13,7 +13,7 @@ export default async function Page(props: PageProps) {
     const limit = DEFAULT_PAGE_SIZE
 
     const category = await categoriesService.getCategory({
-        id: UTTERANCES_CATEGORY.id,
+        id: UTTERANCES_CATEGORY.id!,
         withPosts: true,
         pagination: {
             page,
