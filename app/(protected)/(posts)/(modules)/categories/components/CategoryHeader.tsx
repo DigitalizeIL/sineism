@@ -19,12 +19,12 @@ export const CategoryHeader = async ({
     const nextPage = async () => {
         "use server"
 
-        redirect(`/categories/${category.id}?page=${page + 1}`)
+        redirect(`?page=${page + 1}`)
     }
     const prevPage = async () => {
         "use server"
 
-        redirect(`/categories/${category.id}?page=${page - 1}`)
+        redirect(`?page=${page - 1}`)
     }
 
     return (
