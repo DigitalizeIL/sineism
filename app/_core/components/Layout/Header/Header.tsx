@@ -24,7 +24,7 @@ export const Header = async () => {
                     />
                 ))}
 
-                {CATEGORIES.map((category) => (
+                {CATEGORIES.reverse().map((category) => (
                     <HeaderLink
                         key={category.id}
                         href={category.path}
