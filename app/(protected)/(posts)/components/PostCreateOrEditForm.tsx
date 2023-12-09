@@ -53,6 +53,7 @@ export const PostCreateOrEditForm = (props: {
                     title,
                     content,
                     categoryId: category,
+                    postNumber: number,
                 })
             } else if (data?.user?.id) {
                 await props.createPost({
