@@ -24,6 +24,7 @@ export const PostCreateOrEditForm = (props: {
     const [isOpen, setIsOpen] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
 
+    const [number, setNumber] = useState(props.post?.postNumber)
     const [title, setTitle] = useState(props.post?.title)
     const [content, setContent] = useState(props.post?.content)
     const [category, setCategory] = useState(props.post?.categoryId)
@@ -33,6 +34,7 @@ export const PostCreateOrEditForm = (props: {
             setTitle(props.post.title)
             setContent(props.post.content)
             setCategory(props.post.categoryId)
+            setNumber(props.post.postNumber)
         }
     }, [props.post])
 
@@ -51,6 +53,7 @@ export const PostCreateOrEditForm = (props: {
                     title,
                     content,
                     categoryId: category,
+                    postNumber: number,
                 })
             } else if (data?.user?.id) {
                 await props.createPost({
@@ -66,6 +69,7 @@ export const PostCreateOrEditForm = (props: {
             setTitle("")
             setContent("")
             setCategory(undefined)
+            setNumber(undefined)
 
             setIsOpen(false)
             return false
@@ -83,13 +87,26 @@ export const PostCreateOrEditForm = (props: {
             isOpen={isOpen}>
             <form onSubmit={confirm}>
                 <div className="flex flex-col space-y-2 p-3">
-                    <Input
-                        placeholder={"Title"}
-                        type="text"
-                        name={"title"}
-                        value={title}
-                        onChange={(value) => setTitle(value)}
-                    />
+                    <div className={"flex flex-row gap-2"}>
+                        {number !== undefined && (
+                            <Input
+                                placeholder={"Number"}
+                                type="number"
+                                name={"title"}
+                                value={number}
+                                className={"flex-5"}
+                                onChange={(value) => setNumber(value)}
+                            />
+                        )}
+                        <Input
+                            placeholder={"Title"}
+                            type="text"
+                            name={"title"}
+                            value={title}
+                            className={"flex-1"}
+                            onChange={(value) => setTitle(value)}
+                        />
+                    </div>
                     <TextArea
                         placeholder={"Content"}
                         name={"content"}

@@ -8,4 +8,4 @@ export interface IPost {
 }
 
 export type CreatePostDto = Omit<IPost, "id" | "postNumber">
-export type EditPostDto = Omit<IPost, "authorId" | "id" | "postNumber">
+export type EditPostDto = Partial<Omit<IPost, "authorId" | "id">>

@@ -16,7 +16,11 @@ export interface PostsDbRepository {
 
 export const createPostsDbRepository = (): PostsDbRepository => {
     const getAll = async (): Promise<Post[]> => {
-        const postsResult = await prisma.post.findMany()
+        const postsResult = await prisma.post.findMany({
+            orderBy: {
+                postNumber: "asc",
+            },
+        })
 
         return postsResult.map(Post.fromJson)
     }
@@ -36,6 +40,7 @@ export const createPostsDbRepository = (): PostsDbRepository => {
                 title: item.title || "",
                 categoryId: item.categoryId,
                 authorId: item.authorId,
+                postNumber: await getLowestAvailablePostNumber(),
             },
         })
 
@@ -55,6 +60,31 @@ export const createPostsDbRepository = (): PostsDbRepository => {
         await prisma.post.delete({
             where: { id },
         })
+    }
+
+    const getLowestAvailablePostNumber = async () => {
+        // Fetch all post numbers
+        const postNumbers = await prisma.post.findMany({
+            select: {
+                postNumber: true,
+            },
+            orderBy: {
+                postNumber: "asc",
+            },
+        })
+
+        // Convert the array of objects to an array of numbers
+        const numbers = postNumbers.map((p) => p.postNumber)
+
+        // Find the first missing number in the sequence
+        for (let i = 0; i < numbers.length; i++) {
+            if (numbers[i] !== i + 1) {
+                return i + 1 // +1 because post numbers are 1-based
+            }
+        }
+
+        // If no gaps, return the next number in the sequence
+        return numbers.length + 1
     }
 
     return {

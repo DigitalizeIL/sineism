@@ -14,11 +14,11 @@ export interface CategoriesService {
         id: number
         withPosts?: boolean
         pagination?: Pagination
-    }): Promise<Category | null>
+    }): Promise<ICategory | null>
 
-    createCategory(category: ICategory): Promise<Category>
+    createCategory(category: ICategory): Promise<ICategory>
 
-    updateCategory(id: number, category: Category): Promise<Category>
+    updateCategory(id: number, category: Category): Promise<ICategory>
 
     deleteCategory(id: number): Promise<void>
 
@@ -42,10 +42,8 @@ export const createCategoriesService = (
         id: number
         withPosts?: boolean
         pagination?: Pagination
-    }): Promise<Category | null> => {
-        if (!data.id) return null
-
-        const category = await dependencies.dbRepository.get(
+    }): Promise<ICategory | null> => {
+        return await dependencies.dbRepository.get(
             data.id,
             data.withPosts,
             data.pagination && {
@@ -53,28 +51,17 @@ export const createCategoriesService = (
                 take: data.pagination.perPage,
             }
         )
-
-        if (!category) return null
-
-        return Category.fromJson(category)
     }
 
-    const createCategory = async (category: ICategory): Promise<Category> => {
-        const createdCategory = await dependencies.dbRepository.create(category)
-
-        return Category.fromJson(createdCategory)
+    const createCategory = async (category: ICategory): Promise<ICategory> => {
+        return await dependencies.dbRepository.create(category)
     }
 
     const updateCategory = async (
         id: number,
         category: Partial<ICategory>
-    ): Promise<Category> => {
-        const updatedCategory = await dependencies.dbRepository.update(
-            id,
-            category
-        )
-
-        return Category.fromJson(updatedCategory)
+    ): Promise<ICategory> => {
+        return await dependencies.dbRepository.update(id, category)
     }
 
     const deleteCategory = async (id: number): Promise<void> => {

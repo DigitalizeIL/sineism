@@ -1,17 +1,16 @@
 type Link = {
     href: string
-    label: string
-}
-
-export const COMMENTS_LINK: Link = {
-    href: "/comments",
-    label: "תגובות",
+    label?: string
+    icon?: "house"
 }
 
 export const LINKS: Link[] = [
     {
         href: "/categories",
-        label: "בית",
+        icon: "house",
     },
-    COMMENTS_LINK,
+    {
+        href: "/comments",
+        label: "תגובות",
+    },
 ]

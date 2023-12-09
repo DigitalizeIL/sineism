@@ -19,12 +19,12 @@ export const CategoryHeader = async ({
     const nextPage = async () => {
         "use server"
 
-        redirect(`/categories/${category.id}?page=${page + 1}`)
+        redirect(`?page=${page + 1}`)
     }
     const prevPage = async () => {
         "use server"
 
-        redirect(`/categories/${category.id}?page=${page - 1}`)
+        redirect(`?page=${page - 1}`)
     }
 
     return (
@@ -40,9 +40,9 @@ export const CategoryHeader = async ({
                     {category.name}
                 </h2>
 
-                {category.id ? (
+                {category.id !== undefined && (
                     <MoveToBookmarkButton categoryId={category.id} />
-                ) : null}
+                )}
             </div>
             <div className={"flex items-center justify-end"}>
                 <CommentWithPaymentContainer />

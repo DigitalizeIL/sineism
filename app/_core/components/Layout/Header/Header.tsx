@@ -20,14 +20,15 @@ export const Header = async () => {
                         key={link.href}
                         href={link.href}
                         label={link.label}
+                        icon={link.icon}
                     />
                 ))}
 
-                {CATEGORIES.reverse().map((category) => (
+                {CATEGORIES.map((category) => (
                     <HeaderLink
                         key={category.id}
                         href={category.path}
-                        label={category.label}
+                        label={category.name}
                         className={"h-full p-2"}
                     />
                 ))}
