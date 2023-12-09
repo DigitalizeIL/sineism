@@ -17,6 +17,6 @@ export const EDITED_UTTERANCES_CATEGORY: CategoryData = {
 }
 
 export const CATEGORIES: CategoryData[] = [
-    UTTERANCES_CATEGORY,
     EDITED_UTTERANCES_CATEGORY,
+    UTTERANCES_CATEGORY,
 ]
