@@ -20,6 +20,7 @@ export const Header = async () => {
                         key={link.href}
                         href={link.href}
                         label={link.label}
+                        icon={link.icon}
                     />
                 ))}
 
