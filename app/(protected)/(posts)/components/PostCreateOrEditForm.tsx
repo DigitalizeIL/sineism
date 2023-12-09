@@ -87,14 +87,16 @@ export const PostCreateOrEditForm = (props: {
             <form onSubmit={confirm}>
                 <div className="flex flex-col space-y-2 p-3">
                     <div className={"flex flex-row gap-2"}>
-                        <Input
-                            placeholder={"Title"}
-                            type="number"
-                            name={"title"}
-                            value={number}
-                            className={"flex-5"}
-                            onChange={(value) => setNumber(value)}
-                        />
+                        {number !== undefined && (
+                            <Input
+                                placeholder={"Number"}
+                                type="number"
+                                name={"title"}
+                                value={number}
+                                className={"flex-5"}
+                                onChange={(value) => setNumber(value)}
+                            />
+                        )}
                         <Input
                             placeholder={"Title"}
                             type="text"
