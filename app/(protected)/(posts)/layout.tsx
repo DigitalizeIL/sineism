@@ -30,9 +30,6 @@ export default async function Layout({ children }: LayoutProps) {
             {children}
             <PostsFloatingQuickActions>
                 <PostCreateOrEditFormServer />
-                <ModalWithButton buttonText={"Create Category"}>
-                    <CreateCategoryForm />
-                </ModalWithButton>
             </PostsFloatingQuickActions>
         </>
     )

@@ -1,6 +1,6 @@
 export const LINKS = [
     {
-        href: "/",
+        href: "/categories",
         label: "בית",
     },
     {

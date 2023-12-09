@@ -1,13 +1,13 @@
 "use client"
 
 import { usePayPalScriptReducer } from "@paypal/react-paypal-js"
-import { useEffect, useState, useTransition } from "react"
-import {
+import type {
     CreateOrderActions,
     CreateOrderData,
     OnApproveActions,
     OnApproveData,
 } from "@paypal/paypal-js"
+import { useEffect, useState, useTransition } from "react"
 import { createOrder } from "@/app/(protected)/(payment)/(modules)/comments/actions/CreateOrder"
 import { useUser } from "@/app/(authentication)/context"
 import { Button } from "@/components/Button"

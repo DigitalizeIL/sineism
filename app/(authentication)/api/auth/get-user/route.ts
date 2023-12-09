@@ -1,8 +1,8 @@
 import prisma from "@/lib/prisma"
-import { NextRequest, NextResponse } from "next/server"
+import { NextResponse } from "next/server"
 import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
 
-export const GET = async (req: NextRequest) => {
+export const GET = async (req: Request) => {
     const session = await getAppServerSession()
 
     const url = new URL(req.url)

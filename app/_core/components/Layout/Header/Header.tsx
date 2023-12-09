@@ -1,13 +1,11 @@
 import React from "react"
 import AuthStatus from "@/app/(authentication)/components/AuthStatus"
 import { Logo } from "@/components/Logo"
-import { categoriesService } from "@/app/(protected)/(posts)/(modules)/categories/lib/services/CategoriesService"
 import { LINKS } from "@/components/Layout/Header/consts"
 import { HeaderLink } from "@/components/Layout/Header/HeaderLink"
+import { CATEGORIES } from "@/app/(protected)/(posts)/(modules)/categories/consts/categories"
 
 export const Header = async () => {
-    const categories = await categoriesService.getAllCategories()
-
     return (
         <div
             dir={"ltr"}
@@ -25,11 +23,11 @@ export const Header = async () => {
                     />
                 ))}
 
-                {categories.map((link) => (
+                {CATEGORIES.map((category) => (
                     <HeaderLink
-                        key={link.id}
-                        href={`/categories/${link.id}`}
-                        label={link.name}
+                        key={category.id}
+                        href={category.path}
+                        label={category.label}
                         className={"h-full p-2"}
                     />
                 ))}

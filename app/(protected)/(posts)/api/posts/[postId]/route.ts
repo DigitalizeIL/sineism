@@ -1,6 +1,6 @@
 import { postsService } from "@/app/(protected)/(posts)/lib/services/PostsService"
 import { NextApiRequest } from "next"
-import { NextRequest, NextResponse } from "next/server"
+import { NextResponse } from "next/server"
 import { Post } from "@/app/(protected)/(posts)/lib/models/Post"
 
 type ContextWithParams = NextApiRequest & {
@@ -9,7 +9,7 @@ type ContextWithParams = NextApiRequest & {
     }
 }
 
-export const DELETE = async (req: NextRequest, ctx: ContextWithParams) => {
+export const DELETE = async (req: Request, ctx: ContextWithParams) => {
     const id = Number(ctx.params.postId)
 
     await postsService.deletePost(id)
@@ -19,7 +19,7 @@ export const DELETE = async (req: NextRequest, ctx: ContextWithParams) => {
     })
 }
 
-export const PATCH = async (req: NextRequest, ctx: ContextWithParams) => {
+export const PATCH = async (req: Request, ctx: ContextWithParams) => {
     const id = Number(ctx.params.postId)
 
     const body = await req.json()
