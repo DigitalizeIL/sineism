@@ -1,10 +1,17 @@
-export const LINKS = [
+type Link = {
+    href: string
+    label: string
+}
+
+export const COMMENTS_LINK: Link = {
+    href: "/comments",
+    label: "תגובות",
+}
+
+export const LINKS: Link[] = [
     {
         href: "/categories",
         label: "בית",
     },
-    {
-        href: "/comments",
-        label: "תגובות",
-    },
+    COMMENTS_LINK,
 ]
