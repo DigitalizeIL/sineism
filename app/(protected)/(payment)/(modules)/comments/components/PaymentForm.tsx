@@ -69,7 +69,7 @@ export const PaymentForm = () => {
         const capture = await actions.order?.capture()
 
         if (capture) {
-            console.log(capture)
+            console.log("CAPTURE", capture)
             const { payer } = capture
             setSuccess(true)
 
@@ -126,6 +126,8 @@ export const PaymentForm = () => {
                 },
             } as any
         )
+
+        window.location = window.location
     }
 
     return (
