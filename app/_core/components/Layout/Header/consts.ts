@@ -4,13 +4,15 @@ type Link = {
     icon?: "house"
 }
 
+export const COMMENTS_LINK = {
+    href: "/comments",
+    label: "תגובות",
+}
+
 export const LINKS: Link[] = [
     {
         href: "/categories",
         icon: "house",
     },
-    {
-        href: "/comments",
-        label: "תגובות",
-    },
+    COMMENTS_LINK,
 ]
