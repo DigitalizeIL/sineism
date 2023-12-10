@@ -7,13 +7,15 @@ import { Comment } from "@/app/(protected)/(posts)/(modules)/comments/lib/models
 import { IComment } from "@/app/(protected)/(posts)/(modules)/comments/lib/interfaces/IComment"
 
 export interface CommentsService {
-    getAllComments(postId: number): Promise<Comment[]>
+    getAllComments(): Promise<IComment[]>
 
-    getComment(id: number): Promise<Comment | null>
+    getPostComments(postId: number): Promise<IComment[]>
 
-    createComment(comment: IComment): Promise<Comment>
+    getComment(id: number): Promise<IComment | null>
 
-    updateComment(id: number, comment: Comment): Promise<Comment>
+    createComment(comment: IComment): Promise<IComment>
+
+    updateComment(id: number, comment: Comment): Promise<IComment>
 
     deleteComment(id: number): Promise<void>
 }
@@ -25,33 +27,29 @@ export type CommentsServiceDependencies = {
 export const createCommentsService = (
     dependencies: CommentsServiceDependencies
 ): CommentsService => {
-    const getAllComments = async (postId: number): Promise<Comment[]> => {
-        const comments = await dependencies.dbRepository.getAllForPost(postId)
-
-        return comments.map((comment) => Comment.fromJson(comment))
+    const getAllComments = async (): Promise<IComment[]> => {
+        return await dependencies.dbRepository.getAll()
     }
 
-    const getComment = async (id: number): Promise<Comment | null> => {
-        const comment = await dependencies.dbRepository.get(id)
-
-        if (!comment) return null
-
-        return Comment.fromJson(comment)
+    const getPostComments = async (postId: number): Promise<IComment[]> => {
+        return await dependencies.dbRepository.getAllForPost(postId)
     }
 
-    const createComment = async (comment: IComment): Promise<Comment> => {
-        const createdComment = await dependencies.dbRepository.create(comment)
+    const getComment = async (id: number): Promise<IComment | null> => {
+        return await dependencies.dbRepository.get(id)
+    }
 
-        return Comment.fromJson(createdComment)
+    const createComment = async (comment: IComment): Promise<IComment> => {
+        return await dependencies.dbRepository.create(comment)
     }
 
     const updateComment = async (
         id: number,
-        comment: Comment
-    ): Promise<Comment> => {
+        comment: IComment
+    ): Promise<IComment> => {
         const updatedComment = await dependencies.dbRepository.update(
             id,
-            comment.toJson()
+            comment
         )
 
         return Comment.fromJson(updatedComment)
@@ -63,6 +61,7 @@ export const createCommentsService = (
 
     return {
         getAllComments,
+        getPostComments,
         getComment,
         createComment,
         updateComment,

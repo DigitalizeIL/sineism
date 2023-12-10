@@ -9,7 +9,7 @@ type CommentProps = {
 export const PostComments = async (props: CommentProps) => {
     if (!props.post.id) return null
 
-    const comments = await commentsService.getAllComments(props.post.id)
+    const comments = await commentsService.getPostComments(props.post.id)
 
     return (
         <div className="flex flex-col space-y-2 gap-3">
