@@ -14,12 +14,12 @@ export const PaginationControls = async (props: PaginationButtonsProps) => {
 
     return (
         <div className={"flex items-center justify-center h-full px-4"}>
-            {props.nextPage && !isLastPage ? (
-                <form action={props.nextPage}>
+            {props.prevPage && !isFirstPage ? (
+                <form action={props.prevPage}>
                     <Button
                         type={"ghost"}
                         className="bg-blue-500 hover:bg-blue-600">
-                        <FcNext /> Next Page
+                        <FcNext /> {"עמוד קודם"}
                     </Button>
                 </form>
             ) : null}
@@ -29,12 +29,12 @@ export const PaginationControls = async (props: PaginationButtonsProps) => {
                     {props.totalPages ? ` / ${props.totalPages}` : null}
                 </span>
             ) : null}
-            {props.prevPage && !isFirstPage ? (
-                <form action={props.prevPage}>
+            {props.nextPage && !isLastPage ? (
+                <form action={props.nextPage}>
                     <Button
                         type={"ghost"}
                         className="bg-blue-500 hover:bg-blue-600">
-                        Previous Page <FcPrevious />
+                        {"עמוד הבא"} <FcPrevious />
                     </Button>
                 </form>
             ) : null}
