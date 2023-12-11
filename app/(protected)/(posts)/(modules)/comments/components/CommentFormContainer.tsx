@@ -14,6 +14,11 @@ export const CommentFormContainer = async (
     props: CommentFormContainerProps
 ) => {
     let posts: IPost[] = []
+    const session = await getAppServerSession()
+
+    if (!session?.user) {
+        return null
+    }
 
     if (!props.specificPost) {
         posts = await postsService.getAllPosts()
@@ -21,7 +26,6 @@ export const CommentFormContainer = async (
 
     async function createComment(formData: FormData) {
         "use server"
-        const session = await getAppServerSession()
         const content = formData.get("content") as string
         const postId = Number(formData.get("postId") as string)
 
