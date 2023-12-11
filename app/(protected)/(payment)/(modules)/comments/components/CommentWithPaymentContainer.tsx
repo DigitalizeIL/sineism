@@ -2,7 +2,8 @@ import { PaymentModal } from "@/app/(protected)/(payment)/(modules)/comments/com
 import { quotaService } from "@/app/(protected)/(payment)/(modules)/comments/lib/QuotaService"
 import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
 import { CommentsModal } from "@/app/(protected)/(payment)/(modules)/comments/components/CommentsModal"
-import { CreateCommentForm } from "@/app/(protected)/(posts)/(modules)/comments/components/CreateCommentForm"
+import { CommentForm } from "@/app/(protected)/(posts)/(modules)/comments/components/CommentForm"
+import { CommentFormContainer } from "@/app/(protected)/(posts)/(modules)/comments/components/CommentFormContainer"
 
 export const CommentWithPaymentContainer = async () => {
     const session = await getAppServerSession()
@@ -18,7 +19,7 @@ export const CommentWithPaymentContainer = async () => {
                     <PaymentModal />
                 ) : (
                     <CommentsModal>
-                        <CreateCommentForm />
+                        <CommentFormContainer />
                     </CommentsModal>
                 )}
             </div>
