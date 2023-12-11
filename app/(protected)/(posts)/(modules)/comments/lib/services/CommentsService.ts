@@ -5,6 +5,7 @@ import {
 } from "@/app/(protected)/(posts)/(modules)/comments/lib/repositories/CommentsDbRepository"
 import { Comment } from "@/app/(protected)/(posts)/(modules)/comments/lib/models/Comment"
 import { IComment } from "@/app/(protected)/(posts)/(modules)/comments/lib/interfaces/IComment"
+import { quotaService } from "@/app/(protected)/(payment)/(modules)/comments/lib/QuotaService"
 
 export interface CommentsService {
     getAllComments(): Promise<IComment[]>
@@ -40,7 +41,10 @@ export const createCommentsService = (
     }
 
     const createComment = async (comment: IComment): Promise<IComment> => {
-        return await dependencies.dbRepository.create(comment)
+        const createdComment = await dependencies.dbRepository.create(comment)
+        await quotaService.consumeQuota(createdComment.userId)
+
+        return createdComment
     }
 
     const updateComment = async (
