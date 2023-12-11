@@ -4,8 +4,8 @@ import { Button } from "@/components/Button"
 import { IPost } from "@/app/(protected)/(posts)/lib/interfaces/IPost"
 import { TextArea } from "@/components/Form/TextArea"
 import clsx from "clsx"
-import { Select } from "@/components/Form/Select"
 import { useRef } from "react"
+import { UnControlledSelect } from "@/components/Form/Select/UnControlledSelect"
 
 type CommentFormProps = {
     createComment: (formData: FormData) => void
@@ -28,7 +28,7 @@ export const CommentForm = (props: CommentFormProps) => {
                 <TextArea
                     name="content"
                     className="w-full"
-                    placeholder={"Comment on the post"}
+                    placeholder={"לתגובה על פוסט/ים"}
                 />
                 {props.post ? (
                     <input
@@ -37,7 +37,7 @@ export const CommentForm = (props: CommentFormProps) => {
                         value={props.post.id}
                     />
                 ) : (
-                    <Select
+                    <UnControlledSelect
                         name={"postId"}
                         options={props.postOptions}
                     />
@@ -45,7 +45,7 @@ export const CommentForm = (props: CommentFormProps) => {
                 <Button
                     type="ghost"
                     className={"text-3xl text-black"}>
-                    Create comment
+                    יצירת תגובה
                 </Button>
             </form>
         </div>
