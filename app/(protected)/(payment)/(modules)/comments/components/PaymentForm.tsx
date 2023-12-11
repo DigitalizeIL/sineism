@@ -1,34 +1,22 @@
 "use client"
 
-import { usePayPalScriptReducer } from "@paypal/react-paypal-js"
+import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js"
 import type {
     CreateOrderActions,
     CreateOrderData,
     OnApproveActions,
     OnApproveData,
 } from "@paypal/paypal-js"
-import { useEffect, useState, useTransition } from "react"
-import { createOrder } from "@/app/(protected)/(payment)/(modules)/comments/actions/CreateOrder"
+import { useState, useTransition } from "react"
 import { useUser } from "@/app/(authentication)/context"
-import { Button } from "@/components/Button"
+import { createOrder } from "@/app/(protected)/(payment)/(modules)/comments/actions/CreateOrder"
 
 export const PaymentForm = () => {
     const [{ isPending }] = usePayPalScriptReducer()
     let [isTransitionPending, startTransition] = useTransition()
     const user = useUser()
-    // const onApprove = async (
-    //     data: OnApproveData,
-    //     actions: OnApproveActions
-    // ) => {
-    //     console.log("onApprove")
-    //     startTransition(() => {
-    //         createOrder(data)
-    //     })
-    // }
 
-    const [success, setSuccess] = useState(false)
-    const [ErrorMessage, setErrorMessage] = useState("")
-    const [orderId, setOrderId] = useState<string>()
+    const [errorMessage, setErrorMessage] = useState<string>()
 
     const product = "Comments"
     const price = 0.1
@@ -50,14 +38,10 @@ export const PaymentForm = () => {
             ],
         })
 
-        console.log(order)
-
         if (!order) {
             setErrorMessage("Something went wrong")
             return ""
         }
-
-        setOrderId(order)
 
         return order
     }
@@ -69,78 +53,43 @@ export const PaymentForm = () => {
         const capture = await actions.order?.capture()
 
         if (capture) {
-            console.log("CAPTURE", capture)
-            const { payer } = capture
-            setSuccess(true)
+            const { payer, id, status } = capture
 
-            if (!orderId) return console.error("No order id!")
+            if (status !== "COMPLETED") {
+                console.log("CAPTURE", capture)
+                return
+            }
 
-            await createOrder(
-                {
-                    price,
-                    product,
-                    orderId,
-                },
-                user.id
-            )
+            executeOrder(id)
         }
     }
 
-    useEffect(() => {
-        if (success) {
-            alert("Payment successful!!")
-            console.log("Order successful . Your order id is--", orderId)
-        }
-    }, [user, orderId, success])
-
-    const demo = async () => {
-        await createPaypalOrder(
+    const executeOrder = async (orderId: string) => {
+        await createOrder(
             {
-                paymentSource: "card",
+                price,
+                product,
+                orderId,
             },
-            {
-                order: {
-                    create: async (options) => {
-                        return "OrderIDDD"
-                    },
-                },
-            }
+            user.id
         )
 
-        await onApprove(
-            {
-                facilitatorAccessToken: "asdads",
-                orderID: "OrderIDDD",
-            },
-            {
-                order: {
-                    async capture() {
-                        return {
-                            payer: {
-                                name: "Neri",
-                            },
-                            id: 123,
-                            intent: "CAPTURE",
-                        }
-                    },
-                },
-            } as any
-        )
-
-        window.location = window.location
+        alert("Payment successful")
     }
 
     return (
-        <Button onClick={demo}>Purchase</Button>
-        // <PayPalButtons
-        //     createOrder={createPaypalOrder}
-        //     onApprove={onApprove}
-        //     style={{
-        //         shape: "pill",
-        //         label: "buynow",
-        //         layout: "horizontal",
-        //         tagline: false,
-        //     }}
-        // />
+        <>
+            <PayPalButtons
+                createOrder={createPaypalOrder}
+                onApprove={onApprove}
+                style={{
+                    shape: "pill",
+                    label: "buynow",
+                    layout: "horizontal",
+                    tagline: false,
+                }}
+            />
+            {errorMessage && <p>{errorMessage}</p>}
+        </>
     )
 }
