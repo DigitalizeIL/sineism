@@ -6,9 +6,10 @@ import { TextArea } from "@/components/Form/TextArea"
 import clsx from "clsx"
 import { useRef } from "react"
 import { UnControlledSelect } from "@/components/Form/Select/UnControlledSelect"
+import { FormResponse } from "@/components/Form/types"
 
 type CommentFormProps = {
-    createComment: (formData: FormData) => void
+    createComment: (formData: FormData) => Promise<FormResponse>
     post?: IPost
     postOptions: { value: number; label: string }[]
     className?: string
@@ -22,8 +23,8 @@ export const CommentForm = (props: CommentFormProps) => {
             <form
                 ref={formRef}
                 action={async (formData) => {
-                    await props.createComment(formData)
-                    formRef.current?.reset()
+                    const success = await props.createComment(formData)
+                    if (success) formRef.current?.reset()
                 }}>
                 <TextArea
                     name="content"
@@ -38,6 +39,8 @@ export const CommentForm = (props: CommentFormProps) => {
                     />
                 ) : (
                     <UnControlledSelect
+                        defaultValue={""}
+                        placeholder={"בחירת פוסט"}
                         name={"postId"}
                         options={props.postOptions}
                     />
