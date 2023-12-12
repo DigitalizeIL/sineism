@@ -5,7 +5,7 @@ export interface CrudRepository<T> {
 
     get(id: number): Promise<T | null>
 
-    create(item: T): Promise<T>
+    create(item: Partial<T>): Promise<T>
 
     update(id: number, item: Partial<T>): Promise<T>
 

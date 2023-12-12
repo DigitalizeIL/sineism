@@ -18,7 +18,7 @@ export interface CommentsService {
 
     createComment(comment: CreateCommentType): Promise<IComment>
 
-    updateComment(id: number, comment: Comment): Promise<IComment>
+    updateComment(id: number, comment: Partial<IComment>): Promise<IComment>
 
     deleteComment(id: number): Promise<void>
 }
@@ -53,14 +53,9 @@ export const createCommentsService = (
 
     const updateComment = async (
         id: number,
-        comment: IComment
+        comment: Partial<IComment>
     ): Promise<IComment> => {
-        const updatedComment = await dependencies.dbRepository.update(
-            id,
-            comment
-        )
-
-        return Comment.fromJson(updatedComment)
+        return await dependencies.dbRepository.update(id, comment)
     }
 
     const deleteComment = async (id: number): Promise<void> => {

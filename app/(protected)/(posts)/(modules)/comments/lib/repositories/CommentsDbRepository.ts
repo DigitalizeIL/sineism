@@ -1,8 +1,11 @@
 import "server-only"
 
-import { CrudRepository } from "@/lib/repositories/CrudRepository"
 import prisma from "@/lib/prisma"
-import { IComment } from "@/app/(protected)/(posts)/(modules)/comments/lib/interfaces/IComment"
+import {
+    CreateCommentType,
+    IComment,
+} from "@/app/(protected)/(posts)/(modules)/comments/lib/interfaces/IComment"
+import { CrudRepository } from "@/lib/repositories/CrudRepository"
 
 export interface CommentsDbRepository extends CrudRepository<IComment> {
     getAllForPost(postId: number): Promise<IComment[]>
@@ -27,7 +30,7 @@ export const createCommentsDbRepository = (): CommentsDbRepository => {
         })
     }
 
-    const create = async (item: IComment): Promise<IComment> => {
+    const create = async (item: CreateCommentType): Promise<IComment> => {
         return prisma.comment.create({
             data: item,
         })
