@@ -3,8 +3,10 @@ import {
     commentsDbRepository,
     CommentsDbRepository,
 } from "@/app/(protected)/(posts)/(modules)/comments/lib/repositories/CommentsDbRepository"
-import { Comment } from "@/app/(protected)/(posts)/(modules)/comments/lib/models/Comment"
-import { IComment } from "@/app/(protected)/(posts)/(modules)/comments/lib/interfaces/IComment"
+import {
+    CreateCommentType,
+    IComment,
+} from "@/app/(protected)/(posts)/(modules)/comments/lib/interfaces/IComment"
 import { quotaService } from "@/app/(protected)/(payment)/(modules)/comments/lib/QuotaService"
 
 export interface CommentsService {
@@ -14,7 +16,7 @@ export interface CommentsService {
 
     getComment(id: number): Promise<IComment | null>
 
-    createComment(comment: IComment): Promise<IComment>
+    createComment(comment: CreateCommentType): Promise<IComment>
 
     updateComment(id: number, comment: Comment): Promise<IComment>
 
@@ -40,7 +42,9 @@ export const createCommentsService = (
         return await dependencies.dbRepository.get(id)
     }
 
-    const createComment = async (comment: IComment): Promise<IComment> => {
+    const createComment = async (
+        comment: CreateCommentType
+    ): Promise<IComment> => {
         const createdComment = await dependencies.dbRepository.create(comment)
         await quotaService.consumeQuota(createdComment.userId)
 
