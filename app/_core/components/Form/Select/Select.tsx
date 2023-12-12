@@ -50,7 +50,6 @@ export const Select = (props: {
             ])}>
             <option
                 value={"empty"}
-                selected
                 disabled>
                 {props.placeholder || "Select"}
             </option>

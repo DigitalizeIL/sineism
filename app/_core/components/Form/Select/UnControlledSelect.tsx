@@ -16,6 +16,7 @@ export const UnControlledSelect = (props: {
         <select
             multiple={props.multiple}
             name={props.name}
+            defaultValue={props.defaultValue}
             onChange={props.onChange}
             placeholder={props.placeholder}
             className={clsx([
@@ -31,8 +32,7 @@ export const UnControlledSelect = (props: {
                 "p-2",
             ])}>
             <option
-                // value={"empty"}
-                selected
+                value={""}
                 disabled>
                 {props.placeholder || "Select"}
             </option>
