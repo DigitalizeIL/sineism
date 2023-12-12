@@ -1,7 +1,7 @@
 import { z } from "zod"
 
 export const Comment = z.object({
-    content: z.string(),
+    content: z.string().trim().min(1),
     postId: z.number(),
     userId: z.number(),
     id: z.number(),

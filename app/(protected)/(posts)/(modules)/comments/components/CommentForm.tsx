@@ -8,6 +8,7 @@ import { useRef, useState } from "react"
 import { UnControlledSelect } from "@/components/Form/Select/UnControlledSelect"
 import { FormErrors, FormResponse } from "@/components/Form/types"
 import { ErrorList } from "@/components/ErrorList"
+import { Input } from "@/components/Form/Input"
 
 type CommentFormProps = {
     createComment: (formData: FormData) => Promise<FormResponse>
@@ -35,12 +36,14 @@ export const CommentForm = (props: CommentFormProps) => {
                 ref={formRef}
                 action={formAction}>
                 <TextArea
+                    defaultValue={""}
                     name="content"
                     className="w-full"
                     placeholder={"לתגובה על פוסט/ים"}
                 />
                 {props.post ? (
-                    <input
+                    <Input
+                        defaultValue={""}
                         type={"hidden"}
                         name={"postId"}
                         value={props.post.id}

@@ -31,7 +31,9 @@ export const CommentFormContainer = async (
         const validation = CreateComment.safeParse({
             userId: session?.user?.id,
             content: formData.get("content"),
-            postId: formData.get("postId"),
+            postId: formData.get("postId")
+                ? Number(formData.get("postId"))
+                : undefined,
         })
 
         if (!validation.success) {
