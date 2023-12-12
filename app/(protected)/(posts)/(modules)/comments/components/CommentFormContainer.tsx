@@ -37,7 +37,7 @@ export const CommentFormContainer = async (
         if (!validation.success) {
             return {
                 success: false,
-                errors: validation.error.format()._errors,
+                errors: validation.error.flatten(),
             }
         }
 
