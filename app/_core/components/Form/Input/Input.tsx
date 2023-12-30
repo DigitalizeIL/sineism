@@ -1,27 +1,45 @@
 "use client"
 
-import { ChangeEvent } from "react"
+import {ChangeEvent} from "react"
 import clsx from "clsx"
 
-export function Input<T extends string | number>(props: {
-    value?: T
+
+type TextInputProps = {
+    value?: string
     defaultValue?: string
+    type?: "text"
+    onChange?: (value: string, event: ChangeEvent<HTMLInputElement>) => void
+}
+
+type NumberInputProps = {
+    value?: number
+    defaultValue?: number
+    type?: "number"
+    onChange?: (value: number, event: ChangeEvent<HTMLInputElement>) => void
+}
+
+type InputProps = {
     className?: string
     name?: string
-    onChange?: (value: T, event: ChangeEvent<HTMLInputElement>) => void
-    type?: "text" | "number" | string
     placeholder?: string
-}) {
+} & (
+    TextInputProps |
+    NumberInputProps
+    )
+
+
+export function Input<T extends string | number>(props: InputProps) {
     const onChange = (event: ChangeEvent<HTMLInputElement>) => {
-        if (props.onChange) {
-            let value: string | number = event.target.value
-
-            if (props.type === "number") {
-                value = value === "" ? "" : Number(value)
-            }
-
-            props.onChange(value as T, event)
+        if (!props.onChange) {
+            return
         }
+
+        if (props.type === "number") {
+            props.onChange(Number(event.target.value), event)
+        } else if (props.type === "text") {
+            props.onChange(event.target.value, event)
+        }
+
     }
 
     return (

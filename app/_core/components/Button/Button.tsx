@@ -1,8 +1,8 @@
 "use client"
 
-import { ReactNode, useMemo } from "react"
+import {ReactNode, useMemo} from "react"
 import clsx from "clsx"
-import { LoadingDots } from "@/components/LoadingDots"
+import {LoadingDots} from "@/components/LoadingDots"
 
 type ButtonType = keyof typeof typesStyle
 
@@ -10,17 +10,19 @@ type ButtonProps = {
     loading?: boolean
     children: ReactNode | ReactNode[]
     type?: ButtonType | ButtonType[]
+    htmlType?: "button" | "submit" | "reset"
     className?: string
     onClick?: () => void
 }
 
 export const Button = ({
-    loading,
-    children,
-    type,
-    className,
-    onClick,
-}: ButtonProps) => {
+                           loading,
+                           children,
+                           type,
+                           htmlType,
+                           className,
+                           onClick,
+                       }: ButtonProps) => {
     const styleClassnames = useMemo(() => {
         if (!type) return ""
 
@@ -35,13 +37,14 @@ export const Button = ({
         <button
             onClick={onClick}
             disabled={loading}
+            type={htmlType}
             className={clsx([
                 className,
                 loading && "cursor-not-allowed border-gray-200 bg-gray-100",
                 "flex h-10 px-1 w-full items-center justify-center rounded-md border text-sm transition-all focus:outline-none",
                 styleClassnames,
             ])}>
-            {loading ? <LoadingDots color="#808080" /> : children}
+            {loading ? <LoadingDots color="#808080"/> : children}
         </button>
     )
 }
