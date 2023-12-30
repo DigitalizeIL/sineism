@@ -1,5 +1,6 @@
 import {CATEGORIES} from "../app/(protected)/(posts)/(modules)/categories/consts/categories"
 import prisma from "../app/_core/lib/prisma"
+import {hash} from "bcryptjs";
 
 async function createUsers() {
     const admin = await prisma.user.create({
@@ -7,7 +8,7 @@ async function createUsers() {
             name: "Neriya Rosner",
             email: "neri.coder@gmail.com",
             role: "ADMIN",
-            password: "DevelopThatStuff",
+            password: await hash("DevelopThatStuff", 10),
         },
     })
     console.log(`Created admin with id: ${admin.id}`)
