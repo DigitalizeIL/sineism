@@ -24,34 +24,50 @@ async function createUsers() {
 }
 
 async function createCategories() {
-    const categories = await prisma.category.createMany({
-        data: CATEGORIES.map((category) => ({
-            name: category.name,
-        })),
-    })
+    try {
+        const categories = await prisma.category.createMany({
+            data: CATEGORIES.map((category) => ({
+                name: category.name,
+            })),
+        })
 
-    console.log(`Created ${categories.count} categories`)
+        console.log(`Created ${categories.count} categories`)
+    } catch (e: any) {
+        if (e.code === "P2002") {
+            return console.log("Categories already exists")
+        } else {
+            throw e
+        }
+    }
 }
 
 async function createSettings() {
-    const settings = await prisma.settings.createMany({
-        data: [
-            {
-                key: "posts_per_page",
-                value: "10",
-            },
-            {
-                key: "comments_cost_usd",
-                value: "5",
-            },
-            {
-                key: "comments_amount_per_purchase",
-                value: "3",
-            },
-        ],
-    })
+    try {
+        const settings = await prisma.settings.createMany({
+            data: [
+                {
+                    key: "posts_per_page",
+                    value: "10",
+                },
+                {
+                    key: "comments_cost_usd",
+                    value: "5",
+                },
+                {
+                    key: "comments_amount_per_purchase",
+                    value: "3",
+                },
+            ],
+        })
 
-    console.log(`Created ${settings.count} settings`)
+        console.log(`Created ${settings.count} settings`)
+    } catch (e: any) {
+        if (e.code === "P2002") {
+            return console.log("Settings already exists")
+        } else {
+            throw e
+        }
+    }
 }
 
 async function main() {
