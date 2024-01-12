@@ -6,21 +6,38 @@ import { Modal } from "@/components/Modal"
 import { Button } from "@/components/Button"
 import { BiComment } from "react-icons/bi"
 import { PaymentForm } from "@/app/(protected)/(payment)/(modules)/comments/components/PaymentForm"
+import toast from "react-hot-toast"
+import { LoadingDots } from "@/components/LoadingDots"
 
-export const PaymentModal = () => {
+export const PaymentModal = (props: { price: number; amount: number }) => {
     const [{ isPending }] = usePayPalScriptReducer()
 
     const [isModalOpen, setIsModalOpen] = useState(false)
+
+    const onSuccess = () => {
+        setIsModalOpen(false)
+        toast.success("Payment received")
+
+        setTimeout(() => {
+            window.location.reload()
+        }, 2000)
+    }
 
     return (
         <div>
             <Modal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}>
-                {isPending ? "Loading..." : null}
-                <div className="flex flex-col space-y-2 gap-3 p-4">
+                {isPending ? <LoadingDots /> : null}
+                <div className="flex flex-col items-center justify-center space-y-2 gap-3 p-4">
                     <h3>Buy Comments</h3>
-                    <PaymentForm />
+                    <div className={"w-3/5 h-auto"}>
+                        <PaymentForm
+                            onSuccess={onSuccess}
+                            price={props.price}
+                            amount={props.amount}
+                        />
+                    </div>
                 </div>
             </Modal>
             <Button

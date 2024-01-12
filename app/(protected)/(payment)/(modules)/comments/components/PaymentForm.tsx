@@ -1,25 +1,26 @@
 "use client"
 
-import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js"
+import { PayPalButtons } from "@paypal/react-paypal-js"
 import type {
     CreateOrderActions,
     CreateOrderData,
     OnApproveActions,
     OnApproveData,
 } from "@paypal/paypal-js"
-import { useState, useTransition } from "react"
+import { useState } from "react"
 import { useUser } from "@/app/(authentication)/context"
 import { createOrder } from "@/app/(protected)/(payment)/(modules)/comments/actions/CreateOrder"
 
-export const PaymentForm = () => {
-    const [{ isPending }] = usePayPalScriptReducer()
-    let [isTransitionPending, startTransition] = useTransition()
+export const PaymentForm = (props: {
+    price: number
+    amount: number
+    onSuccess: () => void
+}) => {
     const user = useUser()
 
     const [errorMessage, setErrorMessage] = useState<string>()
 
     const product = "Comments"
-    const price = 0.1
 
     // creates a PayPal order
     const createPaypalOrder = async (
@@ -32,7 +33,7 @@ export const PaymentForm = () => {
                     description: product,
                     amount: {
                         currency_code: "USD",
-                        value: price.toString(),
+                        value: props.price.toString(),
                     },
                 },
             ],
@@ -60,21 +61,20 @@ export const PaymentForm = () => {
                 return
             }
 
-            executeOrder(id)
+            await executeOrder(id)
         }
     }
 
     const executeOrder = async (orderId: string) => {
         await createOrder(
             {
-                price,
                 product,
                 orderId,
             },
             user.id
         )
 
-        alert("Payment successful")
+        props.onSuccess()
     }
 
     return (

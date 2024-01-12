@@ -79,3 +79,9 @@ model Orders {
   product String
   price   Decimal
 }
+
+model Settings {
+  id    Int    @id @default(autoincrement())
+  key   String @unique
+  value String
+}

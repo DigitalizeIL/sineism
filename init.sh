@@ -12,5 +12,3 @@ docker-compose up -d
 # Push the db schema
 npx prisma db push
 
-# Start the server
-pnpm dev

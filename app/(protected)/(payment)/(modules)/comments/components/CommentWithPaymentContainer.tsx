@@ -3,6 +3,8 @@ import { quotaService } from "@/app/(protected)/(payment)/(modules)/comments/lib
 import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
 import { CommentsModal } from "@/app/(protected)/(payment)/(modules)/comments/components/CommentsModal"
 import { CommentFormContainer } from "@/app/(protected)/(posts)/(modules)/comments/components/CommentFormContainer"
+import { settingsService } from "@/app/(protected)/(posts)/(modules)/settings/lib/services/SettingsService"
+import { SettingKey } from "@/app/(protected)/(posts)/(modules)/settings/lib/interfaces/ISettings"
 
 export const CommentWithPaymentContainer = async () => {
     const session = await getAppServerSession()
@@ -10,12 +12,25 @@ export const CommentWithPaymentContainer = async () => {
 
     const quotaObject = await quotaService.getQuota(session.user.id)
     const shouldPay = !quotaObject || quotaObject.quota <= 0
+    const price = await settingsService.getSettingByKey(
+        SettingKey.comments_cost_usd
+    )
+    const amount = await settingsService.getSettingByKey(
+        SettingKey.comments_amount_per_purchase
+    )
+
+    if (price?.value === undefined || amount?.value === undefined) {
+        return <></>
+    }
 
     return (
         <div>
             <div className={"flex items-center justify-end"}>
                 {shouldPay ? (
-                    <PaymentModal />
+                    <PaymentModal
+                        amount={Number(amount.value)}
+                        price={Number(price.value)}
+                    />
                 ) : (
                     <CommentsModal>
                         <CommentFormContainer />
