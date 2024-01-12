@@ -2,12 +2,13 @@
 
 import { Button } from "@/components/Button"
 import { IPost } from "@/app/(protected)/(posts)/lib/interfaces/IPost"
-import { TextArea } from "@/components/Form/TextArea"
 import clsx from "clsx"
 import { Select } from "@/components/Form/Select"
 import { Form, FormSubmitHandler, useForm } from "react-hook-form"
 import { ControllerPlus } from "@/components/Form/Controller/Transformer"
 import { Input } from "@/components/Form/Input"
+import { FormField } from "@/components/Form/Controller/FormField"
+import { TextArea } from "@/components/Form/TextArea"
 
 type CommentFormProps = {
     createComment: (formData: CommentFormDto) => Promise<string | void>
@@ -38,7 +39,8 @@ export const CommentForm = (props: CommentFormProps) => {
             <Form
                 control={control}
                 onSubmit={onSubmit}>
-                <TextArea
+                <FormField
+                    Component={TextArea}
                     control={control}
                     name={"content"}
                     rules={{
@@ -47,19 +49,32 @@ export const CommentForm = (props: CommentFormProps) => {
                     className="w-full"
                     placeholder={"לתגובה על פוסט/ים"}
                 />
-                <ControllerPlus
-                    control={control}
-                    transform={{
-                        output: (value) => {
-                            return parseInt(value.target.value)
-                        },
-                    }}
-                    name={"postId"}
-                    type={"number"}
-                    hidden={!!props.post}
-                    Component={props.post ? Input : Select}
-                    options={props.postOptions}
-                />
+                {props.post ? (
+                    <ControllerPlus
+                        Component={Input}
+                        control={control}
+                        transform={{
+                            output: (value) => {
+                                return parseInt(value.target.value)
+                            },
+                        }}
+                        name={"postId"}
+                        type={"number"}
+                        hidden
+                    />
+                ) : (
+                    <ControllerPlus
+                        Component={Select}
+                        control={control}
+                        transform={{
+                            output: (value) => {
+                                return parseInt(value.target.value)
+                            },
+                        }}
+                        name={"postId"}
+                        options={props.postOptions}
+                    />
+                )}
                 <Button
                     submit
                     type="ghost"
