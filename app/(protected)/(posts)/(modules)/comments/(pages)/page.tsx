@@ -5,7 +5,10 @@ export default async function CommentsPage() {
     const comments = await commentsService.getAllComments()
 
     return (
-        <div className={"flex justify-center items-center h-screen"}>
+        <div
+            className={
+                "flex justify-center items-center flex-col overflow-scroll"
+            }>
             {comments.map((comment) => (
                 <Comment
                     comment={comment}
