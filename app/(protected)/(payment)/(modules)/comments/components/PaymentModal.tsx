@@ -29,13 +29,15 @@ export const PaymentModal = (props: { price: number; amount: number }) => {
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}>
                 {isPending ? <LoadingDots /> : null}
-                <div className="flex flex-col space-y-2 gap-3 p-4">
+                <div className="flex flex-col items-center justify-center space-y-2 gap-3 p-4">
                     <h3>Buy Comments</h3>
-                    <PaymentForm
-                        onSuccess={onSuccess}
-                        price={props.price}
-                        amount={props.amount}
-                    />
+                    <div className={"w-3/5 h-auto"}>
+                        <PaymentForm
+                            onSuccess={onSuccess}
+                            price={props.price}
+                            amount={props.amount}
+                        />
+                    </div>
                 </div>
             </Modal>
             <Button
