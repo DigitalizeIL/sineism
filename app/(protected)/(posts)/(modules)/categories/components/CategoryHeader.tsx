@@ -6,6 +6,7 @@ import { categoriesService } from "@/app/(protected)/(posts)/(modules)/categorie
 import { DEFAULT_PAGE_SIZE } from "@/app/(protected)/(posts)/(modules)/categories/consts/pagination"
 import { CommentWithPaymentContainer } from "@/app/(protected)/(payment)/(modules)/comments/components/CommentWithPaymentContainer"
 import { settingsService } from "@/app/(protected)/(posts)/(modules)/settings/lib/services/SettingsService"
+import { SettingKey } from "@/app/(protected)/(posts)/(modules)/settings/lib/interfaces/ISettings"
 
 type CategoryHeaderProps = { category: ICategory; page: number }
 
@@ -15,7 +16,9 @@ export const CategoryHeader = async ({
 }: CategoryHeaderProps) => {
     const postsCount = await categoriesService.countCategoryPosts(category.id!)
 
-    const postsPerPage = await settingsService.getSettingByKey("posts_per_page")
+    const postsPerPage = await settingsService.getSettingByKey(
+        SettingKey.posts_per_page
+    )
     const pageSize = Number(postsPerPage?.value) || DEFAULT_PAGE_SIZE
 
     const nextPage = async () => {

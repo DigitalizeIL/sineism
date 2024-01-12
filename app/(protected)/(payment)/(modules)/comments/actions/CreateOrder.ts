@@ -3,6 +3,7 @@
 import { quotaService } from "@/app/(protected)/(payment)/(modules)/comments/lib/QuotaService"
 import { orderService } from "@/app/(protected)/(payment)/lib/OrderService"
 import { settingsService } from "@/app/(protected)/(posts)/(modules)/settings/lib/services/SettingsService"
+import { SettingKey } from "@/app/(protected)/(posts)/(modules)/settings/lib/interfaces/ISettings"
 
 export const createOrder = async (
     order: {
@@ -11,9 +12,11 @@ export const createOrder = async (
     },
     userId: number
 ) => {
-    const price = await settingsService.getSettingByKey("comments_cost_usd")
+    const price = await settingsService.getSettingByKey(
+        SettingKey.comments_cost_usd
+    )
     const amount = await settingsService.getSettingByKey(
-        "comments_amount_per_purchase"
+        SettingKey.comments_amount_per_purchase
     )
 
     if (price?.value === undefined) {
