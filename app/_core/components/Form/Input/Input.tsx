@@ -1,32 +1,21 @@
-"use client"
-
-import { ChangeEvent } from "react"
+import React, { ChangeEvent, forwardRef } from "react"
 import clsx from "clsx"
 
-export function Input<T extends string | number>(props: {
-    value?: T
+type Props = {
+    value?: string
     defaultValue?: string
     className?: string
     name?: string
     hidden?: boolean
-    onChange?: (value: T, event: ChangeEvent<HTMLInputElement>) => void
+    isInvalid?: boolean
+    onChange?: (event: ChangeEvent<HTMLInputElement>) => void
     type?: "text" | "number" | string
     placeholder?: string
-}) {
-    const onChange = (event: ChangeEvent<HTMLInputElement>) => {
-        if (props.onChange) {
-            let value: string | number = event.target.value
-
-            if (props.type === "number") {
-                value = value === "" ? "" : Number(value)
-            }
-
-            props.onChange(value as T, event)
-        }
-    }
-
+}
+export const Input = forwardRef<HTMLInputElement, Props>((props, ref) => {
     return (
         <input
+            ref={ref}
             placeholder={props.placeholder}
             defaultValue={props.defaultValue}
             name={props.name}
@@ -35,12 +24,14 @@ export function Input<T extends string | number>(props: {
                 "border-2 border-gray-300 rounded-md p-2",
                 "focus:outline-none",
                 "focus:ring-2",
-                "focus:ring-blue-400",
+                props.isInvalid ? "focus:ring-red-400" : "focus:ring-blue-400",
                 "focus:border-transparent",
                 props.className,
             ])}
             value={props.value}
-            onChange={onChange}
+            onChange={props.onChange}
         />
     )
-}
+})
+
+Input.displayName = "Input"

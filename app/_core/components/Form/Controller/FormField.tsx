@@ -40,6 +40,7 @@ export function FormField<
             <Component
                 {...props}
                 {...field}
+                isInvalid={fieldState.invalid}
             />
 
             <div>{fieldState.error?.message}</div>
