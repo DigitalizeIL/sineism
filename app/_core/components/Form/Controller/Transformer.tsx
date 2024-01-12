@@ -5,7 +5,7 @@ import {
     Path,
     PathValue,
 } from "react-hook-form"
-import { ChangeEvent } from "react"
+import React, { ChangeEvent } from "react"
 
 type ReactHookFormTypes<Value, Dto extends FieldValues> = {
     control: Control<Dto>
@@ -24,6 +24,12 @@ export type SubComponentProps<ComponentType> =
         Component: ComponentType
     }
 
+type SubComponentExternalInterface<
+    ComponentType,
+    Value,
+    Dto extends FieldValues,
+> = Omit<SubComponentProps<ComponentType>, keyof ReactHookFormTypes<Value, Dto>>
+
 export function ControllerPlus<
     Dto extends FieldValues,
     Value extends PathValue<Dto, Path<Dto>>,
@@ -35,7 +41,8 @@ export function ControllerPlus<
     defaultValue,
     Component,
     ...props
-}: SubComponentProps<ComponentType> & ReactHookFormTypes<Value, Dto>) {
+}: SubComponentExternalInterface<ComponentType, Value, Dto> &
+    ReactHookFormTypes<Value, Dto>) {
     const createChangeHandler = (field: any) => {
         return async (e: ChangeEvent<any>) => {
             field.onChange(transform?.output ? transform.output(e) : e)
@@ -47,9 +54,10 @@ export function ControllerPlus<
             defaultValue={defaultValue}
             control={control}
             name={name}
-            render={({ field }) => (
+            render={({ field, fieldState }) => (
                 <Component
                     {...props}
+                    isInvalid={fieldState.invalid}
                     onChange={createChangeHandler(field)}
                     value={
                         transform.input
