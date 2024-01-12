@@ -29,7 +29,7 @@ export const CommentFormContainer = async (
         const content = formData.get("content") as string
         const postId = Number(formData.get("postId") as string)
 
-        if (!session?.user || !content || isNaN(postId)) {
+        if (!session?.user || !content || !postId || isNaN(postId)) {
             // TODO: show error
             console.log("no content", session, content, props.specificPost)
             return
