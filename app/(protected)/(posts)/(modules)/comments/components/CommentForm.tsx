@@ -4,63 +4,69 @@ import { Button } from "@/components/Button"
 import { IPost } from "@/app/(protected)/(posts)/lib/interfaces/IPost"
 import { TextArea } from "@/components/Form/TextArea"
 import clsx from "clsx"
-import { useRef, useState } from "react"
 import { Select } from "@/components/Form/Select"
-import { FormSubmitHandler } from "@/components/Form/types"
-import { getMessageFromFormSubmitError } from "@/components/Form/errors"
-import toast from "react-hot-toast"
+import { Form, FormSubmitHandler, useForm } from "react-hook-form"
+import { ControllerPlus } from "@/components/Form/Controller/Transformer"
+import { Input } from "@/components/Form/Input"
 
 type CommentFormProps = {
-    createComment: FormSubmitHandler
+    createComment: (formData: CommentFormDto) => Promise<string | void>
     post?: IPost
     postOptions: { value: number; label: string }[]
     className?: string
 }
 
-export const CommentForm = (props: CommentFormProps) => {
-    const formRef = useRef<HTMLFormElement>(null)
-    const [selectValue, setSelectValue] = useState<string>()
+export type CommentFormDto = {
+    content: string
+    postId: number
+}
 
-    const formAction = async (formData: FormData) => {
-        const response = await props.createComment(formData)
-        if (response.error) {
-            toast.error(getMessageFromFormSubmitError(response.error))
-            return
-        }
-        formRef.current?.reset()
-        setSelectValue("")
+export const CommentForm = (props: CommentFormProps) => {
+    const {
+        control,
+        formState: { errors },
+    } = useForm<CommentFormDto>({
+        mode: "onChange",
+    })
+
+    const onSubmit: FormSubmitHandler<CommentFormDto> = async (response) => {
+        await props.createComment(response.data)
     }
 
     return (
         <div className={clsx(["flex flex-col space-y-2 p-3", props.className])}>
-            <form
-                ref={formRef}
-                action={formAction}>
+            <Form
+                control={control}
+                onSubmit={onSubmit}>
                 <TextArea
-                    name="content"
+                    control={control}
+                    name={"content"}
+                    rules={{
+                        required: true,
+                    }}
                     className="w-full"
                     placeholder={"לתגובה על פוסט/ים"}
                 />
-                {props.post ? (
-                    <input
-                        type={"hidden"}
-                        name={"postId"}
-                        value={props.post.id}
-                    />
-                ) : (
-                    <Select
-                        name={"postId"}
-                        value={selectValue}
-                        onChange={(value) => setSelectValue(value.toString())}
-                        options={props.postOptions}
-                    />
-                )}
+                <ControllerPlus
+                    control={control}
+                    transform={{
+                        output: (value) => {
+                            return parseInt(value.target.value)
+                        },
+                    }}
+                    name={"postId"}
+                    type={"number"}
+                    hidden={!!props.post}
+                    Component={props.post ? Input : Select}
+                    options={props.postOptions}
+                />
                 <Button
+                    submit
                     type="ghost"
                     className={"text-3xl text-black"}>
                     יצירת תגובה
                 </Button>
-            </form>
+            </Form>
         </div>
     )
 }
