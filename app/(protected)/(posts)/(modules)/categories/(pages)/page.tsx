@@ -8,19 +8,19 @@ export default function CategoriesPage() {
     return (
         <div className={"flex justify-center items-center h-screen"}>
             {CATEGORIES.map((category) => (
-                <div
-                    key={category.id}
-                    className={"flex justify-center items-center"}>
+            <div
+                key={COMMENTS_LINK.href}
+                className={"flex justify-center items-center"}>
                     <Link
                         href={category.path}
                         passHref>
-                        <button
-                            className={
-                                "w-64 h-64 bg-primary rounded-xl shadow-lg m-4 flex justify-center items-center cursor-pointer" +
-                                "hover:bg-primary-600 hover:shadow-xl"
-                            }>
-                            {category.name}
-                        </button>
+                    <button
+                        className={
+                            "w-64 h-64 bg-primary rounded-xl shadow-lg m-4 flex justify-center items-center cursor-pointer" +
+                            "hover:bg-primary-600 hover:shadow-xl"
+                        }>
+                        {COMMENTS_LINK.label}
+                    </button>
                     </Link>
                 </div>
             ))}

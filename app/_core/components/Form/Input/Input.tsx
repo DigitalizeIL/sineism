@@ -1,8 +1,7 @@
 "use client"
 
-import {ChangeEvent} from "react"
+import { ChangeEvent } from "react"
 import clsx from "clsx"
-
 
 type TextInputProps = {
     value?: string
@@ -21,12 +20,9 @@ type NumberInputProps = {
 type InputProps = {
     className?: string
     name?: string
+    hidden?: boolean
     placeholder?: string
-} & (
-    TextInputProps |
-    NumberInputProps
-    )
-
+} & (TextInputProps | NumberInputProps)
 
 export function Input<T extends string | number>(props: InputProps) {
     const onChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -39,7 +35,6 @@ export function Input<T extends string | number>(props: InputProps) {
         } else if (props.type === "text") {
             props.onChange(event.target.value, event)
         }
-
     }
 
     return (
@@ -47,7 +42,7 @@ export function Input<T extends string | number>(props: InputProps) {
             placeholder={props.placeholder}
             defaultValue={props.defaultValue}
             name={props.name}
-            type={props.type || "text"}
+            type={props.hidden ? "hidden" : props.type || "text"}
             className={clsx([
                 "border-2 border-gray-300 rounded-md p-2",
                 "focus:outline-none",
