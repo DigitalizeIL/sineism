@@ -1,6 +1,7 @@
 import {
     Control,
     Controller,
+    ControllerProps,
     FieldValues,
     Path,
     PathValue,
@@ -13,6 +14,7 @@ type ReactHookFormTypes<Value, Dto extends FieldValues> = {
         input?: (changeEvent: ChangeEvent<any>) => Value
         output?: (changeEvent: ChangeEvent<any>) => Value
     }
+    rules?: ControllerProps<Dto, Path<Dto>>["rules"]
     name: Path<Dto>
     defaultValue?: Value
 }
@@ -37,6 +39,7 @@ export function ControllerPlus<
 >({
     control,
     transform,
+    rules,
     name,
     defaultValue,
     Component,
@@ -53,6 +56,7 @@ export function ControllerPlus<
         <Controller
             defaultValue={defaultValue}
             control={control}
+            rules={rules}
             name={name}
             render={({ field, fieldState }) => (
                 <Component
