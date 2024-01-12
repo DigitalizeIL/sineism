@@ -5,6 +5,7 @@ import { redirect } from "next/navigation"
 import { categoriesService } from "@/app/(protected)/(posts)/(modules)/categories/lib/services/CategoriesService"
 import { DEFAULT_PAGE_SIZE } from "@/app/(protected)/(posts)/(modules)/categories/consts/pagination"
 import { CommentWithPaymentContainer } from "@/app/(protected)/(payment)/(modules)/comments/components/CommentWithPaymentContainer"
+import { settingsService } from "@/app/(protected)/(posts)/(modules)/settings/lib/services/SettingsService"
 
 type CategoryHeaderProps = { category: ICategory; page: number }
 
@@ -12,9 +13,10 @@ export const CategoryHeader = async ({
     category,
     page,
 }: CategoryHeaderProps) => {
-    const categoriesCount = await categoriesService.countCategoryPosts(
-        category.id!
-    )
+    const postsCount = await categoriesService.countCategoryPosts(category.id!)
+
+    const postsPerPage = await settingsService.getSettingByKey("posts_per_page")
+    const pageSize = Number(postsPerPage?.value) || DEFAULT_PAGE_SIZE
 
     const nextPage = async () => {
         "use server"
@@ -50,7 +52,7 @@ export const CategoryHeader = async ({
             <div className={"flex items-center justify-end"}>
                 <PaginationControls
                     shouldHidePageNumber={true}
-                    totalPages={Math.ceil(categoriesCount / DEFAULT_PAGE_SIZE)}
+                    totalPages={Math.ceil(postsCount / pageSize)}
                     page={page}
                     nextPage={nextPage}
                     prevPage={prevPage}
