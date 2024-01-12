@@ -28,9 +28,11 @@ export const Comment = async (props: CommentProps) => {
     return (
         <div className="bg-white p-4 mt-4 rounded shadow-md w-3/4 mx-auto relative">
             {session?.user?.role === "ADMIN" && (
-                <form action={deletePost}>
+                <form
+                    action={deletePost}
+                    className="absolute top-4 left-4">
                     <button className="border-none bg-none">
-                        <AiFillDelete className="absolute top-1 right-1" />
+                        <AiFillDelete />
                     </button>
                 </form>
             )}

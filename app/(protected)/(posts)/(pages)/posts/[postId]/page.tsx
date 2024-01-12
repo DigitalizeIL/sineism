@@ -1,7 +1,7 @@
 import { postsService } from "@/app/(protected)/(posts)/lib/services/PostsService"
 import { notFound } from "next/navigation"
-import { CreateCommentForm } from "@/app/(protected)/(posts)/(modules)/comments/components/CreateCommentForm"
 import { PostComments } from "@/app/(protected)/(posts)/(modules)/comments/components/PostComments"
+import { CommentFormContainer } from "@/app/(protected)/(posts)/(modules)/comments/components/CommentFormContainer"
 
 type PostPageProps = {
     params: { postId: number }
@@ -22,7 +22,7 @@ export default async function PostPage(props: PostPageProps) {
                 <hr className="w-1/5 py-2" />
                 <h3>comments</h3>
                 <PostComments post={post} />
-                <CreateCommentForm post={post} />
+                <CommentFormContainer specificPost={post} />
             </div>
         )
     } catch (e) {
