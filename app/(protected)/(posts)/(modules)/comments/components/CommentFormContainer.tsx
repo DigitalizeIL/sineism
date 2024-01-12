@@ -4,8 +4,10 @@ import { IPost } from "@/app/(protected)/(posts)/lib/interfaces/IPost"
 import { revalidatePath } from "next/cache"
 import { postsService } from "@/app/(protected)/(posts)/lib/services/PostsService"
 import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
-import { CommentForm } from "@/app/(protected)/(posts)/(modules)/comments/components/CommentForm"
-import { FormSubmitHandler } from "@/components/Form/types"
+import {
+    CommentForm,
+    CommentFormDto,
+} from "@/app/(protected)/(posts)/(modules)/comments/components/CommentForm"
 
 type CommentFormContainerProps = {
     specificPost?: IPost
@@ -25,41 +27,22 @@ export const CommentFormContainer = async (
         posts = await postsService.getAllPosts()
     }
 
-    const createComment: FormSubmitHandler = async (formData) => {
+    const createComment = async (formData: CommentFormDto) => {
         "use server"
-        const content = formData.get("content") as string
-        const postId = Number(formData.get("postId") as string)
 
-        if (!session?.user || !content || !postId || isNaN(postId)) {
-            return {
-                error: {
-                    message: "Validation Failed",
-                    data: {
-                        ...(!session?.user && {
-                            noSession: "Please authenticate",
-                        }),
-                        ...(!content && {
-                            content: "Content is required",
-                        }),
-                        ...((!postId || isNaN(postId)) && {
-                            post: "Please select a post",
-                        }),
-                    },
-                },
-            }
+        if (!session.user?.id) {
+            return "Please authenticate"
         }
 
         const newComment: IComment = {
-            userId: session.user.id,
-            postId,
-            content,
+            userId: session.user?.id,
+            postId: formData.postId,
+            content: formData.content,
         }
 
         await commentsService.createComment(newComment)
 
         revalidatePath("/posts")
-
-        return {}
     }
 
     return (
