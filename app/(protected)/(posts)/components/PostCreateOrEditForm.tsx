@@ -1,18 +1,20 @@
 "use client"
 import { Button } from "@/components/Button"
 import { Input } from "@/components/Form/Input/Input"
-import { TextArea } from "@/components/Form/TextArea"
 import {
     CreatePostDto,
     EditPostDto,
     IPost,
 } from "@/app/(protected)/(posts)/lib/interfaces/IPost"
 import { ICategory } from "@/app/(protected)/(posts)/(modules)/categories/lib/interfaces/ICategory"
-import { Select } from "@/components/Form/Select"
 import { ModalWithButton } from "@/components/Modal"
 import React, { FormEvent, useEffect, useState } from "react"
 import { useSession } from "next-auth/react"
 import { AiOutlineEdit } from "react-icons/ai"
+import { useForm } from "react-hook-form"
+import { FormField } from "@/components/Form/Controller/FormField"
+import { TextArea } from "@/components/Form/TextArea"
+import { Select } from "@/components/Form/Select"
 
 export const PostCreateOrEditForm = (props: {
     post?: IPost
@@ -28,6 +30,12 @@ export const PostCreateOrEditForm = (props: {
     const [title, setTitle] = useState(props.post?.title)
     const [content, setContent] = useState(props.post?.content)
     const [category, setCategory] = useState(props.post?.categoryId)
+    const {
+        control,
+        formState: { errors },
+    } = useForm<CreatePostDto>({
+        mode: "onChange",
+    })
 
     useEffect(() => {
         if (props.post) {
@@ -89,35 +97,34 @@ export const PostCreateOrEditForm = (props: {
                 <div className="flex flex-col space-y-2 p-3">
                     <div className={"flex flex-row gap-2"}>
                         {number !== undefined && (
-                            <Input
+                            <FormField
+                                control={control}
+                                Component={Input}
                                 placeholder={"Number"}
                                 type="number"
                                 name={"title"}
-                                value={number}
                                 className={"flex-5"}
-                                onChange={(value) => setNumber(value)}
                             />
                         )}
-                        <Input
-                            placeholder={"Title"}
-                            type="text"
+                        <FormField
+                            Component={Input}
+                            control={control}
                             name={"title"}
-                            value={title}
                             className={"flex-1"}
-                            onChange={(value) => setTitle(value)}
+                            placeholder={"Title"}
                         />
                     </div>
-                    <TextArea
+                    <FormField
+                        Component={TextArea}
+                        control={control}
                         placeholder={"Content"}
                         name={"content"}
-                        value={content}
-                        onChange={(value) => setContent(value)}
                         rows={10}
                     />
-                    <Select
-                        name={"category"}
-                        value={category}
-                        onChange={(value) => setCategory(Number(value))}
+                    <FormField
+                        Component={Select}
+                        name={"categoryId"}
+                        control={control}
                         options={
                             props.categories?.map((category: ICategory) => ({
                                 label: category.name,
