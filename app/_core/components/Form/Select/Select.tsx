@@ -1,39 +1,27 @@
 "use client"
 
+import { ChangeEventHandler, useMemo } from "react"
 import clsx from "clsx"
-import { ChangeEvent, useEffect, useMemo, useState } from "react"
 
-export const Select = (props: {
-    name: string
+export function Select(props: {
     className?: string
-    defaultValue?: string | number
-    value?: string | number
     placeholder?: string
-    onChange?: (value: string | number) => void
+    value?: string
+    defaultValue?: string
+    isInvalid?: boolean
+    onChange?: ChangeEventHandler<HTMLSelectElement>
     options: { label: string; value: string | number | undefined }[]
-}) => {
+}) {
     const selectedOption = useMemo(() => {
         return props.options.find(
             (option) => option.value === props.defaultValue
         )
     }, [props.defaultValue, props.options])
 
-    const [value, setValue] = useState(props.value)
-
-    useEffect(() => {
-        setValue(props.value)
-    }, [props.value])
-
-    const change = (e: ChangeEvent<HTMLSelectElement>) => {
-        setValue(e.target.value)
-        props.onChange?.(e.target.value)
-    }
-
     return (
         <select
-            value={value || "empty"}
-            onChange={change}
-            name={props.name}
+            value={props.value}
+            onChange={props.onChange}
             placeholder={selectedOption?.label}
             className={clsx([
                 props.className,
@@ -43,10 +31,10 @@ export const Select = (props: {
                 "rounded-md",
                 "focus:outline-none",
                 "focus:ring-2",
-                "focus:ring-blue-400",
+                props.isInvalid ? "focus:ring-red-400" : "focus:ring-blue-400",
                 "focus:border-transparent",
                 "p-2",
-                !value && "text-gray-400",
+                !props.value && "text-gray-400",
             ])}>
             <option
                 value={"empty"}
