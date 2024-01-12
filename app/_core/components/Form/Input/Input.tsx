@@ -8,6 +8,7 @@ export function Input<T extends string | number>(props: {
     defaultValue?: string
     className?: string
     name?: string
+    hidden?: boolean
     onChange?: (value: T, event: ChangeEvent<HTMLInputElement>) => void
     type?: "text" | "number" | string
     placeholder?: string
@@ -29,7 +30,7 @@ export function Input<T extends string | number>(props: {
             placeholder={props.placeholder}
             defaultValue={props.defaultValue}
             name={props.name}
-            type={props.type || "text"}
+            type={props.hidden ? "hidden" : props.type || "text"}
             className={clsx([
                 "border-2 border-gray-300 rounded-md p-2",
                 "focus:outline-none",
