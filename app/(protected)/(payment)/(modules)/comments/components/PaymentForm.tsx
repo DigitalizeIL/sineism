@@ -74,7 +74,7 @@ export const PaymentForm = (props: {
             user.id
         )
 
-        alert("Payment successful")
+        props.onSuccess()
     }
 
     return (

@@ -13,6 +13,8 @@ import { ModalWithButton } from "@/components/Modal"
 import React, { FormEvent, useEffect, useState } from "react"
 import { useSession } from "next-auth/react"
 import { AiOutlineEdit } from "react-icons/ai"
+import { CATEGORIES } from "@/app/(protected)/(posts)/(modules)/categories/consts/categories"
+import toast from "react-hot-toast"
 
 export const PostCreateOrEditForm = (props: {
     post?: IPost
@@ -71,6 +73,8 @@ export const PostCreateOrEditForm = (props: {
             setCategory(undefined)
             setNumber(undefined)
 
+            toast.success("Your post is submitted")
+
             setIsOpen(false)
             return false
         } catch (error) {
@@ -79,6 +83,7 @@ export const PostCreateOrEditForm = (props: {
             setIsLoading(false)
         }
     }
+
     return (
         <ModalWithButton
             onClose={() => setIsOpen(false)}
@@ -119,7 +124,7 @@ export const PostCreateOrEditForm = (props: {
                         value={category}
                         onChange={(value) => setCategory(Number(value))}
                         options={
-                            props.categories?.map((category: ICategory) => ({
+                            CATEGORIES?.map((category: ICategory) => ({
                                 label: category.name,
                                 value: category.id,
                             })) || []
