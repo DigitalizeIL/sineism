@@ -2,10 +2,8 @@ import { categoriesService } from "@/app/(protected)/(posts)/(modules)/categorie
 import { notFound } from "next/navigation"
 import { DEFAULT_PAGE_SIZE } from "@/app/(protected)/(posts)/(modules)/categories/consts/pagination"
 import { CategoryFeed } from "@/app/(protected)/(posts)/(modules)/categories/components/CategoryFeed"
-import {
-    EDITED_UTTERANCES_CATEGORY,
-    UTTERANCES_CATEGORY,
-} from "@/app/(protected)/(posts)/(modules)/categories/consts/categories"
+import { EDITED_UTTERANCES_CATEGORY } from "@/app/(protected)/(posts)/(modules)/categories/consts/categories"
+import { settingsService } from "@/app/(protected)/(posts)/(modules)/settings/lib/services/SettingsService"
 
 type PageProps = {
     searchParams?: { [key: string]: string }
@@ -13,14 +11,14 @@ type PageProps = {
 
 export default async function Page(props: PageProps) {
     const page = Number(props.searchParams?.page || 1)
-    const limit = DEFAULT_PAGE_SIZE
+    const postsPerPage = await settingsService.getSettingByKey("posts_per_page")
 
     const category = await categoriesService.getCategory({
         id: EDITED_UTTERANCES_CATEGORY.id!,
         withPosts: true,
         pagination: {
             page,
-            perPage: limit,
+            perPage: Number(postsPerPage?.value) || DEFAULT_PAGE_SIZE,
         },
     })
 
