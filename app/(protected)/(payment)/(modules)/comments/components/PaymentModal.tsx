@@ -7,6 +7,7 @@ import { Button } from "@/components/Button"
 import { BiComment } from "react-icons/bi"
 import { PaymentForm } from "@/app/(protected)/(payment)/(modules)/comments/components/PaymentForm"
 import toast from "react-hot-toast"
+import { LoadingDots } from "@/components/LoadingDots"
 
 export const PaymentModal = (props: { price: number; amount: number }) => {
     const [{ isPending }] = usePayPalScriptReducer()
@@ -27,7 +28,7 @@ export const PaymentModal = (props: { price: number; amount: number }) => {
             <Modal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}>
-                {isPending ? "Loading..." : null}
+                {isPending ? <LoadingDots /> : null}
                 <div className="flex flex-col space-y-2 gap-3 p-4">
                     <h3>Buy Comments</h3>
                     <PaymentForm
