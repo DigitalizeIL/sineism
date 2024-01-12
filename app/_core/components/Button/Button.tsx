@@ -12,6 +12,7 @@ type ButtonProps = {
     type?: ButtonType | ButtonType[]
     className?: string
     onClick?: () => void
+    submit?: boolean
 }
 
 export const Button = ({
@@ -20,6 +21,7 @@ export const Button = ({
     type,
     className,
     onClick,
+    submit,
 }: ButtonProps) => {
     const styleClassnames = useMemo(() => {
         if (!type) return ""
@@ -33,6 +35,7 @@ export const Button = ({
 
     return (
         <button
+            type={submit ? "submit" : "button"}
             onClick={onClick}
             disabled={loading}
             className={clsx([
