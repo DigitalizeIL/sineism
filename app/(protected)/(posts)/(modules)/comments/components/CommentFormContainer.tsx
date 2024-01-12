@@ -30,7 +30,7 @@ export const CommentFormContainer = async (
         const content = formData.get("content") as string
         const postId = Number(formData.get("postId") as string)
 
-        if (!session?.user || !content || isNaN(postId)) {
+        if (!session?.user || !content || !postId || isNaN(postId)) {
             return {
                 error: {
                     message: "Validation Failed",
@@ -41,7 +41,7 @@ export const CommentFormContainer = async (
                         ...(!content && {
                             content: "Content is required",
                         }),
-                        ...(isNaN(postId) && {
+                        ...((!postId || isNaN(postId)) && {
                             post: "Please select a post",
                         }),
                     },
