@@ -32,7 +32,7 @@ export const Comment = async (props: CommentProps) => {
                     action={deletePost}
                     className="absolute top-4 left-4">
                     <button className="border-none bg-none">
-                        <AiFillDelete />
+                        <AiFillDelete className="absolute top-1 right-1" />
                     </button>
                 </form>
             )}

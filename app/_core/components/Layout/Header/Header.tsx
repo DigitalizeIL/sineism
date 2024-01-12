@@ -24,14 +24,16 @@ export const Header = async () => {
                     />
                 ))}
 
-                {CATEGORIES.map((category) => (
-                    <HeaderLink
-                        key={category.id}
-                        href={category.path}
-                        label={category.name}
-                        className={"h-full p-2"}
-                    />
-                ))}
+                <div className={"flex flex-row-reverse h-full"}>
+                    {CATEGORIES.map((category) => (
+                        <HeaderLink
+                            key={category.id}
+                            href={category.path}
+                            label={category.name}
+                            className={"h-full p-2"}
+                        />
+                    ))}
+                </div>
             </nav>
             <div className={"flex items-center justify-end"}>
                 <AuthStatus />

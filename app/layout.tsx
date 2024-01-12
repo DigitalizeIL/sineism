@@ -21,7 +21,6 @@ export const metadata: Metadata = {
         description: METADATA.description,
     },
     metadataBase: new URL(METADATA.base),
-    themeColor: METADATA.themeColor,
 }
 export default async function RootLayout({
     children,

@@ -30,7 +30,7 @@ export const CategoryHeader = async ({
     return (
         <div
             className={
-                "flex align-middle justify-between w-full border-b border-stone-200 h-14"
+                "grid grid-cols-3 w-full border-b border-stone-200 h-14"
             }>
             <div className={"flex items-center"}>
                 <h2
@@ -44,7 +44,7 @@ export const CategoryHeader = async ({
                     <MoveToBookmarkButton categoryId={category.id} />
                 )}
             </div>
-            <div className={"flex items-center justify-end"}>
+            <div className={"flex items-center justify-center"}>
                 <CommentWithPaymentContainer />
             </div>
             <div className={"flex items-center justify-end"}>
