@@ -1,40 +1,43 @@
 import {
-    ChangeHandler,
     Control,
     Controller,
-    ControllerRenderProps,
     FieldValues,
     Path,
     PathValue,
 } from "react-hook-form"
-import { ComponentType } from "react"
+import { ChangeEvent } from "react"
+
+type ReactHookFormTypes<Value, Dto extends FieldValues> = {
+    control: Control<Dto>
+    transform: {
+        input?: (changeEvent: ChangeEvent<any>) => Value
+        output?: (changeEvent: ChangeEvent<any>) => Value
+    }
+    name: Path<Dto>
+    defaultValue?: Value
+}
+
+export type SubComponentProps<ComponentType> =
+    (ComponentType extends React.ComponentType<infer ComponentProps>
+        ? ComponentProps
+        : never) & {
+        Component: ComponentType
+    }
 
 export function ControllerPlus<
     Dto extends FieldValues,
     Value extends PathValue<Dto, Path<Dto>>,
+    ComponentType extends React.ComponentType<any>,
 >({
     control,
     transform,
     name,
     defaultValue,
-    component,
+    Component,
     ...props
-}: {
-    control: Control<Dto>
-    transform: {
-        input?: (value: any) => Value
-        output?: (value: any) => Value
-    }
-    name: Path<Dto>
-    defaultValue?: Value
-    component: ComponentType<{ onChange: ChangeHandler; value: Value }>
-}) {
-    const Component = component
-
-    const createChangeHandler = (
-        field: ControllerRenderProps<Dto, Path<Dto>>
-    ): ChangeHandler => {
-        return async (e) => {
+}: SubComponentProps<ComponentType> & ReactHookFormTypes<Value, Dto>) {
+    const createChangeHandler = (field: any) => {
+        return async (e: ChangeEvent<any>) => {
             field.onChange(transform?.output ? transform.output(e) : e)
         }
     }
