@@ -53,6 +53,9 @@ export const CommentForm = (props: CommentFormProps) => {
                     <ControllerPlus
                         Component={Input}
                         control={control}
+                        rules={{
+                            required: true,
+                        }}
                         transform={{
                             output: (value) => {
                                 return parseInt(value.target.value)
@@ -66,6 +69,9 @@ export const CommentForm = (props: CommentFormProps) => {
                     <ControllerPlus
                         Component={Select}
                         control={control}
+                        rules={{
+                            required: true,
+                        }}
                         transform={{
                             output: (value) => {
                                 return parseInt(value.target.value)
