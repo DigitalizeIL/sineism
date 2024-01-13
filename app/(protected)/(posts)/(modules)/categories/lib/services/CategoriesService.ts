@@ -1,50 +1,39 @@
 import "server-only"
+import { ICategory } from "@/app/(protected)/(posts)/(modules)/categories/lib/interfaces/ICategory"
+import { Pagination } from "@/lib/types/pagination"
 import {
     CategoriesDbRepository,
     categoriesDbRepository,
+    CategoryWithoutPosts,
 } from "@/app/(protected)/(posts)/(modules)/categories/lib/repositories/CategoriesDbRepository"
-import { ICategory } from "@/app/(protected)/(posts)/(modules)/categories/lib/interfaces/ICategory"
-import { Category } from "@/app/(protected)/(posts)/(modules)/categories/lib/models/Category"
-import { Pagination } from "@/lib/types/pagination"
 
-export interface CategoriesService {
-    getAllCategories(): Promise<ICategory[]>
-
-    getCategory(data: {
-        id: number
-        withPosts?: boolean
-        pagination?: Pagination
-    }): Promise<ICategory | null>
-
-    createCategory(category: ICategory): Promise<ICategory>
-
-    updateCategory(id: number, category: Category): Promise<ICategory>
-
-    deleteCategory(id: number): Promise<void>
-
-    countCategories(): Promise<number>
-
-    countCategoryPosts(categoryId: number): Promise<number>
+export type GetCategoryFilter = {
+    id?: number
+    path?: string
 }
 
 export type CategoriesServiceDependencies = {
     dbRepository: CategoriesDbRepository
 }
 
-export const createCategoriesService = (
-    dependencies: CategoriesServiceDependencies
-): CategoriesService => {
-    const getAllCategories = async (): Promise<ICategory[]> => {
-        return await dependencies.dbRepository.getAll()
+export class CategoriesService {
+    private dbRepository: CategoriesDbRepository
+
+    constructor(dependencies: CategoriesServiceDependencies) {
+        this.dbRepository = dependencies.dbRepository
     }
 
-    const getCategory = async (data: {
-        id: number
+    async getAllCategories(): Promise<ICategory[]> {
+        return await this.dbRepository.getAll()
+    }
+
+    async getCategory(data: {
+        filter: GetCategoryFilter
         withPosts?: boolean
         pagination?: Pagination
-    }): Promise<ICategory | null> => {
-        return await dependencies.dbRepository.get(
-            data.id,
+    }): Promise<ICategory | null> {
+        return await this.dbRepository.get(
+            data.filter,
             data.withPosts,
             data.pagination && {
                 skip: (data.pagination.page - 1) * data.pagination.perPage,
@@ -53,40 +42,30 @@ export const createCategoriesService = (
         )
     }
 
-    const createCategory = async (category: ICategory): Promise<ICategory> => {
-        return await dependencies.dbRepository.create(category)
+    async createCategory(category: ICategory): Promise<ICategory> {
+        return await this.dbRepository.create(category)
     }
 
-    const updateCategory = async (
+    async updateCategory(
         id: number,
-        category: Partial<ICategory>
-    ): Promise<ICategory> => {
-        return await dependencies.dbRepository.update(id, category)
+        category: CategoryWithoutPosts
+    ): Promise<ICategory> {
+        return await this.dbRepository.update(id, category)
     }
 
-    const deleteCategory = async (id: number): Promise<void> => {
-        await dependencies.dbRepository.deleteItem(id)
+    async deleteCategory(id: number): Promise<void> {
+        await this.dbRepository.deleteItem(id)
     }
 
-    const countCategories = async (): Promise<number> => {
-        return await dependencies.dbRepository.count()
+    async countCategories(): Promise<number> {
+        return await this.dbRepository.count()
     }
 
-    const countCategoryPosts = async (categoryId: number): Promise<number> => {
-        return await dependencies.dbRepository.countPosts(categoryId)
-    }
-
-    return {
-        countCategoryPosts,
-        countCategories,
-        getAllCategories,
-        getCategory,
-        createCategory,
-        updateCategory,
-        deleteCategory,
+    async countCategoryPosts(categoryId: number): Promise<number> {
+        return await this.dbRepository.countPosts(categoryId)
     }
 }
 
-export const categoriesService = createCategoriesService({
+export const categoriesService = new CategoriesService({
     dbRepository: categoriesDbRepository,
 })
