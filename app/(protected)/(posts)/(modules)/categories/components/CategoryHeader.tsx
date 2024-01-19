@@ -46,7 +46,10 @@ export const CategoryHeader = async ({
                 </h2>
 
                 {category.id !== undefined && (
-                    <MoveToBookmarkButton categoryId={category.id} />
+                    <MoveToBookmarkButton
+                        categoryId={category.id}
+                        categoryPath={category.path}
+                    />
                 )}
             </div>
             <div className={"flex items-center justify-center"}>
