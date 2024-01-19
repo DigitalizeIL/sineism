@@ -26,7 +26,9 @@ export const Rating = ({ userRating, totalRating, onChange }: RatingProps) => {
                     })
                 }}
             />
-            <span>{totalRating}</span>
+            {totalRating !== null && !isNaN(totalRating) && (
+                <span>{totalRating}</span>
+            )}
         </div>
     )
 }
