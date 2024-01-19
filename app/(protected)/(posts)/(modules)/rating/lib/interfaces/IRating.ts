@@ -1,6 +1,7 @@
 export interface IRating {
     id: number
-    rating: number
+    rating: number | null
+    userId: number
     postId?: number
     commentId?: number
 }

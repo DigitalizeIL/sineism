@@ -11,11 +11,15 @@ ALTER TABLE "Category" ADD COLUMN     "path" TEXT NOT NULL;
 CREATE TABLE "Rating" (
     "id" SERIAL NOT NULL,
     "rating" INTEGER NOT NULL,
+    "userId" INTEGER NOT NULL,
     "postId" INTEGER,
     "commentId" INTEGER,
 
     CONSTRAINT "Rating_pkey" PRIMARY KEY ("id")
 );
+
+-- AddForeignKey
+ALTER TABLE "Rating" ADD CONSTRAINT "Rating_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Rating" ADD CONSTRAINT "Rating_postId_fkey" FOREIGN KEY ("postId") REFERENCES "Post"("id") ON DELETE SET NULL ON UPDATE CASCADE;

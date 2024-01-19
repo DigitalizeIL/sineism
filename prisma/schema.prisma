@@ -19,6 +19,7 @@ model User {
   bookmark         Bookmark[]
   userCommentQuota UserCommentQuota[]
   orders           Orders[]
+  Rating           Rating[]
 }
 
 model Post {
@@ -92,7 +93,10 @@ model Settings {
 model Rating {
   id Int @id @default(autoincrement())
 
-  rating Int
+  userRating Int
+  
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   postId    Int?
   Post      Post?    @relation(fields: [postId], references: [id])
