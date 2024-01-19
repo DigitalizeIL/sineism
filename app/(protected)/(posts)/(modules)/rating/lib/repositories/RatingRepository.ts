@@ -4,17 +4,39 @@ import {
     IRating,
     IRatingCreate,
 } from "@/app/(protected)/(posts)/(modules)/rating/lib/interfaces/IRating"
-import { GetRating } from "@/app/(protected)/(posts)/(modules)/rating/lib/interfaces/RatingQuery"
+import {
+    GetAllRatingsFilter,
+    GetRatingFilter,
+} from "@/app/(protected)/(posts)/(modules)/rating/lib/interfaces/RatingQuery"
 
 export class RatingRepository {
-    async getAll(): Promise<IRating[]> {
-        return prisma.rating.findMany()
+    async getAll(filter: GetAllRatingsFilter): Promise<IRating[]> {
+        return prisma.rating.findMany({
+            where: {
+                OR: [
+                    {
+                        postId: filter.postId,
+                    },
+                    {
+                        commentId: filter.commentId,
+                    },
+                ],
+            },
+        })
     }
 
-    async get(filter: GetRating): Promise<IRating | null> {
+    async get(filter: GetRatingFilter): Promise<IRating | null> {
         return prisma.rating.findFirst({
             where: {
-                id: filter.id,
+                ...("id" in filter && { id: filter.id }),
+                ...("commentId" in filter && {
+                    commentId: filter.commentId,
+                    userId: filter.userId,
+                }),
+                ...("postId" in filter && {
+                    postId: filter.postId,
+                    userId: filter.userId,
+                }),
             },
         })
     }

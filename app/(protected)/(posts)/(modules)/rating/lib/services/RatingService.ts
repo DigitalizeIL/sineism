@@ -3,8 +3,14 @@ import {
     ratingRepository,
     RatingRepository,
 } from "@/app/(protected)/(posts)/(modules)/rating/lib/repositories/RatingRepository"
-import { GetRating } from "@/app/(protected)/(posts)/(modules)/rating/lib/interfaces/RatingQuery"
-import { IRating } from "@/app/(protected)/(posts)/(modules)/rating/lib/interfaces/IRating"
+import {
+    GetAllRatingsFilter,
+    GetRatingFilter,
+} from "@/app/(protected)/(posts)/(modules)/rating/lib/interfaces/RatingQuery"
+import {
+    IRating,
+    IRatingCreate,
+} from "@/app/(protected)/(posts)/(modules)/rating/lib/interfaces/IRating"
 
 export type RatingServiceDependencies = {
     dbRepository: RatingRepository
@@ -17,15 +23,17 @@ export class RatingService {
         this.dbRepository = dependencies.dbRepository
     }
 
-    async getAllRatings(): Promise<IRating[]> {
-        return await this.dbRepository.getAll()
+    async getAllRatings(filter: GetAllRatingsFilter): Promise<IRating[]> {
+        return await this.dbRepository.getAll(filter)
     }
 
-    async getRating(data: { filter: GetRating }): Promise<IRating | null> {
+    async getRating(data: {
+        filter: GetRatingFilter
+    }): Promise<IRating | null> {
         return await this.dbRepository.get(data.filter)
     }
 
-    async createRating(rating: IRating): Promise<IRating> {
+    async createRating(rating: IRatingCreate): Promise<IRating> {
         return await this.dbRepository.create(rating)
     }
 
@@ -34,14 +42,20 @@ export class RatingService {
     }
 
     async deleteRating(id: number): Promise<void> {
-        await this.dbRepository.deleteItem(id)
+        await this.dbRepository.delete(id)
     }
 
     async countRatings(): Promise<number> {
         return await this.dbRepository.count()
     }
+
+    async getRatingAverage(filter: GetAllRatingsFilter) {
+        const posts = await this.dbRepository.getAll(filter)
+
+        return posts.reduce((acc, post) => acc + post.rating, 0) / posts.length
+    }
 }
 
-export const categoriesService = new RatingService({
+export const ratingService = new RatingService({
     dbRepository: ratingRepository,
 })
