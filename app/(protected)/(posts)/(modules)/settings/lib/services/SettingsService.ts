@@ -15,7 +15,7 @@ export interface SettingsService {
 
 export const createSettingsService = (): SettingsService => {
     const getSettingByKey = async (
-        key: ISetting["key"]
+        key: SettingKey
     ): Promise<ISetting | null> => {
         const found = await prisma.settings.findUnique({
             where: { key },
