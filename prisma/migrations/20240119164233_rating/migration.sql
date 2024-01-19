@@ -10,7 +10,7 @@ ALTER TABLE "Category" ADD COLUMN     "path" TEXT NOT NULL;
 -- CreateTable
 CREATE TABLE "Rating" (
     "id" SERIAL NOT NULL,
-    "rating" INTEGER NOT NULL,
+    "rating" INTEGER,
     "userId" INTEGER NOT NULL,
     "postId" INTEGER,
     "commentId" INTEGER,
