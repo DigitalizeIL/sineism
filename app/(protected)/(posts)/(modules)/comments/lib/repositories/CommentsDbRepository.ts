@@ -1,14 +1,9 @@
 import "server-only"
 
-import { CrudRepository } from "@/lib/repositories/CrudRepository"
 import prisma from "@/lib/prisma"
 import { IComment } from "@/app/(protected)/(posts)/(modules)/comments/lib/interfaces/IComment"
 
-export interface CommentsDbRepository extends CrudRepository<IComment> {
-    getAllForPost(postId: number): Promise<IComment[]>
-}
-
-export const createCommentsDbRepository = (): CommentsDbRepository => {
+export const createCommentsDbRepository = () => {
     const getAll = async (): Promise<IComment[]> => {
         return prisma.comment.findMany()
     }
