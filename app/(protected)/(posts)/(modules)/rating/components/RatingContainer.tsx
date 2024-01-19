@@ -41,8 +41,8 @@ export const RatingContainer = async ({ commentId, postId }: RatingProps) => {
         } else {
             await ratingService.createRating({
                 rating: ratingNumber,
-                commentId,
-                postId,
+                commentId: commentId || null,
+                postId: postId || null,
                 userId: session?.user?.id,
             })
         }

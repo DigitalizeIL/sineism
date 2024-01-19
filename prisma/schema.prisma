@@ -93,7 +93,7 @@ model Settings {
 model Rating {
   id Int @id @default(autoincrement())
 
-  userRating Int
+  rating Int?
   
   userId Int
   user   User @relation(fields: [userId], references: [id], onDelete: Cascade)

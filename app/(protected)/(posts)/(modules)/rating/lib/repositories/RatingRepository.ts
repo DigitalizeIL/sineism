@@ -13,14 +13,8 @@ export class RatingRepository {
     async getAll(filter: GetAllRatingsFilter): Promise<IRating[]> {
         return prisma.rating.findMany({
             where: {
-                OR: [
-                    {
-                        postId: filter.postId,
-                    },
-                    {
-                        commentId: filter.commentId,
-                    },
-                ],
+                postId: filter.postId || null,
+                commentId: filter.commentId || null,
             },
         })
     }
@@ -43,7 +37,11 @@ export class RatingRepository {
 
     async create(item: IRatingCreate): Promise<IRating> {
         return prisma.rating.create({
-            data: item,
+            data: {
+                ...item,
+                commentId: item.commentId || null,
+                postId: item.postId || null,
+            },
         })
     }
 

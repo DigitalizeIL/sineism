@@ -34,7 +34,7 @@ export const Select = (props: {
             value={value || "empty"}
             onChange={change}
             name={props.name}
-            placeholder={selectedOption?.label}
+            aria-placeholder={props.placeholder}
             className={clsx([
                 props.className,
                 "w-full",
