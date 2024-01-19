@@ -43,9 +43,9 @@ export const PostFeedItem = async ({ post, page }: PostFeedItemProps) => {
                         <>
                             <DeletePostButton postId={post.id} />
                             <PostCreateOrEditFormServer post={post} />
-                            <RatingContainer postId={post.id} />
                         </>
                     ) : null}
+                    <RatingContainer postId={post.id} />
                 </div>
             }
         />

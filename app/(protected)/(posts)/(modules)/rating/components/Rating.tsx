@@ -13,7 +13,7 @@ export const Rating = ({ userRating, totalRating, onChange }: RatingProps) => {
     const [isPending, startTransition] = useTransition()
 
     return (
-        <div className={"flex flex-row"}>
+        <div className={"flex flex-row items-center"}>
             <MuiRating
                 style={{
                     direction: "ltr",
@@ -27,7 +27,7 @@ export const Rating = ({ userRating, totalRating, onChange }: RatingProps) => {
                 }}
             />
             {totalRating !== null && !isNaN(totalRating) && (
-                <span>{totalRating}</span>
+                <span className={"text-stone-700 "}>{totalRating}</span>
             )}
         </div>
     )
