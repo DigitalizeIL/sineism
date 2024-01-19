@@ -16,7 +16,7 @@ export class CategoriesDbRepository {
         withPosts?: boolean,
         pagination?: DBPagination
     ): Promise<ICategory | null> {
-        if (!filter.id || !filter.path) {
+        if (!filter.id && !filter.path) {
             return null
         }
 
