@@ -17,7 +17,9 @@ export default async function Page(props: PageProps) {
     )
 
     const category = await categoriesService.getCategory({
-        id: UTTERANCES_CATEGORY.id!,
+        filter: {
+            id: UTTERANCES_CATEGORY.id!,
+        },
         withPosts: true,
         pagination: {
             page,
