@@ -6,6 +6,7 @@ import { SaveBookmarkButton } from "@/app/(protected)/(posts)/(modules)/bookmark
 import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
 import React from "react"
 import { PostCreateOrEditFormServer } from "@/app/(protected)/(posts)/components/PostCreateOrEditFormServer"
+import { RatingContainer } from "@/app/(protected)/(posts)/(modules)/rating/components/RatingContainer"
 
 type PostFeedItemProps = {
     post: IPost
@@ -44,6 +45,7 @@ export const PostFeedItem = async ({ post, page }: PostFeedItemProps) => {
                             <PostCreateOrEditFormServer post={post} />
                         </>
                     ) : null}
+                    <RatingContainer postId={post.id} />
                 </div>
             }
         />

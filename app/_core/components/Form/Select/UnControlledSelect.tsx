@@ -17,7 +17,7 @@ export const UnControlledSelect = (props: {
             multiple={props.multiple}
             name={props.name}
             onChange={props.onChange}
-            placeholder={props.placeholder}
+            aria-placeholder={props.placeholder}
             className={clsx([
                 props.className,
                 "w-full",
