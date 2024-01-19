@@ -47,6 +47,7 @@ model Comment {
 model Category {
   id       Int        @id @default(autoincrement())
   name     String
+  path     String
   posts    Post[]
   bookmark Bookmark[]
 }

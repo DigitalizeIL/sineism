@@ -28,7 +28,7 @@ export const Header = async () => {
                     {CATEGORIES.map((category) => (
                         <HeaderLink
                             key={category.id}
-                            href={category.path}
+                            href={`/categories/${category.path}`}
                             label={category.name}
                             className={"h-full p-2"}
                         />

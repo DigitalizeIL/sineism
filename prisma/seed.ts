@@ -26,9 +26,7 @@ async function createUsers() {
 async function createCategories() {
     try {
         const categories = await prisma.category.createMany({
-            data: CATEGORIES.map((category) => ({
-                name: category.name,
-            })),
+            data: CATEGORIES,
         })
 
         console.log(`Created ${categories.count} categories`)

@@ -4,22 +4,27 @@ import { Button } from "@/components/Button"
 import { redirect } from "next/navigation"
 import { BiBookBookmark } from "react-icons/bi"
 
-export const MoveToBookmarkButton = async (props: { categoryId: number }) => {
+export const MoveToBookmarkButton = async (props: {
+    categoryPath: string
+    categoryId: number
+}) => {
     const session = await getAppServerSession()
     if (!session?.user) return null
 
-    const activeCategory = await bookmarkService.getBookmarkByUserAndCategory(
+    const activeBookmark = await bookmarkService.getBookmarkByUserAndCategory(
         session?.user?.id,
         props.categoryId
     )
 
     const moveToCategory = async () => {
         "use server"
-        if (!activeCategory?.page) return
-        redirect(`/categories/${props.categoryId}?page=${activeCategory?.page}`)
+        if (!activeBookmark?.page) return
+        redirect(
+            `/categories/${props.categoryPath}?page=${activeBookmark?.page}`
+        )
     }
 
-    if (!activeCategory) return null
+    if (!activeBookmark) return null
 
     return (
         <form

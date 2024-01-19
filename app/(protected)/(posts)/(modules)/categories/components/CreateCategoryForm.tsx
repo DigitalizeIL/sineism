@@ -16,15 +16,19 @@ export const CreateCategoryForm = async (props: CreateCategoryButtonProps) => {
     async function createCategory(formData: FormData) {
         "use server"
         const name = formData.get("name") as string
+        const path = formData.get("path") as string
 
-        if (!name) {
-            // TODO: show error
-            console.log("no name", name)
+        if (!name || !path) {
+            console.log("Cant create post", {
+                name,
+                path,
+            })
             return
         }
 
         const newCategory: ICategory = {
             name,
+            path,
         }
 
         await categoriesService.createCategory(newCategory)
@@ -41,6 +45,11 @@ export const CreateCategoryForm = async (props: CreateCategoryButtonProps) => {
                     name="name"
                     className="w-full"
                     placeholder={"Category on the post"}
+                />
+                <Input
+                    name="path"
+                    className="w-full"
+                    placeholder={"Url Path"}
                 />
                 <Button
                     type="ghost"

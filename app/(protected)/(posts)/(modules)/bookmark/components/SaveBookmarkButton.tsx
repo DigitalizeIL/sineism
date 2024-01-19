@@ -22,7 +22,7 @@ export const SaveBookmarkButton = async (props: {
 
     const saveBookmark = async () => {
         "use server"
-        if (!session) return console.log("no user")
+        if (!session.user?.id) return console.log("no user")
 
         if (isActive && activeBookmark?.id) {
             await bookmarkService.deleteBookmark(activeBookmark?.id)

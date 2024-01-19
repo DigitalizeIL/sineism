@@ -3,20 +3,7 @@ import "server-only"
 import { IBookmark } from "@/app/(protected)/(posts)/(modules)/bookmark/lib/interfaces/IBookmark"
 import prisma from "@/lib/prisma"
 
-export interface BookmarkService {
-    getBookmarkById(id: number): Promise<IBookmark | null>
-
-    getBookmarkByUserAndCategory(
-        userId: number,
-        categoryId: number
-    ): Promise<IBookmark | null>
-
-    upsertBookmark(category: Partial<IBookmark>): Promise<IBookmark>
-
-    deleteBookmark(id: number): Promise<void>
-}
-
-export const createBookmarkService = (): BookmarkService => {
+export const createBookmarkService = () => {
     const getBookmarkById = async (id: number): Promise<IBookmark | null> => {
         return prisma.bookmark.findUnique({
             where: { id },

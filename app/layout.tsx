@@ -37,7 +37,7 @@ export default async function RootLayout({
                 className={inter.variable}
                 suppressHydrationWarning={true}>
                 <Providers session={session}>
-                    <Toaster />
+                    <Toaster position={"bottom-center"} />
                     {children}
                 </Providers>
             </body>
