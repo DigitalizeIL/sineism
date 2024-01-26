@@ -10,8 +10,7 @@ import {
 } from "@/app/(protected)/(posts)/(modules)/settings/lib/interfaces/ISettings"
 
 function isSettingKey(key: string): key is SettingKey {
-    // @ts-ignore
-    return SettingKey.includes(key)
+    return key in SettingKey
 }
 
 export const Settings = async () => {
