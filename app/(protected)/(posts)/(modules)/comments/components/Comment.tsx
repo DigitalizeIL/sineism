@@ -6,6 +6,7 @@ import { postsService } from "@/app/(protected)/(posts)/lib/services/PostsServic
 import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
 import { AiFillDelete } from "react-icons/ai"
 import { RatingContainer } from "@/app/(protected)/(posts)/(modules)/rating/components/RatingContainer"
+import { Box } from "@/components/Box"
 
 type CommentProps = {
     comment: IComment
@@ -29,7 +30,7 @@ export const Comment = async ({
     if (!author) return null
 
     return (
-        <div className="bg-primary p-4 mt-4 rounded shadow-md w-3/4 mx-auto relative">
+        <Box>
             <div className="absolute top-4 left-4 flex flex-row gap-4">
                 {session?.user?.role === "ADMIN" && (
                     <form action={deletePost}>
@@ -50,6 +51,6 @@ export const Comment = async ({
                 {"הגיב על פוסט:"} {post.title}
             </div>
             <div className="text-gray-700">{content}</div>
-        </div>
+        </Box>
     )
 }
