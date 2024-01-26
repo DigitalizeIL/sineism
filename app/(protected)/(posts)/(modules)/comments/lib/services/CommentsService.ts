@@ -1,50 +1,73 @@
 import "server-only"
-import { commentsDbRepository } from "@/app/(protected)/(posts)/(modules)/comments/lib/repositories/CommentsDbRepository"
-import { Comment } from "@/app/(protected)/(posts)/(modules)/comments/lib/models/Comment"
-import { IComment } from "@/app/(protected)/(posts)/(modules)/comments/lib/interfaces/IComment"
-import { quotaService } from "@/app/(protected)/(payment)/(modules)/comments/lib/QuotaService"
+import {
+    CreateComment,
+    IComment,
+} from "@/app/(protected)/(posts)/(modules)/comments/lib/interfaces/IComment"
+import {
+    commentsDbRepository,
+    CommentsDbRepository,
+} from "@/app/(protected)/(posts)/(modules)/comments/lib/repositories/CommentsDbRepository"
+import {
+    quotaService,
+    QuotaService,
+} from "@/app/(protected)/(payment)/(modules)/comments/lib/QuotaService"
+import { Pagination } from "@/lib/types/pagination"
 
-export const createCommentsService = () => {
-    const getAllComments = async (): Promise<IComment[]> => {
-        return await commentsDbRepository.getAll()
+export class CommentsService {
+    private readonly quotaService: QuotaService
+
+    constructor(
+        private commentsDbRepository: CommentsDbRepository,
+        quotaService: QuotaService
+    ) {
+        this.quotaService = quotaService
     }
 
-    const getPostComments = async (postId: number): Promise<IComment[]> => {
-        return await commentsDbRepository.getAllForPost(postId)
+    getAllComments = async ({
+        pagination,
+    }: {
+        pagination: Pagination
+    }): Promise<IComment[]> => {
+        return await this.commentsDbRepository.getAll({
+            ...(pagination && {
+                skip: (pagination.page - 1) * pagination.perPage,
+                take: pagination.perPage,
+            }),
+        })
     }
 
-    const getComment = async (id: number): Promise<IComment | null> => {
-        return await commentsDbRepository.get(id)
+    getPostComments = async (postId: number): Promise<IComment[]> => {
+        return await this.commentsDbRepository.getAllForPost(postId)
     }
 
-    const createComment = async (comment: IComment): Promise<IComment> => {
-        const createdComment = await commentsDbRepository.create(comment)
-        await quotaService.consumeQuota(createdComment.userId)
+    getComment = async (id: number): Promise<IComment | null> => {
+        return await this.commentsDbRepository.get(id)
+    }
+
+    createComment = async (comment: CreateComment): Promise<IComment> => {
+        const createdComment = await this.commentsDbRepository.create(comment)
+        await this.quotaService.consumeQuota(createdComment.userId)
 
         return createdComment
     }
 
-    const updateComment = async (
+    updateComment = async (
         id: number,
         comment: IComment
     ): Promise<IComment> => {
-        const updatedComment = await commentsDbRepository.update(id, comment)
-
-        return Comment.fromJson(updatedComment)
+        return await this.commentsDbRepository.update(id, comment)
     }
 
-    const deleteComment = async (id: number): Promise<void> => {
-        await commentsDbRepository.deleteItem(id)
+    deleteComment = async (id: number): Promise<void> => {
+        await this.commentsDbRepository.deleteItem(id)
     }
 
-    return {
-        getAllComments,
-        getPostComments,
-        getComment,
-        createComment,
-        updateComment,
-        deleteComment,
+    count = (): Promise<number> => {
+        return this.commentsDbRepository.count()
     }
 }
 
-export const commentsService = createCommentsService()
+export const commentsService = new CommentsService(
+    commentsDbRepository,
+    quotaService
+)

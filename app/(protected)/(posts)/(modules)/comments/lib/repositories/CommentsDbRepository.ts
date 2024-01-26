@@ -1,14 +1,27 @@
 import "server-only"
-
+import {
+    CreateComment,
+    IComment,
+} from "@/app/(protected)/(posts)/(modules)/comments/lib/interfaces/IComment"
 import prisma from "@/lib/prisma"
-import { IComment } from "@/app/(protected)/(posts)/(modules)/comments/lib/interfaces/IComment"
+import { DBPagination } from "@/lib/types/pagination"
 
-export const createCommentsDbRepository = () => {
-    const getAll = async (): Promise<IComment[]> => {
-        return prisma.comment.findMany()
+export class CommentsDbRepository {
+    constructor() {}
+
+    getAll = async (pagination?: DBPagination): Promise<IComment[]> => {
+        return prisma.comment.findMany({
+            ...(pagination && {
+                skip: pagination.skip,
+                take: pagination.take,
+            }),
+            orderBy: {
+                commentNumber: "asc",
+            },
+        })
     }
 
-    const getAllForPost = async (postId: number): Promise<IComment[]> => {
+    getAllForPost = async (postId: number): Promise<IComment[]> => {
         return prisma.comment.findMany({
             where: {
                 postId,
@@ -16,39 +29,34 @@ export const createCommentsDbRepository = () => {
         })
     }
 
-    const get = async (id: number): Promise<IComment | null> => {
+    get = async (id: number): Promise<IComment | null> => {
         return prisma.comment.findUnique({
             where: { id },
         })
     }
 
-    const create = async (item: IComment): Promise<IComment> => {
+    create = async (item: CreateComment): Promise<IComment> => {
         return prisma.comment.create({
             data: item,
         })
     }
 
-    const update = async (id: number, item: IComment): Promise<IComment> => {
+    update = async (id: number, item: IComment): Promise<IComment> => {
         return prisma.comment.update({
             where: { id },
             data: item,
         })
     }
 
-    const deleteItem = async (id: number): Promise<void> => {
-        await prisma.comment.delete({
+    deleteItem = async (id: number) => {
+        return prisma.comment.delete({
             where: { id },
         })
     }
 
-    return {
-        getAll,
-        getAllForPost,
-        get,
-        create,
-        update,
-        deleteItem,
+    count = () => {
+        return prisma.comment.count()
     }
 }
 
-export const commentsDbRepository = createCommentsDbRepository()
+export const commentsDbRepository = new CommentsDbRepository()

@@ -17,6 +17,7 @@ export const Rating = ({ userRating, totalRating, onChange }: RatingProps) => {
             <MuiRating
                 style={{
                     direction: "ltr",
+                    color: "black",
                 }}
                 name="simple-controlled"
                 value={userRating}

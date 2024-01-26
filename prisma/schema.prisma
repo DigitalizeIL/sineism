@@ -23,49 +23,46 @@ model User {
 }
 
 model Post {
-  id         Int        @id @default(autoincrement())
+  id         Int       @id @default(autoincrement())
   title      String
   content    String
   metadata   Json?
   authorId   Int
-  author     User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  author     User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
   comments   Comment[]
   categoryId Int
-  category   Category   @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  bookmark   Bookmark[]
-  postNumber Int        @default(autoincrement())
-  Reviews    Rating[]
+  category   Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  postNumber Int       @default(autoincrement())
+  reviews    Rating[]
 }
 
 model Comment {
-  id      Int      @id @default(autoincrement())
-  content String
-  postId  Int
-  post    Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
-  userId  Int
-  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  Reviews Rating[]
+  id            Int      @id @default(autoincrement())
+  content       String
+  commentNumber Int      @default(autoincrement())
+  postId        Int
+  post          Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId        Int
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  reviews       Rating[]
 }
 
 model Category {
-  id       Int        @id @default(autoincrement())
-  name     String
-  path     String
-  posts    Post[]
-  bookmark Bookmark[]
+  id    Int    @id @default(autoincrement())
+  name  String
+  path  String
+  posts Post[]
 }
 
 model Bookmark {
-  id         Int      @id @default(autoincrement())
-  userId     Int
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  postId     Int
-  post       Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
-  categoryId Int
-  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  page       Int
+  id               Int    @id @default(autoincrement())
+  page             Int
+  userId           Int
+  user             User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bookmarkedItemId String
+  referenceType    String
 
-  @@unique(fields: [userId, categoryId], name: "userCategory")
+  @@unique(fields: [userId, referenceType], name: "identifiers")
 }
 
 model UserCommentQuota {
@@ -94,7 +91,7 @@ model Rating {
   id Int @id @default(autoincrement())
 
   rating Int?
-  
+
   userId Int
   user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
 

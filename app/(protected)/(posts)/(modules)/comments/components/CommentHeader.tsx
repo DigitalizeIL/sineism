@@ -1,20 +1,14 @@
-import { ICategory } from "@/app/(protected)/(posts)/(modules)/categories/lib/interfaces/ICategory"
-import { categoriesService } from "@/app/(protected)/(posts)/(modules)/categories/lib/services/CategoriesService"
 import { DEFAULT_PAGE_SIZE } from "@/app/(protected)/(posts)/(modules)/categories/consts/pagination"
 import { settingsService } from "@/app/(protected)/(posts)/(modules)/settings/lib/services/SettingsService"
 import { SettingKey } from "@/app/(protected)/(posts)/(modules)/settings/lib/interfaces/ISettings"
 import { SubHeader } from "@/components/Layout"
+import { commentsService } from "@/app/(protected)/(posts)/(modules)/comments/lib/services/CommentsService"
 
-type CategoryHeaderProps = {
-    category: ICategory
-    page: number
-}
+type CategoryHeaderProps = { page: number }
 
-export const CategoryHeader = async ({
-    category,
-    page,
-}: CategoryHeaderProps) => {
-    const postsCount = await categoriesService.countCategoryPosts(category.id!)
+export const CommentHeader = async ({ page }: CategoryHeaderProps) => {
+    const postsCount = await commentsService.count()
+
     const postsPerPage = await settingsService.getSettingByKey(
         SettingKey.posts_per_page
     )
@@ -22,11 +16,11 @@ export const CategoryHeader = async ({
 
     return (
         <SubHeader
-            title={category.name}
+            title={"תגובות"}
             page={page}
             pageSize={pageSize}
             itemsCount={postsCount}
-            bookmarkReferenceType={category.id?.toString()}
+            bookmarkReferenceType={"comment"}
         />
     )
 }
