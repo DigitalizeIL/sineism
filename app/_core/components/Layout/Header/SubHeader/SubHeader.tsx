@@ -1,14 +1,16 @@
 import { PaginationControls } from "@/components/PaginationControls"
 import { redirect } from "next/navigation"
 import { CommentWithPaymentContainer } from "@/app/(protected)/(payment)/(modules)/comments/components/CommentWithPaymentContainer"
-import { ReactNode } from "react"
+import { MoveToBookmarkButton } from "@/app/(protected)/(posts)/(modules)/bookmark/components/MoveToBookmarkButton"
+import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
+import { BookmarkIdentifiers } from "@/app/(protected)/(posts)/(modules)/bookmark/lib/interfaces/IBookmark"
 
 type CategoryHeaderProps = {
     title?: string
     page: number
     pageSize: number
     itemsCount: number
-    actions?: ReactNode
+    bookmarkReferenceType?: BookmarkIdentifiers["referenceType"]
 }
 
 export const SubHeader = async ({
@@ -16,8 +18,10 @@ export const SubHeader = async ({
     page,
     pageSize,
     itemsCount,
-    actions,
+    bookmarkReferenceType,
 }: CategoryHeaderProps) => {
+    const session = await getAppServerSession()
+
     const nextPage = async () => {
         "use server"
 
@@ -42,7 +46,12 @@ export const SubHeader = async ({
                     {title}
                 </h2>
 
-                {actions}
+                {session?.user && bookmarkReferenceType && (
+                    <MoveToBookmarkButton
+                        referenceType={bookmarkReferenceType}
+                        userId={session.user.id}
+                    />
+                )}
             </div>
             <div className={"flex items-center justify-center"}>
                 <CommentWithPaymentContainer />

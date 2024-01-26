@@ -20,6 +20,7 @@ export const CommentHeader = async ({ page }: CategoryHeaderProps) => {
             page={page}
             pageSize={pageSize}
             itemsCount={postsCount}
+            bookmarkReferenceType={"comment"}
         />
     )
 }
