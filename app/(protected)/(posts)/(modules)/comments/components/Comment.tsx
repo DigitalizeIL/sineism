@@ -8,6 +8,7 @@ import { AiFillDelete } from "react-icons/ai"
 import { RatingContainer } from "@/app/(protected)/(posts)/(modules)/rating/components/RatingContainer"
 import { Box } from "@/components/Box"
 import { SaveBookmarkButton } from "@/app/(protected)/(posts)/(modules)/bookmark/components/SaveBookmarkButton"
+import React from "react"
 
 type CommentProps = {
     comment: IComment
@@ -41,6 +42,18 @@ export const Comment = async ({
                             <AiFillDelete />
                         </button>
                     </form>
+                )}
+
+                {session?.user?.id && (
+                    <SaveBookmarkButton
+                        pathForRevalidation={`/comments`}
+                        ids={{
+                            referenceType: "comment",
+                            userId: session.user.id,
+                        }}
+                        itemIdToBookmark={id.toString()}
+                        page={page || 1}
+                    />
                 )}
 
                 <RatingContainer commentId={id} />
