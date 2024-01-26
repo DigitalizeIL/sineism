@@ -34,12 +34,18 @@ export const PostFeedItem = async ({ post, page }: PostFeedItemProps) => {
                         </h3>
                     </div>
 
-                    <div className={"flex flex-row "}>
-                        <SaveBookmarkButton
-                            categoryId={post.categoryId}
-                            postId={post.id}
-                            page={page || 1}
-                        />
+                    <div className={"flex flex-row"}>
+                        {session?.user?.id && (
+                            <SaveBookmarkButton
+                                pathForRevalidation={`/categories/${post.categoryId}`}
+                                ids={{
+                                    referenceType: post.categoryId.toString(),
+                                    userId: session.user.id,
+                                }}
+                                itemIdToBookmark={post.id.toString()}
+                                page={page || 1}
+                            />
+                        )}
                     </div>
                     {session?.user?.role === USER_ROLES.admin ? (
                         <>
