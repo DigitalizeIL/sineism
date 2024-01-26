@@ -26,13 +26,14 @@ export default async function CommentsPage(props: PageProps) {
 
     return (
         <div className={"flex justify-center flex-col"}>
-            <CommentHeader page={1} />
+            <CommentHeader page={page} />
             <div
                 className={
                     "flex justify-center items-center flex-col overflow-scroll h-auto"
                 }>
                 {comments.map((comment) => (
                     <Comment
+                        page={page}
                         comment={comment}
                         key={comment.id}
                     />

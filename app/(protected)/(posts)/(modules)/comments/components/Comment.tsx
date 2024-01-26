@@ -7,12 +7,15 @@ import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
 import { AiFillDelete } from "react-icons/ai"
 import { RatingContainer } from "@/app/(protected)/(posts)/(modules)/rating/components/RatingContainer"
 import { Box } from "@/components/Box"
+import { SaveBookmarkButton } from "@/app/(protected)/(posts)/(modules)/bookmark/components/SaveBookmarkButton"
 
 type CommentProps = {
     comment: IComment
+    page?: number
 }
 
 export const Comment = async ({
+    page,
     comment: { content, id, postId, userId, commentNumber },
 }: CommentProps) => {
     const author = await usersService.getUserById(userId)
