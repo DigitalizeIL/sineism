@@ -1,5 +1,5 @@
 import { commentsService } from "@/app/(protected)/(posts)/(modules)/comments/lib/services/CommentsService"
-import { IComment } from "@/app/(protected)/(posts)/(modules)/comments/lib/interfaces/IComment"
+import { CreateComment } from "@/app/(protected)/(posts)/(modules)/comments/lib/interfaces/IComment"
 import { IPost } from "@/app/(protected)/(posts)/lib/interfaces/IPost"
 import { revalidatePath } from "next/cache"
 import { postsService } from "@/app/(protected)/(posts)/lib/services/PostsService"
@@ -35,7 +35,7 @@ export const CommentFormContainer = async (
             return
         }
 
-        const newComment: IComment = {
+        const newComment: CreateComment = {
             userId: session.user.id,
             postId,
             content,

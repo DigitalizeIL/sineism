@@ -1,7 +1,9 @@
 import "server-only"
 import { commentsDbRepository } from "@/app/(protected)/(posts)/(modules)/comments/lib/repositories/CommentsDbRepository"
-import { Comment } from "@/app/(protected)/(posts)/(modules)/comments/lib/models/Comment"
-import { IComment } from "@/app/(protected)/(posts)/(modules)/comments/lib/interfaces/IComment"
+import {
+    CreateComment,
+    IComment,
+} from "@/app/(protected)/(posts)/(modules)/comments/lib/interfaces/IComment"
 import { quotaService } from "@/app/(protected)/(payment)/(modules)/comments/lib/QuotaService"
 
 export const createCommentsService = () => {
@@ -17,7 +19,7 @@ export const createCommentsService = () => {
         return await commentsDbRepository.get(id)
     }
 
-    const createComment = async (comment: IComment): Promise<IComment> => {
+    const createComment = async (comment: CreateComment): Promise<IComment> => {
         const createdComment = await commentsDbRepository.create(comment)
         await quotaService.consumeQuota(createdComment.userId)
 
@@ -30,7 +32,7 @@ export const createCommentsService = () => {
     ): Promise<IComment> => {
         const updatedComment = await commentsDbRepository.update(id, comment)
 
-        return Comment.fromJson(updatedComment)
+        return updatedComment
     }
 
     const deleteComment = async (id: number): Promise<void> => {

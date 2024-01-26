@@ -1,7 +1,10 @@
 import "server-only"
 
 import prisma from "@/lib/prisma"
-import { IComment } from "@/app/(protected)/(posts)/(modules)/comments/lib/interfaces/IComment"
+import {
+    CreateComment,
+    IComment,
+} from "@/app/(protected)/(posts)/(modules)/comments/lib/interfaces/IComment"
 
 export const createCommentsDbRepository = () => {
     const getAll = async (): Promise<IComment[]> => {
@@ -22,7 +25,7 @@ export const createCommentsDbRepository = () => {
         })
     }
 
-    const create = async (item: IComment): Promise<IComment> => {
+    const create = async (item: CreateComment): Promise<IComment> => {
         return prisma.comment.create({
             data: item,
         })
