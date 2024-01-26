@@ -55,14 +55,14 @@ model Category {
 }
 
 model Bookmark {
-  id            Int    @id @default(autoincrement())
-  page          Int
-  userId        Int
-  user          User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  referenceId   String
-  referenceType String
+  id               Int    @id @default(autoincrement())
+  page             Int
+  userId           Int
+  user             User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bookmarkedItemId String
+  referenceType    String
 
-  @@unique(fields: [userId, referenceId, referenceType], name: "identifiers")
+  @@unique(fields: [userId, referenceType], name: "identifiers")
 }
 
 model UserCommentQuota {

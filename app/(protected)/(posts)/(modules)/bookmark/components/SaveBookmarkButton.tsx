@@ -1,41 +1,39 @@
 import { Button } from "@/components/Button"
 import { bookmarkService } from "@/app/(protected)/(posts)/(modules)/bookmark/lib/services/BookmarkService"
-import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
-import { revalidatePath } from "next/cache"
 import { BsBookmarkPlus } from "react-icons/bs"
+import { BookmarkIdentifiers } from "@/app/(protected)/(posts)/(modules)/bookmark/lib/interfaces/IBookmark"
+import { revalidatePath } from "next/cache"
 
-export const SaveBookmarkButton = async (props: {
-    categoryId: number
-    postId: number
+type Props = {
+    ids: BookmarkIdentifiers
     page: number
-}) => {
-    const session = await getAppServerSession()
+    itemIdToBookmark: string
+    pathForRevalidation?: string
+}
+export const SaveBookmarkButton = async ({
+    ids,
+    page,
+    itemIdToBookmark,
+    pathForRevalidation,
+}: Props) => {
+    const activeBookmark = await bookmarkService.getBookmark(ids)
 
-    if (!session?.user) return null
-
-    const activeBookmark = await bookmarkService.getBookmarkByUserAndCategory(
-        session.user.id,
-        props.categoryId
-    )
-
-    const isActive = activeBookmark?.postId === props.postId
+    const isActive = activeBookmark?.bookmarkedItemId === itemIdToBookmark
 
     const saveBookmark = async () => {
         "use server"
-        if (!session.user?.id) return console.log("no user")
 
         if (isActive && activeBookmark?.id) {
             await bookmarkService.deleteBookmark(activeBookmark?.id)
         } else {
             await bookmarkService.upsertBookmark({
-                postId: props.postId,
-                categoryId: props.categoryId,
-                userId: session.user?.id,
-                page: props.page,
+                ...ids,
+                bookmarkedItemId: itemIdToBookmark,
+                page,
             })
         }
 
-        revalidatePath(`/categories/${props.categoryId}`)
+        pathForRevalidation && revalidatePath(pathForRevalidation)
     }
 
     return (

@@ -2,6 +2,7 @@ import "server-only"
 
 import {
     BookmarkIdentifiers,
+    CreateBookmark,
     IBookmark,
 } from "@/app/(protected)/(posts)/(modules)/bookmark/lib/interfaces/IBookmark"
 import prisma from "@/lib/prisma"
@@ -18,23 +19,21 @@ export const createBookmarkService = () => {
     ): Promise<IBookmark | null> => {
         return prisma.bookmark.findUnique({
             where: {
-                identifiers: {
-                    userId: ids.userId,
-                    referenceId: ids.referenceId,
-                    referenceIdType: ids.referenceType,
-                    ...(ids.extraId && { extraId: ids.extraId }),
-                },
+                identifiers: ids,
             },
         })
     }
 
     const upsertBookmark = async (
-        ids: BookmarkIdentifiers,
-        item: IBookmark
-    ): Promise<IBookmark> => {
+        item: CreateBookmark
+    ): Promise<IBookmark | null> => {
         return prisma.bookmark.upsert({
             where: {
-                identifiers: ids,
+                identifiers: {
+                    userId: item.userId,
+                    referenceId: item.referenceId,
+                    referenceType: item.referenceType,
+                },
             },
             update: item,
             create: item,

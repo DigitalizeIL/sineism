@@ -1,13 +1,12 @@
 export type BookmarkIdentifiers = {
     userId: number
-    referenceId: number
-    referenceType: "post" | "comment"
-    extraId?: number
+    referenceType: "comment" | string
 }
 
 export type IBookmark = BookmarkIdentifiers & {
     id: number
     page: number
+    bookmarkedItemId: string
 }
 
-export type CreateBookmark = BookmarkIdentifiers & Pick<IBookmark, "page">
+export type CreateBookmark = Omit<IBookmark, "id">
