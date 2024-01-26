@@ -31,7 +31,6 @@ export const createBookmarkService = () => {
             where: {
                 identifiers: {
                     userId: item.userId,
-                    referenceId: item.referenceId,
                     referenceType: item.referenceType,
                 },
             },
