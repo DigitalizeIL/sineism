@@ -1,7 +1,7 @@
 "use client"
 
-import {ReactNode, useEffect} from "react"
-import {CgClose} from "react-icons/cg"
+import { ReactNode, useEffect } from "react"
+import { CgClose } from "react-icons/cg"
 
 export const Modal = (props: {
     children?: ReactNode
@@ -46,7 +46,7 @@ export const Modal = (props: {
 
                 <div
                     className={
-                        "inline-block align-bottom bg-white rounded-lg text-left overflow-hidden " +
+                        "inline-block align-bottom bg-white rounded-lg text-left" +
                         "shadow-xl transform transition-all sm:my-8 sm:align-middle " +
                         "sm:w-full md:w-3/4 p-5"
                     }>
@@ -56,7 +56,7 @@ export const Modal = (props: {
                 <button
                     onClick={props.onClose}
                     className="absolute top-0 right-0 m-4">
-                    <CgClose size={40}/>
+                    <CgClose size={40} />
                 </button>
             </div>
         </div>
