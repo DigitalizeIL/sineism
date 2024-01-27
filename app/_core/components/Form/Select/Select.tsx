@@ -4,7 +4,7 @@ import clsx from "clsx"
 import { ChangeEvent, useEffect, useState } from "react"
 import Select2 from "react-select"
 
-type Option = {
+export type Option = {
     label: string
     value: string | number
 }
