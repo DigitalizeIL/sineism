@@ -1,69 +1,14 @@
 import "server-only"
-import { Post } from "@/app/(protected)/(posts)/lib/models/Post"
 import prisma from "@/lib/prisma"
 import {
     CreatePostDto,
     EditPostDto,
+    IPost,
 } from "@/app/(protected)/(posts)/lib/interfaces/IPost"
+import { GetAllPostsQuery } from "@/app/(protected)/(posts)/lib/interfaces/PostQueries"
 
-export interface PostsDbRepository {
-    getAll: () => Promise<Post[]>
-    get: (id: number) => Promise<Post>
-    create: (item: CreatePostDto) => Promise<Post>
-    update: (id: number, item: EditPostDto) => Promise<Post>
-    deleteItem: (id: number) => Promise<void>
-}
-
-export const createPostsDbRepository = (): PostsDbRepository => {
-    const getAll = async (): Promise<Post[]> => {
-        const postsResult = await prisma.post.findMany({
-            orderBy: {
-                postNumber: "asc",
-            },
-        })
-
-        return postsResult.map(Post.fromJson)
-    }
-
-    const get = async (id: number): Promise<Post> => {
-        const postResult = await prisma.post.findUnique({
-            where: { id },
-        })
-
-        return Post.fromJson(postResult)
-    }
-
-    const create = async (item: CreatePostDto): Promise<Post> => {
-        const postResult = await prisma.post.create({
-            data: {
-                content: item.content || "",
-                title: item.title || "",
-                categoryId: item.categoryId,
-                authorId: item.authorId,
-                postNumber: await getLowestAvailablePostNumber(),
-            },
-        })
-
-        return Post.fromJson(postResult)
-    }
-
-    const update = async (id: number, item: EditPostDto): Promise<Post> => {
-        const postResult = await prisma.post.update({
-            where: { id },
-            data: item,
-        })
-
-        return Post.fromJson(postResult)
-    }
-
-    const deleteItem = async (id: number): Promise<void> => {
-        await prisma.post.delete({
-            where: { id },
-        })
-    }
-
-    const getLowestAvailablePostNumber = async () => {
-        // Fetch all post numbers
+export class PostsDbRepository {
+    private async getLowestAvailablePostNumber(): Promise<number> {
         const postNumbers = await prisma.post.findMany({
             select: {
                 postNumber: true,
@@ -73,27 +18,62 @@ export const createPostsDbRepository = (): PostsDbRepository => {
             },
         })
 
-        // Convert the array of objects to an array of numbers
         const numbers = postNumbers.map((p) => p.postNumber)
 
-        // Find the first missing number in the sequence
         for (let i = 0; i < numbers.length; i++) {
             if (numbers[i] !== i + 1) {
                 return i + 1 // +1 because post numbers are 1-based
             }
         }
 
-        // If no gaps, return the next number in the sequence
         return numbers.length + 1
     }
 
-    return {
-        getAll,
-        get,
-        create,
-        update,
-        deleteItem,
+    public async getAll(query?: GetAllPostsQuery): Promise<IPost[]> {
+        return prisma.post.findMany({
+            where: {
+                ...(query?.ids && {
+                    id: {
+                        in: query.ids,
+                    },
+                }),
+            },
+            orderBy: {
+                postNumber: "asc",
+            },
+        })
+    }
+
+    public async get(id: number): Promise<IPost | null> {
+        return prisma.post.findUnique({
+            where: { id },
+        })
+    }
+
+    public async create(item: CreatePostDto): Promise<IPost> {
+        return prisma.post.create({
+            data: {
+                content: item.content || "",
+                title: item.title || "",
+                categoryId: item.categoryId,
+                authorId: item.authorId,
+                postNumber: await this.getLowestAvailablePostNumber(),
+            },
+        })
+    }
+
+    public async update(id: number, item: EditPostDto): Promise<IPost> {
+        return prisma.post.update({
+            where: { id },
+            data: item,
+        })
+    }
+
+    public async deleteItem(id: number): Promise<void> {
+        await prisma.post.delete({
+            where: { id },
+        })
     }
 }
 
-export const postsDbRepository = createPostsDbRepository()
+export const postsDbRepository = new PostsDbRepository()

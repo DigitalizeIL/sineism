@@ -1,5 +1,4 @@
 import "server-only"
-import { Post } from "@/app/(protected)/(posts)/lib/models/Post"
 import {
     postsDbRepository,
     PostsDbRepository,
@@ -7,70 +6,38 @@ import {
 import {
     CreatePostDto,
     EditPostDto,
+    IPost,
 } from "@/app/(protected)/(posts)/lib/interfaces/IPost"
+import { GetAllPostsQuery } from "@/app/(protected)/(posts)/lib/interfaces/PostQueries"
 
-export interface PostsService {
-    getAllPosts(): Promise<Post[]>
+export class PostsService {
+    private dbRepository: PostsDbRepository
 
-    getPost(id: number): Promise<Post>
-
-    createPost(post: CreatePostDto): Promise<Post>
-
-    updatePost(id: number, post: Partial<EditPostDto>): Promise<Post>
-
-    deletePost(id: number): Promise<void>
-}
-
-export type PostsServiceDependencies = {
-    dbRepository: PostsDbRepository
-}
-
-export const createPostsService = (
-    dependencies: PostsServiceDependencies
-): PostsService => {
-    const getAllPosts = async (): Promise<Post[]> => {
-        const posts = await dependencies.dbRepository.getAll()
-
-        return posts.map((post) => Post.fromJson(post))
+    constructor(dependencies: { dbRepository: PostsDbRepository }) {
+        this.dbRepository = dependencies.dbRepository
     }
 
-    const getPost = async (id: number): Promise<Post> => {
-        const post = await dependencies.dbRepository.get(id)
-
-        return Post.fromJson(post)
+    public getAllPosts(query?: GetAllPostsQuery): Promise<IPost[]> {
+        return this.dbRepository.getAll(query)
     }
 
-    const createPost = async (post: CreatePostDto): Promise<Post> => {
-        const createdPost = await dependencies.dbRepository.create(post)
-
-        return Post.fromJson(createdPost)
+    public getPost(id: number): Promise<IPost | null> {
+        return this.dbRepository.get(id)
     }
 
-    const updatePost = async (
-        id: number,
-        post: Partial<EditPostDto>
-    ): Promise<Post> => {
-        const updatedPost = await dependencies.dbRepository.update(
-            id,
-            JSON.parse(JSON.stringify(post))
-        )
-
-        return Post.fromJson(updatedPost)
+    public createPost(post: CreatePostDto): Promise<IPost> {
+        return this.dbRepository.create(post)
     }
 
-    const deletePost = async (id: number): Promise<void> => {
-        await dependencies.dbRepository.deleteItem(id)
+    public updatePost(id: number, post: Partial<EditPostDto>): Promise<IPost> {
+        return this.dbRepository.update(id, JSON.parse(JSON.stringify(post)))
     }
 
-    return {
-        getAllPosts,
-        getPost,
-        createPost,
-        updatePost,
-        deletePost,
+    public async deletePost(id: number): Promise<void> {
+        await this.dbRepository.deleteItem(id)
     }
 }
 
-export const postsService = createPostsService({
+export const postsService = new PostsService({
     dbRepository: postsDbRepository,
 })
