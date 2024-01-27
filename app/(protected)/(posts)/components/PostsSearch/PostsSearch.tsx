@@ -1,15 +1,15 @@
 "use client"
 
 import Styles from "./PostsSearch.module.css"
-import { Post } from "@/app/(protected)/(posts)/lib/models/Post"
 import { TEXTS } from "@/app/(protected)/(posts)/components/PostsSearch/texts"
 import { usePostsSearch } from "@/app/(protected)/(posts)/components/PostsSearch/usePostsSearch"
 import React, { ReactNode, useEffect } from "react"
+import { IPost } from "@/app/(protected)/(posts)/lib/interfaces/IPost"
 
 export const PostsSearch = (props: {
-    posts: Post[]
-    onPostsFilter?: (posts: Post[]) => void
-    render?: (posts: Post[]) => ReactNode | ReactNode[]
+    posts: IPost[]
+    onPostsFilter?: (posts: IPost[]) => void
+    render?: (posts: IPost[]) => ReactNode | ReactNode[]
 }) => {
     const { filteredPosts, searchPosts, searchText } = usePostsSearch(
         props.posts

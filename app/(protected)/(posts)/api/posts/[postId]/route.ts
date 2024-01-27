@@ -1,7 +1,6 @@
 import { postsService } from "@/app/(protected)/(posts)/lib/services/PostsService"
 import { NextApiRequest } from "next"
 import { NextResponse } from "next/server"
-import { Post } from "@/app/(protected)/(posts)/lib/models/Post"
 
 type ContextWithParams = NextApiRequest & {
     params: {
@@ -24,7 +23,7 @@ export const PATCH = async (req: Request, ctx: ContextWithParams) => {
 
     const body = await req.json()
 
-    const post = await postsService.updatePost(id, Post.fromJson(body))
+    const post = await postsService.updatePost(id, body)
 
     return NextResponse.json({
         success: true,
