@@ -5,23 +5,26 @@ import { IPost } from "@/app/(protected)/(posts)/lib/interfaces/IPost"
 import { TextArea } from "@/components/Form/TextArea"
 import clsx from "clsx"
 import { useRef, useState } from "react"
-import { Select } from "@/components/Form/Select"
+import { Option } from "@/components/Form/Select"
+import Select2, { MultiValue } from "react-select"
 
 type CommentFormProps = {
     createComment: (formData: FormData) => Promise<void>
     post?: IPost
-    postOptions: { value: number; label: string }[]
+    postOptions: Option[]
     className?: string
 }
 
 export const CommentForm = (props: CommentFormProps) => {
     const formRef = useRef<HTMLFormElement>(null)
-    const [selectValue, setSelectValue] = useState<string>()
+    const [selectValue, setSelectValue] = useState<MultiValue<Option>>([])
 
     const action = async (formData: FormData) => {
+        const postIds = selectValue.map((value) => value.value).join("|")
+        formData.set("postIds", postIds)
         await props.createComment(formData)
         formRef.current?.reset()
-        setSelectValue("")
+        setSelectValue([])
     }
 
     return (
@@ -38,15 +41,28 @@ export const CommentForm = (props: CommentFormProps) => {
                 {props.post ? (
                     <input
                         type={"hidden"}
-                        name={"postId"}
+                        name={"postIds"}
                         value={props.post.id}
                     />
                 ) : (
-                    <Select
+                    <Select2
+                        isMulti
+                        isSearchable
                         value={selectValue}
-                        onChange={(id) => setSelectValue(id.toString())}
-                        name={"postId"}
-                        options={props.postOptions}
+                        onChange={(id) => setSelectValue(id)}
+                        name={"postIds"}
+                        options={props.postOptions as any}
+                        styles={{
+                            option: (base, props) => ({
+                                ...base,
+                                textAlign: "right",
+                                // paddingInlineStart: "10px",
+                            }),
+                            placeholder: (base, props) => ({
+                                ...base,
+                                textAlign: "right",
+                            }),
+                        }}
                     />
                 )}
                 <Button
