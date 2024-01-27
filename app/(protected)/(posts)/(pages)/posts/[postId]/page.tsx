@@ -12,20 +12,21 @@ export default async function PostPage(props: PostPageProps) {
 
     if (isNaN(postId)) return notFound()
 
-    try {
-        const post = await postsService.getPost(postId)
-        return (
-            <div className="flex flex-col items-center justify-center h-screen">
-                <div className="text-xl whitespace-pre-wrap py-2">
-                    {post.content}
-                </div>
-                <hr className="w-1/5 py-2" />
-                <h3>comments</h3>
-                <PostComments post={post} />
-                <CommentFormContainer specificPost={post} />
-            </div>
-        )
-    } catch (e) {
+    const post = await postsService.getPost(postId)
+
+    if (!post) {
         return notFound()
     }
+
+    return (
+        <div className="flex flex-col items-center justify-center h-screen">
+            <div className="text-xl whitespace-pre-wrap py-2">
+                {post.content}
+            </div>
+            <hr className="w-1/5 py-2" />
+            <h3>comments</h3>
+            <PostComments post={post} />
+            <CommentFormContainer specificPost={post} />
+        </div>
+    )
 }
