@@ -124,10 +124,10 @@ export const PostCreateOrEditForm = (props: {
                         value={category}
                         onChange={(value) => setCategory(Number(value))}
                         options={
-                            CATEGORIES?.map((category: ICategory) => ({
+                            (CATEGORIES?.map((category: ICategory) => ({
                                 label: category.name,
                                 value: category.id,
-                            })) || []
+                            })) as any) || []
                         }
                     />
                     <hr />

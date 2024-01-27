@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react"
-import { Post } from "@/app/(protected)/(posts)/lib/models/Post"
+import { IPost } from "@/app/(protected)/(posts)/lib/interfaces/IPost"
 
-export const usePostsSearch = (posts: Post[]) => {
+export const usePostsSearch = (posts: IPost[]) => {
     const [searchText, setSearchText] = useState<string>("")
 
-    const [filteredPosts, setFilteredPosts] = useState<Post[]>(posts)
+    const [filteredPosts, setFilteredPosts] = useState<IPost[]>(posts)
 
     useEffect(() => {
         if (searchText === "") return setFilteredPosts(posts)

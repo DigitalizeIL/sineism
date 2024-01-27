@@ -1,10 +1,10 @@
-import { commentsService } from "@/app/(protected)/(posts)/(modules)/comments/lib/services/CommentsService"
-import { CreateComment } from "@/app/(protected)/(posts)/(modules)/comments/lib/interfaces/IComment"
 import { IPost } from "@/app/(protected)/(posts)/lib/interfaces/IPost"
-import { revalidatePath } from "next/cache"
 import { postsService } from "@/app/(protected)/(posts)/lib/services/PostsService"
 import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
 import { CommentForm } from "@/app/(protected)/(posts)/(modules)/comments/components/CommentForm"
+import { CreateComment } from "@/app/(protected)/(posts)/(modules)/comments/lib/interfaces/IComment"
+import { commentsService } from "@/app/(protected)/(posts)/(modules)/comments/lib/services/CommentsService"
+import { revalidatePath } from "next/cache"
 
 type CommentFormContainerProps = {
     specificPost?: IPost
@@ -27,9 +27,11 @@ export const CommentFormContainer = async (
     async function createComment(formData: FormData) {
         "use server"
         const content = formData.get("content") as string
-        const postId = Number(formData.get("postId") as string)
+        const postIds = (formData.get("postIds") as string)
+            .split("|")
+            .map(Number)
 
-        if (!session?.user || !content || !postId || isNaN(postId)) {
+        if (!session?.user || !content || !postIds) {
             // TODO: show error
             console.log("no content", session, content, props.specificPost)
             return
@@ -37,7 +39,7 @@ export const CommentFormContainer = async (
 
         const newComment: CreateComment = {
             userId: session.user.id,
-            postId,
+            postIds,
             content,
         }
 

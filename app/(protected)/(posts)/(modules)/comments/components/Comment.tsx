@@ -17,10 +17,10 @@ type CommentProps = {
 
 export const Comment = async ({
     page,
-    comment: { content, id, postId, userId, commentNumber },
+    comment: { content, id, postIds, userId, commentNumber },
 }: CommentProps) => {
     const author = await usersService.getUserById(userId)
-    const post = await postsService.getPost(postId)
+    const posts = await postsService.getAllPosts({ ids: postIds })
     const session = await getAppServerSession()
 
     const deletePost = async () => {
@@ -63,8 +63,13 @@ export const Comment = async ({
                 <span>{commentNumber} |</span>
                 <div>{author?.name}</div>
             </div>
-            <div dir={" rtl"}>
-                {"הגיב על פוסט:"} {post.title}
+            <div
+                className={"flex flex-row gap-2"}
+                dir={"rtl"}>
+                <span>{"הגיב על פוסט/ים:"}</span>
+                {posts.map((post) => (
+                    <span key={post.id}>{post.title}, </span>
+                ))}
             </div>
             <div className="text-gray-700">{content}</div>
         </Box>

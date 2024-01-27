@@ -23,16 +23,15 @@ model User {
 }
 
 model Post {
-  id         Int       @id @default(autoincrement())
+  id         Int      @id @default(autoincrement())
   title      String
   content    String
   metadata   Json?
   authorId   Int
-  author     User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  comments   Comment[]
+  author     User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   categoryId Int
-  category   Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  postNumber Int       @default(autoincrement())
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  postNumber Int      @default(autoincrement())
   reviews    Rating[]
 }
 
@@ -40,8 +39,7 @@ model Comment {
   id            Int      @id @default(autoincrement())
   content       String
   commentNumber Int      @default(autoincrement())
-  postId        Int
-  post          Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postIds       Int[]
   userId        Int
   user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   reviews       Rating[]

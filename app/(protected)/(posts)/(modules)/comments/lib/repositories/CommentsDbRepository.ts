@@ -24,7 +24,9 @@ export class CommentsDbRepository {
     getAllForPost = async (postId: number): Promise<IComment[]> => {
         return prisma.comment.findMany({
             where: {
-                postId,
+                postIds: {
+                    has: postId,
+                },
             },
         })
     }
