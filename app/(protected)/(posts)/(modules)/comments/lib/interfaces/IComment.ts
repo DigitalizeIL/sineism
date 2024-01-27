@@ -1,7 +1,7 @@
 export interface IComment {
     id: number
     content: string
-    postId: number
+    postIds: number[]
     userId: number
     commentNumber: number
 }
