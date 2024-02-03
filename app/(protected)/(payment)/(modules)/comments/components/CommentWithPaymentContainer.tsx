@@ -11,15 +11,24 @@ export const CommentWithPaymentContainer = async () => {
     if (!session?.user) return
 
     const quotaObject = await quotaService.getQuota(session.user.id)
-    const shouldPay = !quotaObject || quotaObject.quota <= 0
-    const price = await settingsService.getSettingByKey(
-        SettingKey.comments_cost_usd
-    )
-    const amount = await settingsService.getSettingByKey(
+    const amountSetting = await settingsService.getSettingByKey(
         SettingKey.comments_amount_per_purchase
     )
 
-    if (price?.value === undefined || amount?.value === undefined) {
+    const priceSetting = await settingsService.getSettingByKey(
+        SettingKey.comments_cost_usd
+    )
+    const price = Number(priceSetting?.value)
+    const amount = Number(amountSetting?.value)
+
+    const shouldPay = price > 0 && (!quotaObject || quotaObject.quota <= 0)
+
+    if (
+        price === undefined ||
+        amount === undefined ||
+        isNaN(amount) ||
+        isNaN(amount)
+    ) {
         return <></>
     }
 
@@ -28,17 +37,20 @@ export const CommentWithPaymentContainer = async () => {
             <div className={"flex items-center justify-end"}>
                 {shouldPay ? (
                     <PaymentModal
-                        amount={Number(amount.value)}
-                        price={Number(price.value)}
+                        amount={amount}
+                        price={price}
                     />
                 ) : (
                     <CommentsModal>
                         <CommentFormContainer />
-                        <div className={"-mt-2 m-2 flex items-center gap-1"}>
-                            <span>נשאר לך</span>
-                            <span>{quotaObject?.quota}</span>
-                            <span>תגובות</span>
-                        </div>
+                        {price > 0 && (
+                            <div
+                                className={"-mt-2 m-2 flex items-center gap-1"}>
+                                <span>נשאר לך</span>c
+                                <span>{quotaObject?.quota}</span>
+                                <span>תגובות</span>
+                            </div>
+                        )}
                     </CommentsModal>
                 )}
             </div>
