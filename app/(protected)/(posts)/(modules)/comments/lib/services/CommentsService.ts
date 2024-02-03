@@ -12,6 +12,8 @@ import {
     QuotaService,
 } from "@/app/(protected)/(payment)/(modules)/comments/lib/QuotaService"
 import { Pagination } from "@/lib/types/pagination"
+import { settingsService } from "@/app/(protected)/(posts)/(modules)/settings/lib/services/SettingsService"
+import { SettingKey } from "@/app/(protected)/(posts)/(modules)/settings/lib/interfaces/ISettings"
 
 export class CommentsService {
     private readonly quotaService: QuotaService
@@ -46,7 +48,15 @@ export class CommentsService {
 
     createComment = async (comment: CreateComment): Promise<IComment> => {
         const createdComment = await this.commentsDbRepository.create(comment)
-        await this.quotaService.consumeQuota(createdComment.userId)
+
+        const priceSetting = await settingsService.getSettingByKey(
+            SettingKey.comments_cost_usd
+        )
+        const price = Number(priceSetting?.value)
+
+        if (price > 0) {
+            await this.quotaService.consumeQuota(createdComment.userId)
+        }
 
         return createdComment
     }
