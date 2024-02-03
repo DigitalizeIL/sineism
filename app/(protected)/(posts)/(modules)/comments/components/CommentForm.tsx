@@ -7,6 +7,7 @@ import clsx from "clsx"
 import { useRef, useState } from "react"
 import { Option } from "@/components/Form/Select"
 import Select2, { MultiValue } from "react-select"
+import toast from "react-hot-toast"
 
 type CommentFormProps = {
     createComment: (formData: FormData) => Promise<void>
@@ -20,7 +21,14 @@ export const CommentForm = (props: CommentFormProps) => {
     const [selectValue, setSelectValue] = useState<MultiValue<Option>>([])
 
     const action = async (formData: FormData) => {
-        const postIds = selectValue.map((value) => value.value).join("|")
+        const content = formData.get("content") as string
+
+        if (!selectValue.length || !content) {
+            toast.error("Content and posts are required")
+            return
+        }
+
+        const postIds = selectValue.map((option) => option.value).join("|")
         formData.set("postIds", postIds)
         await props.createComment(formData)
         formRef.current?.reset()
