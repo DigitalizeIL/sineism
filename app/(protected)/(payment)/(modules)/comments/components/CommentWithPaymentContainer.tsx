@@ -1,6 +1,7 @@
 import { BiComment } from "react-icons/bi"
 import { CommentFormContainer } from "@/app/(protected)/(posts)/(modules)/comments/components/CommentFormContainer"
 import { CommentsModal } from "@/app/(protected)/(payment)/(modules)/comments/components/CommentsModal"
+import { PaymentContainer } from "./PaymentContainer"
 import { PaymentModal } from "@/app/(protected)/(payment)/(modules)/comments/components/PaymentModal"
 import { SettingKey } from "@/app/(protected)/(posts)/(modules)/settings/lib/interfaces/ISettings"
 import { TEXTS } from "./texts"
@@ -30,19 +31,10 @@ export const CommentWithPaymentContainer = async () => {
         <div>
             <div className={"flex items-center justify-end"}>
                 {shouldPay ? (
-                    <PaymentModal
-                        onSuccess={() => {
-                            setTimeout(() => {
-                                window.location.reload()
-                            }, 2000)
-                        }}
+                    <PaymentContainer
                         userId={session.user.id}
-                        createOrder={createOrder}
-                        title={TEXTS.buyComments}
-                        product="Comments"
                         amount={Number(amount.value)}
                         price={Number(price.value)}
-                        buttonContent={<BiComment />}
                     />
                 ) : (
                     <CommentsModal>

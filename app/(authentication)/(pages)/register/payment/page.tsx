@@ -27,6 +27,7 @@ export default async function RegisterPaymentPage() {
             <div className="w-24">
                 {price?.value ? (
                     <RegisterPaymentModal
+                        createOrder={createRegistrationOrder}
                         price={Number(price.value)}
                         userId={session.user.id}
                     />
