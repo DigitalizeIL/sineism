@@ -18,7 +18,7 @@ export class User implements NextUser, IUser {
         public created_at?: Date,
         public updated_at?: Date,
         public role?: UserRole,
-        public isSubscribed?: boolean
+        public isSubscribed: boolean = false
     ) {
         this.role = role ?? USER_ROLES.guest
     }
