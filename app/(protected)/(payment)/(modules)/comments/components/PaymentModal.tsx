@@ -26,9 +26,16 @@ export const PaymentModal = (
         setIsModalOpen(false)
         toast.success("Payment received")
 
-        setTimeout(() => {
-            window.location.reload()
-        }, 2000)
+        props.onSuccess()
+    }
+
+    const onError = () => {
+        setIsModalOpen(false)
+        toast.error(
+            "We had a problem processing your payment, please contact the site support"
+        )
+
+        props.onError?.()
     }
 
     return (
@@ -41,6 +48,7 @@ export const PaymentModal = (
                     <h3>{props.title}</h3>
                     <div className={"w-3/5 h-auto"}>
                         <PaymentForm
+                            onError={onError}
                             userId={props.userId}
                             createOrder={props.createOrder}
                             product={props.product}

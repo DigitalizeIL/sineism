@@ -6,6 +6,7 @@ import {
 import { Button } from "@/app/_core/components/Button"
 import { CompleteRegistrationButton } from "./_components/CompleteRegistrationButton"
 import { PaymentModal } from "@/app/(protected)/(payment)/(modules)/comments/components/PaymentModal"
+import { RegisterPaymentModal } from "./_components/RegistrationPaymentModal"
 import { SettingKey } from "@/app/(protected)/(posts)/(modules)/settings/lib/interfaces/ISettings"
 import { TEXTS } from "./texts"
 import { createRegistrationOrder } from "./_actions/createRegistrationOrder"
@@ -20,24 +21,14 @@ export default async function RegisterPaymentPage() {
         SettingKey.registration_cost_usd
     )
 
-    const shouldPay = price?.value
-
     return (
         <div className="w-screen h-screen flex justify-center items-center flex-col">
             <h2>{TEXTS.welcome}</h2>
             <div className="w-24">
-                {shouldPay ? (
-                    <PaymentModal
+                {price?.value ? (
+                    <RegisterPaymentModal
+                        price={Number(price.value)}
                         userId={session.user.id}
-                        createOrder={createRegistrationOrder}
-                        title={TEXTS.title}
-                        product="Registration"
-                        amount={Number(1)}
-                        price={Number(1)}
-                        buttonProps={{
-                            type: "primary",
-                        }}
-                        buttonContent={TEXTS.completeRegistration}
                     />
                 ) : (
                     <CompleteRegistrationButton />

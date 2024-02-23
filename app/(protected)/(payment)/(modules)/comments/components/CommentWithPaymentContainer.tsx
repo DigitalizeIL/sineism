@@ -31,6 +31,11 @@ export const CommentWithPaymentContainer = async () => {
             <div className={"flex items-center justify-end"}>
                 {shouldPay ? (
                     <PaymentModal
+                        onSuccess={() => {
+                            setTimeout(() => {
+                                window.location.reload()
+                            }, 2000)
+                        }}
                         userId={session.user.id}
                         createOrder={createOrder}
                         title={TEXTS.buyComments}

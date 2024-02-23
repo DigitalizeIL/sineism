@@ -12,4 +12,6 @@ export type PaymentProps = {
     amount: number
     userId: number
     createOrder: CreateOrderFunction
+    onSuccess: () => void
+    onError?: () => void
 }

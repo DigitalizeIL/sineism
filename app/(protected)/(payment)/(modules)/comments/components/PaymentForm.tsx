@@ -10,13 +10,8 @@ import type {
 import { PayPalButtons } from "@paypal/react-paypal-js"
 import { PaymentProps } from "../../../lib/types"
 import { useState } from "react"
-import { useUser } from "@/app/(authentication)/context"
 
-export const PaymentForm = (
-    props: {
-        onSuccess: () => void
-    } & PaymentProps
-) => {
+export const PaymentForm = (props: PaymentProps) => {
     const [errorMessage, setErrorMessage] = useState<string>()
 
     // creates a PayPal order
@@ -63,7 +58,7 @@ export const PaymentForm = (
     }
 
     const executeOrder = async (orderId: string) => {
-        await props.createOrder(
+        const success = await props.createOrder(
             {
                 product: props.product,
                 orderId,
@@ -71,7 +66,11 @@ export const PaymentForm = (
             props.userId
         )
 
-        props.onSuccess()
+        if (success) {
+            props.onSuccess()
+        } else {
+            props.onError?.()
+        }
     }
 
     return (

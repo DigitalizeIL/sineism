@@ -2,6 +2,7 @@ import {
     LOGIN_REDIRECT_URL,
     LOGIN_URL,
     REGISTER_API_URL,
+    REGISTER_PAYMENT_URL,
     TEXTS,
 } from "@/app/(authentication)/components/AuthForm/consts"
 import {
@@ -64,10 +65,16 @@ export const useAuthForm = () => {
                 return errorHandler(error)
             }
 
+            await NextSignIt("credentials", {
+                ...registerData,
+                redirect: false,
+                callbackUrl: LOGIN_REDIRECT_URL,
+            })
+
             toast.success(TEXTS.accountCreated)
-            
+
             setTimeout(() => {
-                router.push(LOGIN_URL)
+                router.push(REGISTER_PAYMENT_URL)
             }, 1000)
         } catch (error: any) {
             errorHandler(error.message)
