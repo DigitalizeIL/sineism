@@ -1,11 +1,13 @@
 import "server-only"
-import { compare, hash } from "bcryptjs"
-import { User as NextUser } from "next-auth"
-import { IUser } from "@/app/(authentication)/lib/interfaces/IUser"
+
 import {
     USER_ROLES,
     UserRole,
 } from "@/app/(authentication)/lib/models/UserRole"
+import { compare, hash } from "bcryptjs"
+
+import { IUser } from "@/app/(authentication)/lib/interfaces/IUser"
+import { User as NextUser } from "next-auth"
 
 export class User implements NextUser, IUser {
     constructor(
@@ -15,7 +17,8 @@ export class User implements NextUser, IUser {
         private _password?: string,
         public created_at?: Date,
         public updated_at?: Date,
-        public role?: UserRole
+        public role?: UserRole,
+        public isSubscribed: boolean = false
     ) {
         this.role = role ?? USER_ROLES.guest
     }
@@ -32,7 +35,8 @@ export class User implements NextUser, IUser {
             json.password,
             json.created_at,
             json.updated_at,
-            json.role
+            json.role,
+            json.isSubscribed
         )
     }
 

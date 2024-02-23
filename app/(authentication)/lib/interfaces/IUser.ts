@@ -8,6 +8,7 @@ export interface IUser {
     created_at?: Date
     updated_at?: Date
     role?: UserRole
+    isSubscribed: boolean
 }
 
 export type INewUser = Omit<IUser, "id">

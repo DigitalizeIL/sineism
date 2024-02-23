@@ -1,43 +1,31 @@
 "use server"
 
+import { CreateOrderFunction } from "@/app/(protected)/(payment)/lib/types"
 import { SettingKey } from "@/app/(protected)/(posts)/(modules)/settings/lib/interfaces/ISettings"
 import { orderService } from "@/app/(protected)/(payment)/lib/OrderService"
-import { quotaService } from "@/app/(protected)/(payment)/(modules)/comments/lib/QuotaService"
 import { settingsService } from "@/app/(protected)/(posts)/(modules)/settings/lib/services/SettingsService"
+import { usersService } from "@/app/(authentication)/lib/services/UsersService"
 
-export const createOrder = async (
-    order: {
-        orderId: string
-        product: string
-    },
-    userId: number
+export const createRegistrationOrder: CreateOrderFunction = async (
+    orderData,
+    userId
 ) => {
     try {
         const price = await settingsService.getSettingByKey(
-            SettingKey.comments_cost_usd
-        )
-        const amount = await settingsService.getSettingByKey(
-            SettingKey.comments_amount_per_purchase
+            SettingKey.registration_cost_usd
         )
 
         if (price?.value === undefined) {
             throw Error("No price")
         }
 
-        if (amount?.value === undefined) {
-            throw Error("No amount")
-        }
-
-        console.log("createOrder", order)
-
         await orderService.createOrder({
-            ...order,
+            ...orderData,
             price: Number(price?.value),
             userId,
         })
-        await quotaService.addQuota(userId, Number(amount.value))
 
-        console.log("DONEEE", order)
+        await usersService.activateSubscription(userId)
 
         return true
     } catch (e) {

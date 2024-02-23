@@ -1,12 +1,13 @@
 "use client"
 
-import {ReactNode, useMemo} from "react"
+import { ReactNode, useMemo } from "react"
+
+import { LoadingDots } from "@/components/LoadingDots"
 import clsx from "clsx"
-import {LoadingDots} from "@/components/LoadingDots"
 
 type ButtonType = keyof typeof typesStyle
 
-type ButtonProps = {
+export type ButtonProps = {
     loading?: boolean
     children: ReactNode | ReactNode[]
     type?: ButtonType | ButtonType[]
@@ -16,13 +17,13 @@ type ButtonProps = {
 }
 
 export const Button = ({
-                           loading,
-                           children,
-                           type,
-                           htmlType,
-                           className,
-                           onClick,
-                       }: ButtonProps) => {
+    loading,
+    children,
+    type,
+    htmlType,
+    className,
+    onClick,
+}: ButtonProps) => {
     const styleClassnames = useMemo(() => {
         if (!type) return ""
 
@@ -44,7 +45,7 @@ export const Button = ({
                 "flex h-10 px-1 w-full items-center justify-center rounded-md border text-sm transition-all focus:outline-none",
                 styleClassnames,
             ])}>
-            {loading ? <LoadingDots color="#808080"/> : children}
+            {loading ? <LoadingDots color="#808080" /> : children}
         </button>
     )
 }

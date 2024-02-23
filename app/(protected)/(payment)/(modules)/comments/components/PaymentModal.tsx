@@ -1,15 +1,23 @@
 "use client"
 
-import { usePayPalScriptReducer } from "@paypal/react-paypal-js"
-import { useState } from "react"
-import { Modal } from "@/components/Modal"
-import { Button } from "@/components/Button"
-import { BiComment } from "react-icons/bi"
-import { PaymentForm } from "@/app/(protected)/(payment)/(modules)/comments/components/PaymentForm"
-import toast from "react-hot-toast"
-import { LoadingDots } from "@/components/LoadingDots"
+import { Button, ButtonProps } from "@/components/Button"
+import { ReactNode, useState } from "react"
 
-export const PaymentModal = (props: { price: number; amount: number }) => {
+import { BiComment } from "react-icons/bi"
+import { LoadingDots } from "@/components/LoadingDots"
+import { Modal } from "@/components/Modal"
+import { PaymentForm } from "@/app/(protected)/(payment)/(modules)/comments/components/PaymentForm"
+import { PaymentProps } from "../../../lib/types"
+import toast from "react-hot-toast"
+import { usePayPalScriptReducer } from "@paypal/react-paypal-js"
+
+export const PaymentModal = (
+    props: {
+        title: string
+        buttonContent: ReactNode
+        buttonProps?: Omit<ButtonProps, "children">
+    } & PaymentProps
+) => {
     const [{ isPending }] = usePayPalScriptReducer()
 
     const [isModalOpen, setIsModalOpen] = useState(false)
@@ -18,9 +26,16 @@ export const PaymentModal = (props: { price: number; amount: number }) => {
         setIsModalOpen(false)
         toast.success("Payment received")
 
-        setTimeout(() => {
-            window.location.reload()
-        }, 2000)
+        props.onSuccess()
+    }
+
+    const onError = () => {
+        setIsModalOpen(false)
+        toast.error(
+            "We had a problem processing your payment, please contact the site support"
+        )
+
+        props.onError?.()
     }
 
     return (
@@ -30,9 +45,13 @@ export const PaymentModal = (props: { price: number; amount: number }) => {
                 onClose={() => setIsModalOpen(false)}>
                 {isPending ? <LoadingDots /> : null}
                 <div className="flex flex-col items-center justify-center space-y-2 gap-3 p-4">
-                    <h3>Buy Comments</h3>
+                    <h3>{props.title}</h3>
                     <div className={"w-3/5 h-auto"}>
                         <PaymentForm
+                            onError={onError}
+                            userId={props.userId}
+                            createOrder={props.createOrder}
+                            product={props.product}
                             onSuccess={onSuccess}
                             price={props.price}
                             amount={props.amount}
@@ -43,8 +62,9 @@ export const PaymentModal = (props: { price: number; amount: number }) => {
             <Button
                 type={"ghost"}
                 className="bg-blue-500 hover:bg-blue-600"
+                {...props.buttonProps}
                 onClick={() => setIsModalOpen(true)}>
-                <BiComment />
+                {props.buttonContent}
             </Button>
         </div>
     )

@@ -1,13 +1,19 @@
 "use client"
 
-import { useSession } from "next-auth/react"
+import {
+    GET_USER_API_URL,
+    REGISTER_PAYMENT_URL,
+    REGISTER_URL,
+} from "../components/AuthForm/consts"
 import { ReactNode, useCallback, useEffect, useMemo, useState } from "react"
-import axios from "axios"
-import { LoadingDotsOverlay } from "@/components/LoadingDots"
-import { useRouter } from "next/navigation"
-import { UserContext } from "@/app/(authentication)/context/UserContext"
+
 import { IUser } from "@/app/(authentication)/lib/interfaces/IUser"
+import { LoadingDotsOverlay } from "@/components/LoadingDots"
 import { USER_ROLES } from "@/app/(authentication)/lib/models/UserRole"
+import { UserContext } from "@/app/(authentication)/context/UserContext"
+import axios from "axios"
+import { useRouter } from "next/navigation"
+import { useSession } from "next-auth/react"
 
 export const UserProvider = (props: { children: ReactNode }) => {
     const { data } = useSession()
@@ -18,9 +24,15 @@ export const UserProvider = (props: { children: ReactNode }) => {
     const getUser = useCallback(async () => {
         if (!data?.user) return
 
-        const res = await axios.get(`/auth/get-user?email=${data.user.email}`)
+        const res = await axios.get(
+            `${GET_USER_API_URL}?email=${data.user.email}`
+        )
 
-        if (res.data === null) return router.push("/auth/register")
+        if (res.data === null) {
+            return router.push(REGISTER_URL)
+        } else if (!res.data.isSubscribed) {
+            return router.push(REGISTER_PAYMENT_URL)
+        }
 
         setUser(res.data)
     }, [data?.user, router])
@@ -35,6 +47,10 @@ export const UserProvider = (props: { children: ReactNode }) => {
 
     if (!user) {
         return <LoadingDotsOverlay />
+    }
+
+    if (!user.isSubscribed) {
+        return <div>You are not authorized to view this page</div>
     }
 
     return (

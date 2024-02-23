@@ -1,17 +1,19 @@
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import toast from "react-hot-toast"
-import {
-    LoginCredentials,
-    RegisterArgs,
-} from "@/app/(authentication)/lib/types/AuthenticationTypes"
-import { signIn as NextSignIt } from "next-auth/react"
 import {
     LOGIN_REDIRECT_URL,
     LOGIN_URL,
     REGISTER_API_URL,
+    REGISTER_PAYMENT_URL,
     TEXTS,
 } from "@/app/(authentication)/components/AuthForm/consts"
+import {
+    LoginCredentials,
+    RegisterArgs,
+} from "@/app/(authentication)/lib/types/AuthenticationTypes"
+
+import { signIn as NextSignIt } from "next-auth/react"
+import toast from "react-hot-toast"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
 
 export const useAuthForm = () => {
     const [loading, setLoading] = useState(false)
@@ -63,10 +65,17 @@ export const useAuthForm = () => {
                 return errorHandler(error)
             }
 
+            await NextSignIt("credentials", {
+                ...registerData,
+                redirect: false,
+                callbackUrl: LOGIN_REDIRECT_URL,
+            })
+
             toast.success(TEXTS.accountCreated)
+
             setTimeout(() => {
-                router.push(LOGIN_URL)
-            }, 2000)
+                router.push(REGISTER_PAYMENT_URL)
+            }, 1000)
         } catch (error: any) {
             errorHandler(error.message)
         } finally {

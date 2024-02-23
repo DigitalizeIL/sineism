@@ -20,6 +20,7 @@ model User {
   userCommentQuota UserCommentQuota[]
   orders           Orders[]
   Rating           Rating[]
+  isSubscribed     Boolean            @default(false)
 }
 
 model Post {

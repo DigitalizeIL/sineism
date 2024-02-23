@@ -3,6 +3,7 @@ export enum SettingKey {
     comments_cost_usd = "comments_cost_usd",
     comments_amount_per_purchase = "comments_amount_per_purchase",
     site_name = "site_name",
+    registration_cost_usd = "registration_cost_usd",
 }
 
 export interface ISettings {
@@ -20,7 +21,7 @@ export type CreateSetting = {
     key: SettingKey | string
 }
 
-type SettingOptions =
+export type SettingOptions =
     | {
           key: "posts_per_page"
           value: number
@@ -36,4 +37,8 @@ type SettingOptions =
     | {
           key: "site_name"
           value: string
+      }
+    | {
+          key: "registration_cost_usd"
+          value: number
       }
