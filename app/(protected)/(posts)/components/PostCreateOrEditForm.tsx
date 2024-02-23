@@ -13,7 +13,10 @@ import { ModalWithButton } from "@/components/Modal"
 import React, { FormEvent, useEffect, useState } from "react"
 import { useSession } from "next-auth/react"
 import { AiOutlineEdit } from "react-icons/ai"
-import { CATEGORIES } from "@/app/(protected)/(posts)/(modules)/categories/consts/categories"
+import {
+    CATEGORIES,
+    UTTERANCES_CATEGORY,
+} from "@/app/(protected)/(posts)/(modules)/categories/consts/categories"
 import toast from "react-hot-toast"
 
 export const PostCreateOrEditForm = (props: {
@@ -29,7 +32,9 @@ export const PostCreateOrEditForm = (props: {
     const [number, setNumber] = useState(props.post?.postNumber)
     const [title, setTitle] = useState(props.post?.title)
     const [content, setContent] = useState(props.post?.content)
-    const [category, setCategory] = useState(props.post?.categoryId)
+    const [category, setCategory] = useState(
+        props.post?.categoryId || UTTERANCES_CATEGORY.id
+    )
 
     useEffect(() => {
         if (props.post) {
