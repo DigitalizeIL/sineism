@@ -5,6 +5,7 @@ import {
     CreateBookmark,
     IBookmark,
 } from "@/app/(protected)/(posts)/(modules)/bookmark/lib/interfaces/IBookmark"
+
 import prisma from "@/lib/prisma"
 
 export const createBookmarkService = () => {

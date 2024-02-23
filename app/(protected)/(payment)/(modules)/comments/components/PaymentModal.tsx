@@ -1,15 +1,20 @@
 "use client"
 
+import { BiComment } from "react-icons/bi"
+import { Button } from "@/components/Button"
+import { LoadingDots } from "@/components/LoadingDots"
+import { Modal } from "@/components/Modal"
+import { PaymentForm } from "@/app/(protected)/(payment)/(modules)/comments/components/PaymentForm"
+import { PaymentProps } from "../../../lib/types"
+import toast from "react-hot-toast"
 import { usePayPalScriptReducer } from "@paypal/react-paypal-js"
 import { useState } from "react"
-import { Modal } from "@/components/Modal"
-import { Button } from "@/components/Button"
-import { BiComment } from "react-icons/bi"
-import { PaymentForm } from "@/app/(protected)/(payment)/(modules)/comments/components/PaymentForm"
-import toast from "react-hot-toast"
-import { LoadingDots } from "@/components/LoadingDots"
 
-export const PaymentModal = (props: { price: number; amount: number }) => {
+export const PaymentModal = (
+    props: {
+        title: string
+    } & PaymentProps
+) => {
     const [{ isPending }] = usePayPalScriptReducer()
 
     const [isModalOpen, setIsModalOpen] = useState(false)
@@ -30,9 +35,10 @@ export const PaymentModal = (props: { price: number; amount: number }) => {
                 onClose={() => setIsModalOpen(false)}>
                 {isPending ? <LoadingDots /> : null}
                 <div className="flex flex-col items-center justify-center space-y-2 gap-3 p-4">
-                    <h3>Buy Comments</h3>
+                    <h3>{props.title}</h3>
                     <div className={"w-3/5 h-auto"}>
                         <PaymentForm
+                            product={props.product}
                             onSuccess={onSuccess}
                             price={props.price}
                             amount={props.amount}

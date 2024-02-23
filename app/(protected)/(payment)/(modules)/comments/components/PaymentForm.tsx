@@ -1,26 +1,26 @@
 "use client"
 
-import { PayPalButtons } from "@paypal/react-paypal-js"
 import type {
     CreateOrderActions,
     CreateOrderData,
     OnApproveActions,
     OnApproveData,
 } from "@paypal/paypal-js"
+
+import { PayPalButtons } from "@paypal/react-paypal-js"
+import { PaymentProps } from "../../../lib/types"
+import { createOrder } from "@/app/(protected)/(payment)/(modules)/comments/actions/CreateOrder"
 import { useState } from "react"
 import { useUser } from "@/app/(authentication)/context"
-import { createOrder } from "@/app/(protected)/(payment)/(modules)/comments/actions/CreateOrder"
 
-export const PaymentForm = (props: {
-    price: number
-    amount: number
-    onSuccess: () => void
-}) => {
+export const PaymentForm = (
+    props: {
+        onSuccess: () => void
+    } & PaymentProps
+) => {
     const user = useUser()
 
     const [errorMessage, setErrorMessage] = useState<string>()
-
-    const product = "Comments"
 
     // creates a PayPal order
     const createPaypalOrder = async (
@@ -30,7 +30,7 @@ export const PaymentForm = (props: {
         const order = await actions.order.create({
             purchase_units: [
                 {
-                    description: product,
+                    description: props.product,
                     amount: {
                         currency_code: "USD",
                         value: props.price.toString(),
@@ -68,7 +68,7 @@ export const PaymentForm = (props: {
     const executeOrder = async (orderId: string) => {
         await createOrder(
             {
-                product,
+                product: props.product,
                 orderId,
             },
             user.id
