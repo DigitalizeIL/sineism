@@ -1,3 +1,4 @@
+import { BiComment } from "react-icons/bi"
 import { CommentFormContainer } from "@/app/(protected)/(posts)/(modules)/comments/components/CommentFormContainer"
 import { CommentsModal } from "@/app/(protected)/(payment)/(modules)/comments/components/CommentsModal"
 import { PaymentModal } from "@/app/(protected)/(payment)/(modules)/comments/components/PaymentModal"
@@ -33,6 +34,7 @@ export const CommentWithPaymentContainer = async () => {
                         product="Comments"
                         amount={Number(amount.value)}
                         price={Number(price.value)}
+                        buttonContent={<BiComment />}
                     />
                 ) : (
                     <CommentsModal>

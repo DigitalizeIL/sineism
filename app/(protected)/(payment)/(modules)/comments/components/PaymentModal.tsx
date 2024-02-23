@@ -1,5 +1,7 @@
 "use client"
 
+import { ReactNode, useState } from "react"
+
 import { BiComment } from "react-icons/bi"
 import { Button } from "@/components/Button"
 import { LoadingDots } from "@/components/LoadingDots"
@@ -8,11 +10,11 @@ import { PaymentForm } from "@/app/(protected)/(payment)/(modules)/comments/comp
 import { PaymentProps } from "../../../lib/types"
 import toast from "react-hot-toast"
 import { usePayPalScriptReducer } from "@paypal/react-paypal-js"
-import { useState } from "react"
 
 export const PaymentModal = (
     props: {
         title: string
+        buttonContent: ReactNode
     } & PaymentProps
 ) => {
     const [{ isPending }] = usePayPalScriptReducer()
@@ -50,7 +52,7 @@ export const PaymentModal = (
                 type={"ghost"}
                 className="bg-blue-500 hover:bg-blue-600"
                 onClick={() => setIsModalOpen(true)}>
-                <BiComment />
+                {props.buttonContent}
             </Button>
         </div>
     )
