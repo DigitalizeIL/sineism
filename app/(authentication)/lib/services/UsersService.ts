@@ -1,34 +1,20 @@
-import { User } from "@/app/(authentication)/lib/models/User"
 import {
-    usersDbRepository,
     UsersDbRepository,
+    usersDbRepository,
 } from "@/app/(authentication)/lib/repositories/UsersDbRepository"
 
-export interface UsersService {
-    getAllUsers(): Promise<User[]>
+import { IUser } from "../interfaces/IUser"
+import { User } from "@/app/(authentication)/lib/models/User"
 
-    getUserById(id: number): Promise<User | null>
-
-    getUserByEmail(email: string): Promise<User | null>
-
-    getCurrentUser(session: any): Promise<User | null>
-}
-
-export interface UsersServiceDependencies {
-    dbRepository: UsersDbRepository
-}
-
-export const createUsersService = (
-    dependencies: UsersServiceDependencies
-): UsersService => {
+export const createUsersService = (dbRepository: UsersDbRepository) => {
     const getAllUsers = async (): Promise<User[]> => {
-        const users = await dependencies.dbRepository.getUsers()
+        const users = await dbRepository.getUsers()
 
-        return users.map((user) => User.fromJson(user))
+        return users.map((user: IUser) => User.fromJson(user))
     }
 
     const getUserById = async (id: number): Promise<User | null> => {
-        const user = await dependencies.dbRepository.getUserById(id)
+        const user = await dbRepository.getUserById(id)
 
         if (!user) return null
 
@@ -36,7 +22,7 @@ export const createUsersService = (
     }
 
     const getUserByEmail = async (email: string): Promise<User | null> => {
-        const user = await dependencies.dbRepository.getUserByEmail(email)
+        const user = await dbRepository.getUserByEmail(email)
 
         if (!user) return null
 
@@ -49,7 +35,12 @@ export const createUsersService = (
         return getUserByEmail(session.user.email)
     }
 
+    const activateSubscription = async (userId: number) => {
+        await dbRepository.activateSubscription(userId)
+    }
+
     return {
+        activateSubscription,
         getCurrentUser,
         getAllUsers,
         getUserById,
@@ -57,6 +48,4 @@ export const createUsersService = (
     }
 }
 
-export const usersService = createUsersService({
-    dbRepository: usersDbRepository,
-})
+export const usersService = createUsersService(usersDbRepository)

@@ -1,20 +1,21 @@
 import "server-only"
 
-import {
-    usersDbRepository,
-    UsersDbRepository,
-} from "@/app/(authentication)/lib/repositories/UsersDbRepository"
-import { NoUserFoundError } from "@/app/(authentication)/lib/errors/NoUserFoundError"
-import { PasswordsDontMatch } from "@/app/(authentication)/lib/errors/PasswordsDontMatch"
-import { User } from "@/app/(authentication)/lib/models/User"
+import { INewUser, IUser } from "@/app/(authentication)/lib/interfaces/IUser"
 import {
     LoginCredentials,
     RegisterArgs,
 } from "@/app/(authentication)/lib/types/AuthenticationTypes"
-import { UserAlreadyExists } from "@/app/(authentication)/lib/errors/UserAlreadyExists"
+import {
+    UsersDbRepository,
+    usersDbRepository,
+} from "@/app/(authentication)/lib/repositories/UsersDbRepository"
+
+import { NoUserFoundError } from "@/app/(authentication)/lib/errors/NoUserFoundError"
+import { PasswordsDontMatch } from "@/app/(authentication)/lib/errors/PasswordsDontMatch"
 import { USER_ROLES } from "@/app/(authentication)/lib/models/UserRole"
+import { User } from "@/app/(authentication)/lib/models/User"
+import { UserAlreadyExists } from "@/app/(authentication)/lib/errors/UserAlreadyExists"
 import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
-import { INewUser, IUser } from "@/app/(authentication)/lib/interfaces/IUser"
 
 export type AuthenticationServiceDependencies = {
     dbRepository: UsersDbRepository
@@ -57,11 +58,14 @@ export const createAuthenticationService = (
         } else {
             let newUser: INewUser = {
                 ...credentials,
+                isSubscribed: false,
                 role: USER_ROLES.user,
             }
 
-            if (process.env.ADMIN_EMAILS?.indexOf(credentials.email) !== -1)
+            if (process.env.ADMIN_EMAILS?.includes(credentials.email)) {
                 newUser.role = USER_ROLES.admin
+                newUser.isSubscribed = true
+            }
 
             return dependencies.dbRepository.createUser(newUser, credentials)
         }

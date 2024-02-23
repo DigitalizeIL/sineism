@@ -41,6 +41,7 @@ export const PaymentModal = (
                     <h3>{props.title}</h3>
                     <div className={"w-3/5 h-auto"}>
                         <PaymentForm
+                            userId={props.userId}
                             createOrder={props.createOrder}
                             product={props.product}
                             onSuccess={onSuccess}

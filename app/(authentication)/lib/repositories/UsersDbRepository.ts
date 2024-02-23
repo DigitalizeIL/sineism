@@ -1,45 +1,33 @@
 import "server-only"
 
-import { User } from "@/app/(authentication)/lib/models/User"
-import prisma from "@/app/_core/lib/prisma"
-import { LoginCredentials } from "@/app/(authentication)/lib/types/AuthenticationTypes"
 import { INewUser, IUser } from "@/app/(authentication)/lib/interfaces/IUser"
 
-export interface UsersDbRepository {
-    getUsers: () => Promise<IUser[]>
-    getUserByEmail: (email: string) => Promise<IUser | null>
-    getUserById: (id: number) => Promise<IUser | null>
-    createUser: (
-        user: INewUser,
-        credentials: LoginCredentials
-    ) => Promise<IUser | null>
-}
+import { LoginCredentials } from "@/app/(authentication)/lib/types/AuthenticationTypes"
+import { User } from "@/app/(authentication)/lib/models/User"
+import prisma from "@/app/_core/lib/prisma"
 
-export const createUsersDbRepository = (): UsersDbRepository => {
-    const getUsers = async () => {
+export class UsersDbRepository {
+    getUsers() {
         return prisma.user.findMany()
     }
 
-    const getUserByEmail = async (email: string) => {
-        return await prisma.user.findUnique({
+    getUserByEmail(email: string) {
+        return prisma.user.findUnique({
             where: {
                 email,
             },
         })
     }
 
-    const getUserById = async (id: number) => {
-        return await prisma.user.findUnique({
+    getUserById(id: number) {
+        return prisma.user.findUnique({
             where: {
                 id,
             },
         })
     }
 
-    const createUser = async (
-        user: INewUser,
-        credentials: LoginCredentials
-    ) => {
+    async createUser(user: INewUser, credentials: LoginCredentials) {
         const password = await User.hashPassword(credentials.password)
 
         return await prisma.user.create({
@@ -50,12 +38,16 @@ export const createUsersDbRepository = (): UsersDbRepository => {
         })
     }
 
-    return {
-        getUserById,
-        getUsers,
-        getUserByEmail,
-        createUser,
+    activateSubscription(userId: number) {
+        return prisma.user.update({
+            where: {
+                id: userId,
+            },
+            data: {
+                isSubscribed: true,
+            },
+        })
     }
 }
 
-export const usersDbRepository = createUsersDbRepository()
+export const usersDbRepository = new UsersDbRepository()

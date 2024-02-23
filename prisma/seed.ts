@@ -1,6 +1,7 @@
 import { CATEGORIES } from "../app/(protected)/(posts)/(modules)/categories/consts/categories"
-import prisma from "../app/_core/lib/prisma"
+import { SettingKey } from "@/app/(protected)/(posts)/(modules)/settings/lib/interfaces/ISettings"
 import { hash } from "bcryptjs"
+import prisma from "../app/_core/lib/prisma"
 
 async function createUsers() {
     try {
@@ -9,6 +10,7 @@ async function createUsers() {
                 name: "Neriya Rosner",
                 email: "neri.coder@gmail.com",
                 role: "ADMIN",
+                isSubscribed: true,
                 password: await hash("DevelopThatStuff", 10),
             },
         })
@@ -41,21 +43,19 @@ async function createCategories() {
 
 async function createSettings() {
     try {
+        const settingsData: Record<SettingKey, string> = {
+            posts_per_page: "10",
+            comments_cost_usd: "5",
+            comments_amount_per_purchase: "3",
+            site_name: "Sineism",
+            registration_cost_usd: "10",
+        }
+
         const settings = await prisma.settings.createMany({
-            data: [
-                {
-                    key: "posts_per_page",
-                    value: "10",
-                },
-                {
-                    key: "comments_cost_usd",
-                    value: "5",
-                },
-                {
-                    key: "comments_amount_per_purchase",
-                    value: "3",
-                },
-            ],
+            data: Object.entries(settingsData).map(([key, value]) => ({
+                key,
+                value,
+            })),
         })
 
         console.log(`Created ${settings.count} settings`)

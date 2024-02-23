@@ -9,7 +9,6 @@ import type {
 
 import { PayPalButtons } from "@paypal/react-paypal-js"
 import { PaymentProps } from "../../../lib/types"
-import { createOrder } from "@/app/(protected)/(payment)/(modules)/comments/actions/CreateOrder"
 import { useState } from "react"
 import { useUser } from "@/app/(authentication)/context"
 
@@ -18,8 +17,6 @@ export const PaymentForm = (
         onSuccess: () => void
     } & PaymentProps
 ) => {
-    const user = useUser()
-
     const [errorMessage, setErrorMessage] = useState<string>()
 
     // creates a PayPal order
@@ -71,7 +68,7 @@ export const PaymentForm = (
                 product: props.product,
                 orderId,
             },
-            user.id
+            props.userId
         )
 
         props.onSuccess()
