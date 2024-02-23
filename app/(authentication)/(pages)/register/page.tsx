@@ -3,7 +3,9 @@ import { SignUpForm } from "@/app/(authentication)/components/AuthForm"
 
 export default function RegisterPage() {
     return (
-        <AuthPage>
+        <AuthPage
+            title="Sign Up"
+            description="Create an account">
             <SignUpForm />
         </AuthPage>
     )
