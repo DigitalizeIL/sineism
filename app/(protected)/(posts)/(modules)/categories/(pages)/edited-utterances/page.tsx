@@ -1,10 +1,11 @@
+import { CategoryFeed } from "@/app/(protected)/(posts)/(modules)/categories/components/CategoryFeed"
+import { DEFAULT_PAGE_SIZE } from "@/app/(protected)/(posts)/(modules)/categories/consts/pagination"
+import { EDITED_UTTERANCES_CATEGORY } from "@/app/(protected)/(posts)/(modules)/categories/consts/categories"
+import { SettingKey } from "@/app/(protected)/(posts)/(modules)/settings/lib/interfaces/ISettings"
+import { Suspense } from "react"
 import { categoriesService } from "@/app/(protected)/(posts)/(modules)/categories/lib/services/CategoriesService"
 import { notFound } from "next/navigation"
-import { DEFAULT_PAGE_SIZE } from "@/app/(protected)/(posts)/(modules)/categories/consts/pagination"
-import { CategoryFeed } from "@/app/(protected)/(posts)/(modules)/categories/components/CategoryFeed"
-import { EDITED_UTTERANCES_CATEGORY } from "@/app/(protected)/(posts)/(modules)/categories/consts/categories"
 import { settingsService } from "@/app/(protected)/(posts)/(modules)/settings/lib/services/SettingsService"
-import { SettingKey } from "@/app/(protected)/(posts)/(modules)/settings/lib/interfaces/ISettings"
 
 type PageProps = {
     searchParams?: { [key: string]: string }
@@ -32,9 +33,11 @@ export default async function Page(props: PageProps) {
     }
 
     return (
-        <CategoryFeed
-            category={category}
-            page={page}
-        />
+        <Suspense fallback={<div>Loading</div>}>
+            <CategoryFeed
+                category={category}
+                page={page}
+            />
+        </Suspense>
     )
 }
