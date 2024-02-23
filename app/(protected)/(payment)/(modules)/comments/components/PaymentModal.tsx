@@ -1,9 +1,9 @@
 "use client"
 
+import { Button, ButtonProps } from "@/components/Button"
 import { ReactNode, useState } from "react"
 
 import { BiComment } from "react-icons/bi"
-import { Button } from "@/components/Button"
 import { LoadingDots } from "@/components/LoadingDots"
 import { Modal } from "@/components/Modal"
 import { PaymentForm } from "@/app/(protected)/(payment)/(modules)/comments/components/PaymentForm"
@@ -15,6 +15,7 @@ export const PaymentModal = (
     props: {
         title: string
         buttonContent: ReactNode
+        buttonProps?: Omit<ButtonProps, "children">
     } & PaymentProps
 ) => {
     const [{ isPending }] = usePayPalScriptReducer()
@@ -40,6 +41,7 @@ export const PaymentModal = (
                     <h3>{props.title}</h3>
                     <div className={"w-3/5 h-auto"}>
                         <PaymentForm
+                            createOrder={props.createOrder}
                             product={props.product}
                             onSuccess={onSuccess}
                             price={props.price}
@@ -51,6 +53,7 @@ export const PaymentModal = (
             <Button
                 type={"ghost"}
                 className="bg-blue-500 hover:bg-blue-600"
+                {...props.buttonProps}
                 onClick={() => setIsModalOpen(true)}>
                 {props.buttonContent}
             </Button>

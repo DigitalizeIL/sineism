@@ -66,7 +66,7 @@ export const PaymentForm = (
     }
 
     const executeOrder = async (orderId: string) => {
-        await createOrder(
+        await props.createOrder(
             {
                 product: props.product,
                 orderId,

@@ -4,6 +4,7 @@ import { CommentsModal } from "@/app/(protected)/(payment)/(modules)/comments/co
 import { PaymentModal } from "@/app/(protected)/(payment)/(modules)/comments/components/PaymentModal"
 import { SettingKey } from "@/app/(protected)/(posts)/(modules)/settings/lib/interfaces/ISettings"
 import { TEXTS } from "./texts"
+import { createOrder } from "../actions/CreateOrder"
 import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
 import { quotaService } from "@/app/(protected)/(payment)/(modules)/comments/lib/QuotaService"
 import { settingsService } from "@/app/(protected)/(posts)/(modules)/settings/lib/services/SettingsService"
@@ -30,6 +31,7 @@ export const CommentWithPaymentContainer = async () => {
             <div className={"flex items-center justify-end"}>
                 {shouldPay ? (
                     <PaymentModal
+                        createOrder={createOrder}
                         title={TEXTS.buyComments}
                         product="Comments"
                         amount={Number(amount.value)}
