@@ -1,13 +1,14 @@
-import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
-import { settingsService } from "@/app/(protected)/(posts)/(modules)/settings/lib/services/SettingsService"
-import { Input } from "@/components/Form/Input"
-import { Button } from "@/components/Button"
-import { ModalWithButton } from "@/components/Modal"
-import { TEXTS } from "@/app/(protected)/(posts)/(modules)/settings/components/texts"
 import {
     ISetting,
     SettingKey,
 } from "@/app/(protected)/(posts)/(modules)/settings/lib/interfaces/ISettings"
+
+import { Button } from "@/components/Button"
+import { Input } from "@/components/Form/Input"
+import { ModalWithButton } from "@/components/Modal"
+import { TEXTS } from "@/app/(protected)/(posts)/(modules)/settings/components/texts"
+import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
+import { settingsService } from "@/app/(protected)/(posts)/(modules)/settings/lib/services/SettingsService"
 
 function isSettingKey(key: string): key is SettingKey {
     return key in SettingKey
