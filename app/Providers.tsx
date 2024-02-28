@@ -1,14 +1,15 @@
 "use client"
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
-import React from "react"
-import axios from "axios"
-import { SessionProvider } from "next-auth/react"
-import { Session } from "next-auth"
+
 import {
     PayPalScriptProvider,
     ReactPayPalScriptOptions,
 } from "@paypal/react-paypal-js"
-import { UserProvider } from "@/app/(authentication)/context/UserProvider"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+
+import React from "react"
+import { Session } from "next-auth"
+import { SessionProvider } from "next-auth/react"
+import axios from "axios"
 
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_API_PREFIX
 
