@@ -52,7 +52,7 @@ export const UserProvider = (props: {
         return <LoadingDotsOverlay />
     }
 
-    if (!user.isSubscribed) {
+    if (!user.isSubscribed && props.isPaymentRequired) {
         return <div>You are not authorized to view this page</div>
     }
 

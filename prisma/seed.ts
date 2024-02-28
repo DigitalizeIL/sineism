@@ -48,7 +48,7 @@ async function createSettings() {
             comments_cost_usd: "5",
             comments_amount_per_purchase: "3",
             site_name: "Sineism",
-            registration_cost_usd: "10",
+            registration_cost_usd: "0",
         }
 
         const settings = await prisma.settings.createMany({

@@ -10,13 +10,12 @@ export default async function Layout({
 }: {
     children: React.ReactNode
 }) {
-    const price = await settingsService.getSettingByKey(
+    const priceSetting = await settingsService.getSettingByKey(
         SettingKey.registration_cost_usd
     )
 
-    return (
-        <UserProvider isPaymentRequired={!!price?.value}>
-            {children}
-        </UserProvider>
-    )
+    const price = Number(priceSetting?.value)
+    const shouldPay = !!price && !isNaN(price)
+
+    return <UserProvider isPaymentRequired={shouldPay}>{children}</UserProvider>
 }
