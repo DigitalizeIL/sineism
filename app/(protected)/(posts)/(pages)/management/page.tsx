@@ -1,9 +1,9 @@
-import {PostsFeed} from "@/app/(protected)/(posts)/components/PostsFeed"
-import {ModalWithButton} from "@/components/Modal"
-import {CreateCategoryForm} from "@/app/(protected)/(posts)/(modules)/categories/components/CreateCategoryForm"
+import { CreateCategoryForm } from "@/app/(protected)/(posts)/(modules)/categories/components/CreateCategoryForm"
+import { ModalWithButton } from "@/components/Modal"
+import { PostCreateOrEditFormServer } from "@/app/(protected)/(posts)/components/PostCreateOrEditFormServer"
+import { PostsFeed } from "@/app/(protected)/(posts)/components/PostsFeed"
 import React from "react"
-import {PostCreateOrEditFormServer} from "@/app/(protected)/(posts)/components/PostCreateOrEditFormServer"
-import {Settings} from "@/app/(protected)/(posts)/(modules)/settings/components/Settings";
+import { Settings } from "@/app/(protected)/(posts)/(modules)/settings/components/Settings"
 
 export default function PostsPage() {
     return (
@@ -11,14 +11,14 @@ export default function PostsPage() {
             <div className="w-screen h-screen flex flex-col space-y-5 justify-start items-center">
                 <h2 className="text-4xl font-bold">Admin Only Page</h2>
                 <div className="flex justify-center mt-4">
-                    <PostCreateOrEditFormServer/>
+                    <PostCreateOrEditFormServer />
                     <ModalWithButton buttonText={"Create Category"}>
-                        <CreateCategoryForm/>
+                        <CreateCategoryForm />
                     </ModalWithButton>
-                    <Settings/>
+                    <Settings />
                 </div>
                 <h3 className="text-2xl font-bold">All Posts</h3>
-                <PostsFeed/>
+                {/* <PostsFeed /> */}
             </div>
         </div>
     )

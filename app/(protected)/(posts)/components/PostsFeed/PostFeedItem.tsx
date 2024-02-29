@@ -1,12 +1,12 @@
 import { Card } from "@/components/Card"
 import { DeletePostButton } from "@/app/(protected)/(posts)/components/DeletePostButton"
-import { USER_ROLES } from "@/app/(authentication)/lib/models/UserRole"
 import { IPost } from "@/app/(protected)/(posts)/lib/interfaces/IPost"
-import { SaveBookmarkButton } from "@/app/(protected)/(posts)/(modules)/bookmark/components/SaveBookmarkButton"
-import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
-import React from "react"
 import { PostCreateOrEditFormServer } from "@/app/(protected)/(posts)/components/PostCreateOrEditFormServer"
 import { RatingContainer } from "@/app/(protected)/(posts)/(modules)/rating/components/RatingContainer"
+import React from "react"
+import { SaveBookmarkButtonContainer } from "@/app/(protected)/(posts)/(modules)/bookmark/components/SaveBookmarkButtonContainer"
+import { USER_ROLES } from "@/app/(authentication)/lib/models/UserRole"
+import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
 
 type PostFeedItemProps = {
     post: IPost
@@ -36,7 +36,7 @@ export const PostFeedItem = async ({ post, page }: PostFeedItemProps) => {
 
                     <div className={"flex flex-row"}>
                         {session?.user?.id && (
-                            <SaveBookmarkButton
+                            <SaveBookmarkButtonContainer
                                 pathForRevalidation={`/categories/${post.categoryId}`}
                                 ids={{
                                     referenceType: post.categoryId.toString(),

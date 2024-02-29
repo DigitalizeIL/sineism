@@ -17,18 +17,21 @@ export default async function RegisterPaymentPage() {
     const session = await getAppServerSession()
     if (!session?.user) return
 
-    const price = await settingsService.getSettingByKey(
+    const priceSetting = await settingsService.getSettingByKey(
         SettingKey.registration_cost_usd
     )
+
+    const price = Number(priceSetting?.value)
+    const shouldPay = price && !isNaN(price)
 
     return (
         <div className="w-screen h-screen flex justify-center items-center flex-col">
             <h2>{TEXTS.welcome}</h2>
             <div className="w-24">
-                {price?.value ? (
+                {shouldPay ? (
                     <RegisterPaymentModal
                         createOrder={createRegistrationOrder}
-                        price={Number(price.value)}
+                        price={price}
                         userId={session.user.id}
                     />
                 ) : (

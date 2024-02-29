@@ -1,48 +1,53 @@
-import { Button } from "@/components/Button"
-import { bookmarkService } from "@/app/(protected)/(posts)/(modules)/bookmark/lib/services/BookmarkService"
-import { BsBookmarkPlus } from "react-icons/bs"
-import { BookmarkIdentifiers } from "@/app/(protected)/(posts)/(modules)/bookmark/lib/interfaces/IBookmark"
-import { revalidatePath } from "next/cache"
+"use client"
 
-type Props = {
-    ids: BookmarkIdentifiers
-    page: number
-    itemIdToBookmark: string
-    pathForRevalidation?: string
+import {
+    BookmarkIdentifiers,
+    IBookmark,
+} from "@/app/(protected)/(posts)/(modules)/bookmark/lib/interfaces/IBookmark"
+
+import { BsBookmarkPlus } from "react-icons/bs"
+import { Button } from "@/components/Button"
+import { SaveBookmarkButtonContainerProps } from "./SaveBookmarkButtonContainer"
+import { bookmarkService } from "@/app/(protected)/(posts)/(modules)/bookmark/lib/services/BookmarkService"
+import { revalidatePath } from "next/cache"
+import { saveBookmark } from "../actions/saveBookmark"
+import { useState } from "react"
+
+type SaveBookmarkButtonProps = SaveBookmarkButtonContainerProps & {
+    isActive: boolean
+    activeBookmark?: IBookmark | null
 }
+
 export const SaveBookmarkButton = async ({
     ids,
     page,
+    isActive,
+    activeBookmark,
     itemIdToBookmark,
     pathForRevalidation,
-}: Props) => {
-    const activeBookmark = await bookmarkService.getBookmark(ids)
+}: SaveBookmarkButtonProps) => {
+    const [isLoading, setIsLoading] = useState(false)
 
-    const isActive = activeBookmark?.bookmarkedItemId === itemIdToBookmark
-
-    const saveBookmark = async () => {
-        "use server"
-
-        if (isActive && activeBookmark?.id) {
-            await bookmarkService.deleteBookmark(activeBookmark?.id)
-        } else {
-            await bookmarkService.upsertBookmark({
-                ...ids,
-                bookmarkedItemId: itemIdToBookmark,
-                page,
-            })
-        }
-
-        pathForRevalidation && revalidatePath(pathForRevalidation)
+    const onClick = async () => {
+        setIsLoading(true)
+        await saveBookmark({
+            ids,
+            isActive,
+            itemIdToBookmark,
+            page,
+            activeBookmark,
+            pathForRevalidation,
+        })
+        setIsLoading(false)
     }
 
     return (
-        <form action={saveBookmark}>
-            <Button
-                type={isActive ? "primary" : "ghost"}
-                className="bg-blue-500 hover:bg-blue-600">
-                <BsBookmarkPlus />
-            </Button>
-        </form>
+        <Button
+            onClick={onClick}
+            loading={isLoading}
+            type={isActive ? "primary" : "ghost"}
+            className="bg-blue-500 hover:bg-blue-600">
+            <BsBookmarkPlus />
+        </Button>
     )
 }
