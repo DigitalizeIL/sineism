@@ -3,7 +3,7 @@ import { Box } from "@/components/Box"
 import { IComment } from "@/app/(protected)/(posts)/(modules)/comments/lib/interfaces/IComment"
 import { RatingContainer } from "@/app/(protected)/(posts)/(modules)/rating/components/RatingContainer"
 import React from "react"
-import { SaveBookmarkButton } from "@/app/(protected)/(posts)/(modules)/bookmark/components/SaveBookmarkButtonContainer"
+import { SaveBookmarkButtonContainer } from "../../bookmark/components/SaveBookmarkButtonContainer"
 import { commentsService } from "@/app/(protected)/(posts)/(modules)/comments/lib/services/CommentsService"
 import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
 import { postsService } from "@/app/(protected)/(posts)/lib/services/PostsService"
@@ -45,7 +45,7 @@ export const Comment = async ({
                 )}
 
                 {session?.user?.id && (
-                    <SaveBookmarkButton
+                    <SaveBookmarkButtonContainer
                         pathForRevalidation={`/comments`}
                         ids={{
                             referenceType: "comment",
