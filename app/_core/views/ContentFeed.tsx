@@ -9,7 +9,7 @@ type CategoryFeedProps = {
 export function ContentFeed({ Header, FeedItems, Footer }: CategoryFeedProps) {
     return (
         <div className="flex flex-col h-full">
-            {Header}
+            <div>{Header}</div>
             <div className={"flex flex-col justify-start items-center w-full"}>
                 {FeedItems}
             </div>
