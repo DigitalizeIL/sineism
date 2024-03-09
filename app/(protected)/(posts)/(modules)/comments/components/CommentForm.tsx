@@ -5,8 +5,11 @@ import { useMemo, useRef, useState } from "react"
 
 import { Button } from "@/components/Button"
 import { EMPTY_COMMENT_ID } from "../comments.consts"
+import { FormControl } from "@mui/material"
 import { IPost } from "@/app/(protected)/(posts)/lib/post.interface"
+import { Label } from "@/app/_core/components/Form/Label"
 import { Option } from "@/components/Form/Select"
+import { TEXTS } from "../comments.texts"
 import { TextArea } from "@/components/Form/TextArea"
 import clsx from "clsx"
 import toast from "react-hot-toast"
@@ -67,39 +70,44 @@ export const CommentForm = (props: CommentFormProps) => {
                         value={props.post.id}
                     />
                 ) : (
-                    <Select2
-                        isMulti={!isNoReference}
-                        isSearchable
-                        value={
-                            isNoReference
-                                ? ({
-                                      label: "All Items",
-                                      value: { EMPTY_COMMENT_ID },
-                                  } as any)
-                                : selectValue
-                        }
-                        onChange={(id) => {
-                            if (!id) {
-                                setSelectValue([])
-                                return
+                    <Label
+                        text={TEXTS.postsSelectionLabel}
+                        className="text-right">
+                        <Select2
+                            placeholder={TEXTS.postsSelectionPlaceholder}
+                            isMulti={!isNoReference}
+                            isSearchable
+                            value={
+                                isNoReference
+                                    ? ({
+                                          label: TEXTS.allItems,
+                                          value: { EMPTY_COMMENT_ID },
+                                      } as any)
+                                    : selectValue
                             }
+                            onChange={(id) => {
+                                if (!id) {
+                                    setSelectValue([])
+                                    return
+                                }
 
-                            setSelectValue("value" in id ? [id] : id)
-                        }}
-                        name={"postIds"}
-                        options={props.postOptions as any}
-                        styles={{
-                            option: (base, props) => ({
-                                ...base,
-                                textAlign: "right",
-                                // paddingInlineStart: "10px",
-                            }),
-                            placeholder: (base, props) => ({
-                                ...base,
-                                textAlign: "right",
-                            }),
-                        }}
-                    />
+                                setSelectValue("value" in id ? [id] : id)
+                            }}
+                            name={"postIds"}
+                            options={props.postOptions as any}
+                            styles={{
+                                option: (base, props) => ({
+                                    ...base,
+                                    textAlign: "right",
+                                    // paddingInlineStart: "10px",
+                                }),
+                                placeholder: (base, props) => ({
+                                    ...base,
+                                    textAlign: "right",
+                                }),
+                            }}
+                        />
+                    </Label>
                 )}
                 <TextArea
                     name="content"
