@@ -51,7 +51,7 @@ export const CommentFormContainer = async (
 
     const postOptions = posts.map((post) => ({
         value: post.id,
-        label: post.title,
+        label: post.postNumber.toString(),
     }))
 
     return (
