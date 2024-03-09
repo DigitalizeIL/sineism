@@ -20,6 +20,7 @@ type CommentFormProps = {
 export const CommentForm = (props: CommentFormProps) => {
     const formRef = useRef<HTMLFormElement>(null)
     const [selectValue, setSelectValue] = useState<MultiValue<Option>>([])
+    const [loading, setLoading] = useState(false)
 
     const action = async (formData: FormData) => {
         const content = formData.get("content") as string
@@ -31,9 +32,12 @@ export const CommentForm = (props: CommentFormProps) => {
 
         const postIds = selectValue.map((option) => option.value).join("|")
         formData.set("postIds", postIds)
+
         await props.createComment(formData)
+
         formRef.current?.reset()
         setSelectValue([])
+        setLoading(false)
     }
 
     return (
@@ -41,6 +45,9 @@ export const CommentForm = (props: CommentFormProps) => {
             <form
                 ref={formRef}
                 action={action}
+                onSubmit={() => {
+                    setLoading(true)
+                }}
                 className={"flex flex-col gap-2"}>
                 <TextArea
                     name="content"
@@ -75,6 +82,7 @@ export const CommentForm = (props: CommentFormProps) => {
                     />
                 )}
                 <Button
+                    loading={loading}
                     type="ghost"
                     className={"text-3xl text-black"}>
                     יצירת תגובה
