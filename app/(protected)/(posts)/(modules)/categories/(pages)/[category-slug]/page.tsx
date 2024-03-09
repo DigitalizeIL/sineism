@@ -1,8 +1,15 @@
-import { CategoryFeed } from "@/app/(protected)/(posts)/(modules)/categories/components/CategoryFeed"
+import {
+    PAGINATION_URL_PARAM_KEY,
+    POST_PROPERTY_FOR_CURSOR,
+} from "@/app/_core/consts/pagination.consts"
+
+import { CategoryHeader } from "../../components/CategoryHeader"
+import { ContentFeed } from "@/app/_core/views/ContentFeed"
 import { DEFAULT_PAGE_SIZE } from "@/app/(protected)/(posts)/(modules)/categories/consts/pagination"
-import { PAGINATION_URL_PARAM_KEY } from "@/app/_core/consts/pagination.consts"
+import { PaginationContainer } from "@/app/_core/components/Pagination/Pagination.container"
+import { PostFeedItem } from "@/app/(protected)/(posts)/components/PostsFeed/PostFeedItem"
 import { SettingKey } from "@/app/(protected)/(posts)/(modules)/settings/lib/settings.interface"
-import { UTTERANCES_CATEGORY } from "@/app/(protected)/(posts)/(modules)/categories/consts/categories"
+import { Suspense } from "react"
 import { categoriesService } from "@/app/(protected)/(posts)/(modules)/categories/lib/categories.service"
 import { notFound } from "next/navigation"
 import { settingsService } from "@/app/(protected)/(posts)/(modules)/settings/lib/settings.service"
@@ -18,9 +25,12 @@ export default async function Page(props: PageProps) {
     let paginationId = Number(props.searchParams?.[PAGINATION_URL_PARAM_KEY])
     if (isNaN(paginationId)) paginationId = 1
 
-    const postsPerPage = await settingsService.getSettingByKey(
+    const itemsPerPageValue = await settingsService.getSettingByKey(
         SettingKey.posts_per_page
     )
+    const itemsPerPage = itemsPerPageValue?.value
+        ? Number(itemsPerPageValue?.value)
+        : DEFAULT_PAGE_SIZE
 
     const category = await categoriesService.getCategory({
         filter: {
@@ -29,9 +39,7 @@ export default async function Page(props: PageProps) {
         withPosts: true,
         pagination: {
             id: paginationId,
-            perPage: postsPerPage?.value
-                ? Number(postsPerPage?.value)
-                : DEFAULT_PAGE_SIZE,
+            perPage: itemsPerPage,
         },
     })
 
@@ -40,9 +48,32 @@ export default async function Page(props: PageProps) {
     }
 
     return (
-        <CategoryFeed
-            category={category}
-            page={paginationId}
+        <ContentFeed
+            Header={
+                <CategoryHeader
+                    category={category}
+                    page={paginationId}
+                />
+            }
+            FeedItems={category.posts?.map((post) => (
+                <PostFeedItem
+                    key={post.id}
+                    page={paginationId}
+                    post={post}
+                />
+            ))}
+            Footer={
+                <Suspense>
+                    <PaginationContainer
+                        page={paginationId}
+                        ids={
+                            category.posts?.map(
+                                (item) => item[POST_PROPERTY_FOR_CURSOR]
+                            ) || []
+                        }
+                    />
+                </Suspense>
+            }
         />
     )
 }

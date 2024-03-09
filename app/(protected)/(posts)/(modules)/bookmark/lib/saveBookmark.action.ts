@@ -5,7 +5,7 @@ import { BookmarkIdentifiers, IBookmark } from "./bookmark.interface"
 import { bookmarkService } from "./bookmark.service"
 import { revalidatePath } from "next/cache"
 
-type SaveBookmarkArgs = {
+export type SaveBookmarkArgs = {
     isActive: boolean
     ids: BookmarkIdentifiers
     itemIdToBookmark: string

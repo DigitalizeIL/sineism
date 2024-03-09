@@ -4,16 +4,15 @@ import { SettingKey } from "@/app/(protected)/(posts)/(modules)/settings/lib/set
 import { settingsService } from "@/app/(protected)/(posts)/(modules)/settings/lib/settings.service"
 
 type PaginationContainerProps = {
-    countFunction: () => Promise<number>
-    page?: number
-    ids?: number[]
+    page: number
+    ids: number[]
 }
 
 export const PaginationContainer = async (props: PaginationContainerProps) => {
-    const itemsCount = await props.countFunction()
     const itemsPerPage = await settingsService.getSettingByKey(
         SettingKey.posts_per_page
     )
+
     const pageSize = Number(itemsPerPage?.value) || DEFAULT_PAGE_SIZE
 
     const page = props.page || 0
@@ -29,8 +28,6 @@ export const PaginationContainer = async (props: PaginationContainerProps) => {
 
     return (
         <PaginationControls
-            shouldHidePageNumber={true}
-            totalPages={Math.ceil(itemsCount / pageSize)}
             nextPage={nextPage}
             page={page}
             previousPage={previousPage}

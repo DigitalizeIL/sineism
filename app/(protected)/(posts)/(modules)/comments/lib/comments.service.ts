@@ -34,7 +34,7 @@ export class CommentsService {
     }): Promise<IComment[]> => {
         return await this.commentsDbRepository.getAll({
             ...(pagination && {
-                skip: (pagination.page - 1) * pagination.perPage,
+                cursor: pagination.id,
                 take: pagination.perPage,
             }),
         })

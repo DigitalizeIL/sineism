@@ -1,6 +1,7 @@
 import { AiFillDelete } from "react-icons/ai"
 import { Box } from "@/components/Box"
 import { Button } from "@/app/_core/components/Button"
+import { COMMENTS_PROPERTY_FOR_CURSOR } from "@/app/_core/consts/pagination.consts"
 import { EMPTY_COMMENT_ID } from "../comments.consts"
 import { IComment } from "@/app/(protected)/(posts)/(modules)/comments/lib/comment.interface"
 import { RatingContainer } from "@/app/(protected)/(posts)/(modules)/rating/components/Rating.container"
@@ -17,10 +18,8 @@ type CommentProps = {
     page?: number
 }
 
-export const Comment = async ({
-    page,
-    comment: { content, id, postIds, userId, commentNumber },
-}: CommentProps) => {
+export const Comment = async ({ page, comment }: CommentProps) => {
+    const { content, id, postIds, userId, commentNumber } = comment
     const author = await usersService.getUserById(userId)
     const posts = await postsService.getAllPosts({ ids: postIds })
     const session = await getAppServerSession()
@@ -57,7 +56,9 @@ export const Comment = async ({
                             referenceType: "comment",
                             userId: session.user.id,
                         }}
-                        itemIdToBookmark={id.toString()}
+                        itemIdToBookmark={comment[
+                            COMMENTS_PROPERTY_FOR_CURSOR
+                        ].toString()}
                         page={page || 1}
                     />
                 )}

@@ -8,15 +8,11 @@ type PaginationButtonsProps = {
     page: number
     nextPage: number
     previousPage: number
-    totalPages: number
-    shouldHidePageNumber?: boolean
 }
 export const PaginationControls = async ({
     page,
     previousPage,
     nextPage,
-    totalPages,
-    shouldHidePageNumber,
 }: PaginationButtonsProps) => {
     const isLastPage = page >= nextPage - 1
     const isFirstPage = previousPage === page || previousPage <= 0
@@ -32,10 +28,6 @@ export const PaginationControls = async ({
         redirect(`?${PAGINATION_URL_PARAM_KEY}=${previousPage}`)
     }
 
-    if (!totalPages) {
-        return <div></div>
-    }
-
     return (
         <div className={"flex items-center justify-center px-4 gap-2"}>
             <form action={goToPrevPage}>
@@ -46,12 +38,6 @@ export const PaginationControls = async ({
                     <FcNext /> {"עמוד קודם"}
                 </Button>
             </form>
-            {!shouldHidePageNumber ? (
-                <span className={"mx-4"}>
-                    {page}
-                    {totalPages ? ` / ${totalPages}` : null}
-                </span>
-            ) : null}
             <form action={goToNextPage}>
                 <Button
                     isDisabled={isLastPage}

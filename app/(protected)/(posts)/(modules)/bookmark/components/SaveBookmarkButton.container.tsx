@@ -1,13 +1,7 @@
-import {
-    BookmarkIdentifiers,
-    IBookmark,
-} from "@/app/(protected)/(posts)/(modules)/bookmark/lib/bookmark.interface"
-
-import { BsBookmarkPlus } from "react-icons/bs"
-import { Button } from "@/components/Button"
+import { BookmarkIdentifiers } from "@/app/(protected)/(posts)/(modules)/bookmark/lib/bookmark.interface"
 import { SaveBookmarkButton } from "./SaveBookmarkButton"
 import { bookmarkService } from "@/app/(protected)/(posts)/(modules)/bookmark/lib/bookmark.service"
-import { revalidatePath } from "next/cache"
+import { saveBookmark } from "../lib/saveBookmark.action"
 
 export type SaveBookmarkButtonContainerProps = {
     ids: BookmarkIdentifiers
@@ -16,18 +10,33 @@ export type SaveBookmarkButtonContainerProps = {
     pathForRevalidation?: string
 }
 
-export const SaveBookmarkButtonContainer = async (
-    props: SaveBookmarkButtonContainerProps
-) => {
-    const activeBookmark = await bookmarkService.getBookmark(props.ids)
+export const SaveBookmarkButtonContainer = async ({
+    ids,
+    itemIdToBookmark,
+    page,
+    pathForRevalidation,
+}: SaveBookmarkButtonContainerProps) => {
+    const activeBookmark = await bookmarkService.getBookmark(ids)
 
-    const isActive = activeBookmark?.bookmarkedItemId === props.itemIdToBookmark
+    const isActive = activeBookmark?.bookmarkedItemId === itemIdToBookmark
+
+    const onClick = async () => {
+        "use server"
+
+        await saveBookmark({
+            ids,
+            isActive,
+            itemIdToBookmark,
+            page,
+            activeBookmark,
+            pathForRevalidation,
+        })
+    }
 
     return (
         <SaveBookmarkButton
-            activeBookmark={activeBookmark}
+            onSaveClick={onClick}
             isActive={isActive}
-            {...props}
         />
     )
 }

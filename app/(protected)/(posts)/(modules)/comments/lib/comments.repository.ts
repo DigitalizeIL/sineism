@@ -5,6 +5,7 @@ import {
     IComment,
 } from "@/app/(protected)/(posts)/(modules)/comments/lib/comment.interface"
 
+import { COMMENTS_PROPERTY_FOR_CURSOR } from "@/app/_core/consts/pagination.consts"
 import { DBPagination } from "@/app/_core/lib/pagination.types"
 import prisma from "@/lib/prisma"
 
@@ -14,7 +15,16 @@ export class CommentsDbRepository {
     getAll = async (pagination?: DBPagination): Promise<IComment[]> => {
         return prisma.comment.findMany({
             ...(pagination && {
-                skip: pagination.skip,
+                ...(pagination.cursor && {
+                    where: {
+                        [COMMENTS_PROPERTY_FOR_CURSOR]: {
+                            gte: pagination.cursor || 0,
+                        },
+                    },
+                }),
+                ...(pagination.skip && {
+                    skip: pagination.skip,
+                }),
                 take: pagination.take,
             }),
             orderBy: {
