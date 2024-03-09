@@ -13,6 +13,7 @@ export type ButtonProps = {
     type?: ButtonType | ButtonType[]
     htmlType?: "button" | "submit" | "reset"
     className?: string
+    isDisabled?: boolean
     onClick?: () => void
 }
 
@@ -21,6 +22,7 @@ export const Button = ({
     children,
     type,
     htmlType,
+    isDisabled,
     className,
     onClick,
 }: ButtonProps) => {
@@ -37,13 +39,13 @@ export const Button = ({
     return (
         <button
             onClick={onClick}
-            disabled={loading}
+            disabled={loading || isDisabled}
             type={htmlType}
             className={clsx([
                 className,
                 loading && "cursor-not-allowed border-gray-200 bg-gray-100",
-                "flex h-10 px-1 w-full items-center justify-center rounded-md border text-sm transition-all focus:outline-none",
-                styleClassnames,
+                "flex h-10 px-2 w-full items-center justify-center rounded-md border text-sm transition-all focus:outline-none",
+                isDisabled ? "bg-gray-200 hover:bg-gray-200" : styleClassnames,
             ])}>
             {loading ? <LoadingDots color="#808080" /> : children}
         </button>
