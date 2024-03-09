@@ -1,5 +1,6 @@
 import { CommentForm } from "@/app/(protected)/(posts)/(modules)/comments/components/CommentForm"
 import { CreateComment } from "@/app/(protected)/(posts)/(modules)/comments/lib/comment.interface"
+import { EMPTY_COMMENT_ID } from "../comments.consts"
 import { IPost } from "@/app/(protected)/(posts)/lib/post.interface"
 import { commentsService } from "@/app/(protected)/(posts)/(modules)/comments/lib/comments.service"
 import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
@@ -48,14 +49,22 @@ export const CommentFormContainer = async (
         revalidatePath("/posts")
     }
 
+    const postOptions = posts.map((post) => ({
+        value: post.id,
+        label: post.title,
+    }))
+
     return (
         <CommentForm
             post={props.specificPost}
             createComment={createComment}
-            postOptions={posts.map((post) => ({
-                value: post.id,
-                label: post.title,
-            }))}
+            postOptions={[
+                {
+                    value: EMPTY_COMMENT_ID,
+                    label: "#",
+                },
+                ...postOptions,
+            ]}
         />
     )
 }

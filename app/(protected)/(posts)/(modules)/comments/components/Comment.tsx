@@ -1,5 +1,6 @@
 import { AiFillDelete } from "react-icons/ai"
 import { Box } from "@/components/Box"
+import { EMPTY_COMMENT_ID } from "../comments.consts"
 import { IComment } from "@/app/(protected)/(posts)/(modules)/comments/lib/comment.interface"
 import { RatingContainer } from "@/app/(protected)/(posts)/(modules)/rating/components/Rating.container"
 import React from "react"
@@ -30,6 +31,8 @@ export const Comment = async ({
 
         revalidatePath("/posts")
     }
+
+    const isNoReference = postIds.includes(EMPTY_COMMENT_ID)
 
     if (!author) return null
 
@@ -63,14 +66,16 @@ export const Comment = async ({
                 <span>{commentNumber} |</span>
                 <div>{author?.name}</div>
             </div>
-            <div
-                className={"flex flex-row gap-2"}
-                dir={"rtl"}>
-                <span>{"הגיב על פוסט/ים:"}</span>
-                {posts.map((post) => (
-                    <span key={post.id}>{post.title}, </span>
-                ))}
-            </div>
+            {!isNoReference && (
+                <div
+                    className={"flex flex-row gap-2"}
+                    dir={"rtl"}>
+                    <span>{"הגיב על פוסט/ים:"}</span>
+                    {posts.map((post) => (
+                        <span key={post.id}>{post.title}, </span>
+                    ))}
+                </div>
+            )}
             <div className="text-gray-700">{content}</div>
         </Box>
     )

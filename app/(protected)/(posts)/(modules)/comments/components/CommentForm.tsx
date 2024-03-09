@@ -1,9 +1,10 @@
 "use client"
 
 import Select2, { MultiValue } from "react-select"
-import { useRef, useState } from "react"
+import { useMemo, useRef, useState } from "react"
 
 import { Button } from "@/components/Button"
+import { EMPTY_COMMENT_ID } from "../comments.consts"
 import { IPost } from "@/app/(protected)/(posts)/lib/post.interface"
 import { Option } from "@/components/Form/Select"
 import { TextArea } from "@/components/Form/TextArea"
@@ -40,6 +41,16 @@ export const CommentForm = (props: CommentFormProps) => {
         setLoading(false)
     }
 
+    const isNoReference = useMemo(
+        () =>
+            !Array.isArray(selectValue) && "value" in selectValue
+                ? selectValue.value === EMPTY_COMMENT_ID
+                : selectValue?.some(
+                      (value) => value.value === EMPTY_COMMENT_ID
+                  ),
+        [selectValue]
+    )
+
     return (
         <div className={clsx(["flex flex-col space-y-2 p-3", props.className])}>
             <form
@@ -49,11 +60,6 @@ export const CommentForm = (props: CommentFormProps) => {
                     setLoading(true)
                 }}
                 className={"flex flex-col gap-2"}>
-                <TextArea
-                    name="content"
-                    className="w-full"
-                    placeholder={"לתגובה על פוסט/ים"}
-                />
                 {props.post ? (
                     <input
                         type={"hidden"}
@@ -62,10 +68,24 @@ export const CommentForm = (props: CommentFormProps) => {
                     />
                 ) : (
                     <Select2
-                        isMulti
+                        isMulti={!isNoReference}
                         isSearchable
-                        value={selectValue}
-                        onChange={(id) => setSelectValue(id)}
+                        value={
+                            isNoReference
+                                ? ({
+                                      label: "All Items",
+                                      value: { EMPTY_COMMENT_ID },
+                                  } as any)
+                                : selectValue
+                        }
+                        onChange={(id) => {
+                            if (!id) {
+                                setSelectValue([])
+                                return
+                            }
+
+                            setSelectValue("value" in id ? [id] : id)
+                        }}
                         name={"postIds"}
                         options={props.postOptions as any}
                         styles={{
@@ -81,6 +101,11 @@ export const CommentForm = (props: CommentFormProps) => {
                         }}
                     />
                 )}
+                <TextArea
+                    name="content"
+                    className="w-full"
+                    placeholder={"לתגובה על פוסט/ים"}
+                />
                 <Button
                     loading={loading}
                     type="ghost"
