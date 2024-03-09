@@ -19,11 +19,12 @@ export function CategoryFeed({ category, page }: CategoryFeedProps) {
             </Suspense>
             <div className={"flex flex-col justify-center items-center w-full"}>
                 {category.posts?.map((post) => (
-                    <PostFeedItem
-                        page={page}
-                        post={post}
-                        key={post.id}
-                    />
+                    <Suspense key={post.id}>
+                        <PostFeedItem
+                            page={page}
+                            post={post}
+                        />
+                    </Suspense>
                 ))}
             </div>
         </>
