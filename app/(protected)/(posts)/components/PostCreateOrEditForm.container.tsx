@@ -4,18 +4,22 @@ import {
     IPost,
 } from "@/app/(protected)/(posts)/lib/post.interface"
 
+import { POST_PROPERTY_FOR_CURSOR } from "@/app/_core/consts/pagination.consts"
 import { PostCreateOrEditForm } from "@/app/(protected)/(posts)/components/PostCreateOrEditForm"
 import { categoriesService } from "@/app/(protected)/(posts)/(modules)/categories/lib/categories.service"
 import { postsService } from "@/app/(protected)/(posts)/lib/posts.service"
 import { revalidatePath } from "next/cache"
 
-export const PostCreateOrEditFormContainer = async (props: { post?: IPost }) => {
+export const PostCreateOrEditFormContainer = async (props: {
+    post?: IPost
+}) => {
     const categories = await categoriesService.getAllCategories()
 
     const create = async (post: CreatePostDto) => {
         "use server"
-        await postsService.createPost(post)
-        revalidatePath("/posts")
+        const newPost = await postsService.createPost(post)
+        revalidatePath(`/posts?page=${newPost[POST_PROPERTY_FOR_CURSOR]}`)
+        return newPost
     }
 
     const edit = async (postId: number, post: EditPostDto) => {

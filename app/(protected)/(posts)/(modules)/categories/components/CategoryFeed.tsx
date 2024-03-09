@@ -1,5 +1,6 @@
 import { CategoryHeader } from "@/app/(protected)/(posts)/(modules)/categories/components/CategoryHeader"
 import { ICategory } from "@/app/(protected)/(posts)/(modules)/categories/lib/category.interface"
+import { POST_PROPERTY_FOR_CURSOR } from "@/app/_core/consts/pagination.consts"
 import { PaginationContainer } from "@/app/_core/components/Pagination/Pagination.container"
 import { PostFeedItem } from "@/app/(protected)/(posts)/components/PostsFeed/PostFeedItem"
 import { Suspense } from "react"
@@ -34,7 +35,9 @@ export function CategoryFeed({ category, page }: CategoryFeedProps) {
                     <Suspense>
                         <PaginationContainer
                             page={page}
-                            ids={category.posts?.map((item) => item.postNumber)}
+                            ids={category.posts?.map(
+                                (item) => item[POST_PROPERTY_FOR_CURSOR]
+                            )}
                             countFunction={() =>
                                 category.id
                                     ? categoriesService.countCategoryPosts(

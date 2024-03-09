@@ -17,7 +17,7 @@ export const MoveToBookmarkButton = async ({
         "use server"
         if (!activeBookmark?.page) return
 
-        redirect(`?page=${activeBookmark?.page}`)
+        redirect(`?page=${activeBookmark?.bookmarkedItemId}`)
     }
 
     if (!activeBookmark) return null

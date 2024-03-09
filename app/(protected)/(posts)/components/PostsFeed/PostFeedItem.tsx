@@ -4,6 +4,7 @@ import { Card } from "@/components/Card"
 import { DeletePostButton } from "@/app/(protected)/(posts)/components/DeletePostButton"
 import { IPost } from "@/app/(protected)/(posts)/lib/post.interface"
 import { LoadingDots } from "@/app/_core/components/LoadingDots"
+import { POST_PROPERTY_FOR_CURSOR } from "@/app/_core/consts/pagination.consts"
 import { PostCreateOrEditFormContainer } from "@/app/(protected)/(posts)/components/PostCreateOrEditForm.container"
 import { Rating } from "../../(modules)/rating/components/Rating"
 import { RatingContainer } from "@/app/(protected)/(posts)/(modules)/rating/components/Rating.container"
@@ -47,7 +48,9 @@ export const PostFeedItem = async ({ post, page }: PostFeedItemProps) => {
                                             post.categoryId.toString(),
                                         userId: session.user.id,
                                     }}
-                                    itemIdToBookmark={post.id.toString()}
+                                    itemIdToBookmark={post[
+                                        POST_PROPERTY_FOR_CURSOR
+                                    ].toString()}
                                     page={page || 1}
                                 />
                             )}

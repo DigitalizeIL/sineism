@@ -24,7 +24,7 @@ import { useSession } from "next-auth/react"
 export const PostCreateOrEditForm = (props: {
     post?: IPost
     categories: ICategory[]
-    createPost: (post: CreatePostDto) => Promise<void>
+    createPost: (post: CreatePostDto) => Promise<IPost>
     editPost: (postId: number, post: EditPostDto) => Promise<void>
 }) => {
     const { data } = useSession()
@@ -77,7 +77,6 @@ export const PostCreateOrEditForm = (props: {
 
             setTitle("")
             setContent("")
-            setCategory(undefined)
             setNumber(undefined)
 
             toast.success("Your post is submitted")
