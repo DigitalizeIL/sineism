@@ -1,7 +1,8 @@
 import { FcNext, FcPrevious } from "react-icons/fc"
 
 import { Button } from "@/components/Button"
-import { PAGINATION_URL_PARAM_KEY } from "../consts/pagination.consts"
+import { PAGINATION_URL_PARAM_KEY } from "../../consts/pagination.consts"
+import { TEXTS } from "./pagination.texts"
 import { redirect } from "next/navigation"
 
 type PaginationButtonsProps = {
@@ -35,7 +36,7 @@ export const PaginationControls = async ({
                     isDisabled={isFirstPage}
                     type={"ghost"}
                     className="bg-blue-500 hover:bg-blue-600">
-                    <FcNext /> {"עמוד קודם"}
+                    <FcNext /> {TEXTS.previousPage}
                 </Button>
             </form>
             <form action={goToNextPage}>
@@ -43,7 +44,7 @@ export const PaginationControls = async ({
                     isDisabled={isLastPage}
                     type={"ghost"}
                     className="bg-blue-500 hover:bg-blue-600">
-                    {"עמוד הבא"} <FcPrevious />
+                    {TEXTS.nextPage} <FcPrevious />
                 </Button>
             </form>
         </div>
