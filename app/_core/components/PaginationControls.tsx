@@ -5,31 +5,39 @@ import { redirect } from "next/navigation"
 
 type PaginationButtonsProps = {
     page: number
+    nextPage: number
+    previousPage: number
     totalPages: number
     shouldHidePageNumber?: boolean
 }
-export const PaginationControls = async (props: PaginationButtonsProps) => {
-    const isFirstPage = props.page === 1
-    const isLastPage = props.page === props.totalPages
+export const PaginationControls = async ({
+    page,
+    previousPage,
+    nextPage,
+    totalPages,
+    shouldHidePageNumber,
+}: PaginationButtonsProps) => {
+    const isLastPage = page >= nextPage-1
+    const isFirstPage = previousPage === page || previousPage <= 0
 
-    const nextPage = async () => {
+    const goToNextPage = async () => {
         "use server"
 
-        redirect(`?page=${props.page + 1}`)
+        redirect(`?page=${nextPage}`)
     }
-    const prevPage = async () => {
+    const goToPrevPage = async () => {
         "use server"
 
-        redirect(`?page=${props.page - 1}`)
+        redirect(`?page=${previousPage}`)
     }
 
-    if (!props.totalPages) {
+    if (!totalPages) {
         return <div></div>
     }
 
     return (
         <div className={"flex items-center justify-center px-4 gap-2"}>
-            <form action={prevPage}>
+            <form action={goToPrevPage}>
                 <Button
                     isDisabled={isFirstPage}
                     type={"ghost"}
@@ -37,13 +45,13 @@ export const PaginationControls = async (props: PaginationButtonsProps) => {
                     <FcNext /> {"עמוד קודם"}
                 </Button>
             </form>
-            {!props.shouldHidePageNumber ? (
+            {!shouldHidePageNumber ? (
                 <span className={"mx-4"}>
-                    {props.page}
-                    {props.totalPages ? ` / ${props.totalPages}` : null}
+                    {page}
+                    {totalPages ? ` / ${totalPages}` : null}
                 </span>
             ) : null}
-            <form action={nextPage}>
+            <form action={goToNextPage}>
                 <Button
                     isDisabled={isLastPage}
                     type={"ghost"}

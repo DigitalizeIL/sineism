@@ -38,7 +38,7 @@ export class CategoriesService {
             data.filter,
             data.withPosts,
             data.pagination && {
-                skip: (data.pagination.page - 1) * data.pagination.perPage,
+                cursor: data.pagination.id,
                 take: data.pagination.perPage,
             }
         )

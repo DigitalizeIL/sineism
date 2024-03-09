@@ -14,7 +14,9 @@ type PageProps = {
 }
 
 export default async function Page(props: PageProps) {
-    const page = Number(props.searchParams?.page || 1)
+    let page = Number(props.searchParams?.page)
+    if (isNaN(page)) page = 1
+
     const postsPerPage = await settingsService.getSettingByKey(
         SettingKey.posts_per_page
     )
@@ -25,7 +27,7 @@ export default async function Page(props: PageProps) {
         },
         withPosts: true,
         pagination: {
-            page,
+            id: page,
             perPage: postsPerPage?.value
                 ? Number(postsPerPage?.value)
                 : DEFAULT_PAGE_SIZE,

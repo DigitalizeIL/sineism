@@ -34,6 +34,7 @@ export function CategoryFeed({ category, page }: CategoryFeedProps) {
                     <Suspense>
                         <PaginationContainer
                             page={page}
+                            ids={category.posts?.map((item) => item.postNumber)}
                             countFunction={() =>
                                 category.id
                                     ? categoriesService.countCategoryPosts(

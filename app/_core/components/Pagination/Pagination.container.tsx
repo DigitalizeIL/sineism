@@ -5,7 +5,8 @@ import { settingsService } from "@/app/(protected)/(posts)/(modules)/settings/li
 
 type PaginationContainerProps = {
     countFunction: () => Promise<number>
-    page: number
+    page?: number
+    ids?: number[]
 }
 
 export const PaginationContainer = async (props: PaginationContainerProps) => {
@@ -15,11 +16,24 @@ export const PaginationContainer = async (props: PaginationContainerProps) => {
     )
     const pageSize = Number(itemsPerPage?.value) || DEFAULT_PAGE_SIZE
 
+    const page = props.page || 0
+    const firstId = props.ids && props.ids[0]
+    const lastId =
+        props.ids &&
+        (props.ids.length > 0 || undefined) &&
+        props.ids[props.ids?.length - 1]
+
+    const nextPage = (lastId ?? page) + 1
+    let previousPage = (firstId ?? page) - pageSize
+    if (previousPage < 0) previousPage = 0
+
     return (
         <PaginationControls
             shouldHidePageNumber={true}
             totalPages={Math.ceil(itemsCount / pageSize)}
-            page={props.page}
+            nextPage={nextPage}
+            page={page}
+            previousPage={previousPage}
         />
     )
 }

@@ -34,7 +34,16 @@ export class CategoriesDbRepository {
                 posts: withPosts
                     ? {
                           ...(pagination && {
-                              skip: pagination.skip,
+                              ...(pagination.cursor && {
+                                  where: {
+                                      postNumber: {
+                                          gte: pagination.cursor || 0,
+                                      },
+                                  },
+                              }),
+                              ...(pagination.skip && {
+                                  skip: pagination.skip,
+                              }),
                               take: pagination.take,
                           }),
                           orderBy: {

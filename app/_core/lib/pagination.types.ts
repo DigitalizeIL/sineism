@@ -1,9 +1,11 @@
 export type DBPagination = {
-    skip: number
     take: number
+    skip?: number
+    cursor?: number
 }
 
 export type Pagination = {
-    page: number
     perPage: number
+    page?: number
+    id?: number
 }
