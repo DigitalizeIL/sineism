@@ -130,6 +130,7 @@ export const PostCreateOrEditForm = (props: {
                         name={"category"}
                         value={category}
                         onChange={(value) => setCategory(Number(value))}
+                        defaultValue={UTTERANCES_CATEGORY.id}
                         options={
                             (CATEGORIES?.map((category: ICategory) => ({
                                 label: category.name,
