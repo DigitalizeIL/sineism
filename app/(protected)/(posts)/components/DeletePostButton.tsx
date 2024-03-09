@@ -1,8 +1,8 @@
-import { Button } from "@/components/Button"
-import { postsService } from "@/app/(protected)/(posts)/lib/services/PostsService"
-import { revalidatePath } from "next/cache"
-import { FiDelete } from "react-icons/fi"
 import { AiOutlineDelete } from "react-icons/ai"
+import { Button } from "@/components/Button"
+import { FiDelete } from "react-icons/fi"
+import { postsService } from "@/app/(protected)/(posts)/lib/posts.service"
+import { revalidatePath } from "next/cache"
 
 export const DeletePostButton = (props: { postId: number }) => {
     const deletePost = async () => {

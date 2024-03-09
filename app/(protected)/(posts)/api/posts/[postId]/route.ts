@@ -1,6 +1,6 @@
-import { postsService } from "@/app/(protected)/(posts)/lib/services/PostsService"
 import { NextApiRequest } from "next"
 import { NextResponse } from "next/server"
+import { postsService } from "@/app/(protected)/(posts)/lib/posts.service"
 
 type ContextWithParams = NextApiRequest & {
     params: {

@@ -1,5 +1,5 @@
 import { CATEGORIES } from "../app/(protected)/(posts)/(modules)/categories/consts/categories"
-import { SettingKey } from "@/app/(protected)/(posts)/(modules)/settings/lib/interfaces/ISettings"
+import { SettingKey } from "@/app/(protected)/(posts)/(modules)/settings/lib/settings.interface"
 import { hash } from "bcryptjs"
 import prisma from "../app/_core/lib/prisma"
 

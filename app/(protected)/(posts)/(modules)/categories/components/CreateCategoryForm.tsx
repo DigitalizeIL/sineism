@@ -1,10 +1,10 @@
 import { Button } from "@/components/Button"
-import { ICategory } from "@/app/(protected)/(posts)/(modules)/categories/lib/interfaces/ICategory"
-import { revalidatePath } from "next/cache"
-import clsx from "clsx"
-import { Input } from "@/components/Form/Input"
-import { categoriesService } from "@/app/(protected)/(posts)/(modules)/categories/lib/services/CategoriesService"
 import { CategoryItem } from "@/app/(protected)/(posts)/(modules)/categories/components/CategoryItem"
+import { ICategory } from "@/app/(protected)/(posts)/(modules)/categories/lib/category.interface"
+import { Input } from "@/components/Form/Input"
+import { categoriesService } from "@/app/(protected)/(posts)/(modules)/categories/lib/categories.service"
+import clsx from "clsx"
+import { revalidatePath } from "next/cache"
 
 type CreateCategoryButtonProps = {
     className?: string

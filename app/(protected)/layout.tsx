@@ -1,9 +1,9 @@
 import "@/styles/globals.css"
 
 import React from "react"
-import { SettingKey } from "./(posts)/(modules)/settings/lib/interfaces/ISettings"
+import { SettingKey } from "./(posts)/(modules)/settings/lib/settings.interface"
 import { UserProvider } from "@/app/(authentication)/context/UserProvider"
-import { settingsService } from "./(posts)/(modules)/settings/lib/services/SettingsService"
+import { settingsService } from "./(posts)/(modules)/settings/lib/settings.service"
 
 export default async function Layout({
     children,

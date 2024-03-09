@@ -1,9 +1,8 @@
-import { ICategory } from "@/app/(protected)/(posts)/(modules)/categories/lib/interfaces/ICategory"
-import { categoriesService } from "@/app/(protected)/(posts)/(modules)/categories/lib/services/CategoriesService"
-import { DEFAULT_PAGE_SIZE } from "@/app/(protected)/(posts)/(modules)/categories/consts/pagination"
-import { settingsService } from "@/app/(protected)/(posts)/(modules)/settings/lib/services/SettingsService"
-import { SettingKey } from "@/app/(protected)/(posts)/(modules)/settings/lib/interfaces/ISettings"
+import { ICategory } from "@/app/(protected)/(posts)/(modules)/categories/lib/category.interface"
+import { POST_PROPERTY_FOR_CURSOR } from "@/app/_core/consts/pagination.consts"
+import { PaginationContainer } from "../../../../../_core/components/Pagination/Pagination.container"
 import { SubHeader } from "@/components/Layout"
+import { Suspense } from "react"
 
 type CategoryHeaderProps = {
     category: ICategory
@@ -14,19 +13,22 @@ export const CategoryHeader = async ({
     category,
     page,
 }: CategoryHeaderProps) => {
-    const postsCount = await categoriesService.countCategoryPosts(category.id!)
-    const postsPerPage = await settingsService.getSettingByKey(
-        SettingKey.posts_per_page
-    )
-    const pageSize = Number(postsPerPage?.value) || DEFAULT_PAGE_SIZE
-
     return (
         <SubHeader
             title={category.name}
-            page={page}
-            pageSize={pageSize}
-            itemsCount={postsCount}
             bookmarkReferenceType={category.id?.toString()}
+            Pagination={
+                <Suspense>
+                    <PaginationContainer
+                        ids={
+                            category.posts?.map(
+                                (post) => post[POST_PROPERTY_FOR_CURSOR]
+                            ) || []
+                        }
+                        page={page}
+                    />
+                </Suspense>
+            }
         />
     )
 }

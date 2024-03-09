@@ -1,6 +1,6 @@
-import { IPost } from "@/app/(protected)/(posts)/lib/interfaces/IPost"
-import { commentsService } from "@/app/(protected)/(posts)/(modules)/comments/lib/services/CommentsService"
 import { Comment } from "@/app/(protected)/(posts)/(modules)/comments/components/Comment"
+import { IPost } from "@/app/(protected)/(posts)/lib/post.interface"
+import { commentsService } from "@/app/(protected)/(posts)/(modules)/comments/lib/comments.service"
 
 type CommentProps = {
     post: IPost

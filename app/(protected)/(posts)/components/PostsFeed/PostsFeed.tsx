@@ -1,7 +1,7 @@
-import React from "react"
+import { IPost } from "@/app/(protected)/(posts)/lib/post.interface"
 import { PostFeedItem } from "@/app/(protected)/(posts)/components/PostsFeed/PostFeedItem"
-import { postsService } from "@/app/(protected)/(posts)/lib/services/PostsService"
-import { IPost } from "@/app/(protected)/(posts)/lib/interfaces/IPost"
+import React from "react"
+import { postsService } from "@/app/(protected)/(posts)/lib/posts.service"
 
 export const PostsFeed = async () => {
     const posts = await postsService.getAllPosts()

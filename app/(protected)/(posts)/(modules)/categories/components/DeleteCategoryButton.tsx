@@ -1,7 +1,7 @@
 import { Button } from "@/components/Button"
-import { revalidatePath } from "next/cache"
-import { categoriesService } from "@/app/(protected)/(posts)/(modules)/categories/lib/services/CategoriesService"
 import { FiDelete } from "react-icons/fi"
+import { categoriesService } from "@/app/(protected)/(posts)/(modules)/categories/lib/categories.service"
+import { revalidatePath } from "next/cache"
 
 type DeleteCategoryButtonProps = {
     className?: string

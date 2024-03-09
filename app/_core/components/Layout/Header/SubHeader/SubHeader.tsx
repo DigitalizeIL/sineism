@@ -1,37 +1,22 @@
-import { PaginationControls } from "@/components/PaginationControls"
-import { redirect } from "next/navigation"
-import { CommentWithPaymentContainer } from "@/app/(protected)/(payment)/(modules)/comments/components/CommentWithPaymentContainer"
+import { ReactNode, Suspense } from "react"
+
+import { BookmarkIdentifiers } from "@/app/(protected)/(posts)/(modules)/bookmark/lib/bookmark.interface"
+import { CommentWithPaymentContainer } from "@/app/(protected)/(payment)/(modules)/comments/components/CommentWithPayment.container"
 import { MoveToBookmarkButton } from "@/app/(protected)/(posts)/(modules)/bookmark/components/MoveToBookmarkButton"
 import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
-import { BookmarkIdentifiers } from "@/app/(protected)/(posts)/(modules)/bookmark/lib/interfaces/IBookmark"
 
 type CategoryHeaderProps = {
     title?: string
-    page: number
-    pageSize: number
-    itemsCount: number
     bookmarkReferenceType?: BookmarkIdentifiers["referenceType"]
+    Pagination?: ReactNode
 }
 
 export const SubHeader = async ({
     title,
-    page,
-    pageSize,
-    itemsCount,
     bookmarkReferenceType,
+    Pagination,
 }: CategoryHeaderProps) => {
     const session = await getAppServerSession()
-
-    const nextPage = async () => {
-        "use server"
-
-        redirect(`?page=${page + 1}`)
-    }
-    const prevPage = async () => {
-        "use server"
-
-        redirect(`?page=${page - 1}`)
-    }
 
     return (
         <div
@@ -46,25 +31,25 @@ export const SubHeader = async ({
                     {title}
                 </h2>
 
-                {session?.user && bookmarkReferenceType && (
-                    <MoveToBookmarkButton
-                        referenceType={bookmarkReferenceType}
-                        userId={session.user.id}
-                    />
-                )}
+                <Suspense>
+                    {session?.user && bookmarkReferenceType && (
+                        <MoveToBookmarkButton
+                            referenceType={bookmarkReferenceType}
+                            userId={session.user.id}
+                        />
+                    )}
+                </Suspense>
             </div>
             <div className={"flex items-center justify-center"}>
-                <CommentWithPaymentContainer />
+                <Suspense>
+                    <CommentWithPaymentContainer />
+                </Suspense>
             </div>
-            <div className={"flex items-center justify-end"}>
-                <PaginationControls
-                    shouldHidePageNumber={true}
-                    totalPages={Math.ceil(itemsCount / pageSize)}
-                    page={page}
-                    nextPage={nextPage}
-                    prevPage={prevPage}
-                />
-            </div>
+            {Pagination && (
+                <div className={"flex items-center justify-end"}>
+                    {Pagination}
+                </div>
+            )}
         </div>
     )
 }

@@ -1,4 +1,4 @@
-import { UserRole } from "@/app/(authentication)/lib/models/UserRole"
+import { UserRole } from "@/app/(authentication)/lib/types/userRole.types"
 import { DefaultSession } from "next-auth"
 
 declare module "next-auth" {

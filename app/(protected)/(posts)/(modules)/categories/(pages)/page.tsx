@@ -1,8 +1,8 @@
 "use client"
 
 import { CATEGORIES } from "@/app/(protected)/(posts)/(modules)/categories/consts/categories"
-import Link from "next/link"
 import { COMMENTS_LINK } from "@/components/Layout/Header/consts"
+import Link from "next/link"
 
 export default function CategoriesPage() {
     return (

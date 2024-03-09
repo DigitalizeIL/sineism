@@ -1,47 +1,51 @@
-import { Button } from "@/components/Button"
 import { FcNext, FcPrevious } from "react-icons/fc"
+
+import { Button } from "@/components/Button"
+import { PAGINATION_URL_PARAM_KEY } from "../consts/pagination.consts"
+import { redirect } from "next/navigation"
 
 type PaginationButtonsProps = {
     page: number
-    totalPages: number
-    shouldHidePageNumber?: boolean
-    nextPage?: () => void
-    prevPage?: () => void
+    nextPage: number
+    previousPage: number
 }
-export const PaginationControls = async (props: PaginationButtonsProps) => {
-    const isFirstPage = props.page === 1
-    const isLastPage = props.page === props.totalPages
+export const PaginationControls = async ({
+    page,
+    previousPage,
+    nextPage,
+}: PaginationButtonsProps) => {
+    const isLastPage = page >= nextPage - 1
+    const isFirstPage = previousPage === page || previousPage <= 0
 
-    if (!props.totalPages) {
-        return <div></div>
+    const goToNextPage = async () => {
+        "use server"
+
+        redirect(`?${PAGINATION_URL_PARAM_KEY}=${nextPage}`)
+    }
+    const goToPrevPage = async () => {
+        "use server"
+
+        redirect(`?${PAGINATION_URL_PARAM_KEY}=${previousPage}`)
     }
 
     return (
-        <div className={"flex items-center justify-center h-full px-4"}>
-            {props.prevPage && !isFirstPage ? (
-                <form action={props.prevPage}>
-                    <Button
-                        type={"ghost"}
-                        className="bg-blue-500 hover:bg-blue-600">
-                        <FcNext /> {"עמוד קודם"}
-                    </Button>
-                </form>
-            ) : null}
-            {!props.shouldHidePageNumber ? (
-                <span className={"mx-4"}>
-                    {props.page}
-                    {props.totalPages ? ` / ${props.totalPages}` : null}
-                </span>
-            ) : null}
-            {props.nextPage && !isLastPage ? (
-                <form action={props.nextPage}>
-                    <Button
-                        type={"ghost"}
-                        className="bg-blue-500 hover:bg-blue-600">
-                        {"עמוד הבא"} <FcPrevious />
-                    </Button>
-                </form>
-            ) : null}
+        <div className={"flex items-center justify-center px-4 gap-2"}>
+            <form action={goToPrevPage}>
+                <Button
+                    isDisabled={isFirstPage}
+                    type={"ghost"}
+                    className="bg-blue-500 hover:bg-blue-600">
+                    <FcNext /> {"עמוד קודם"}
+                </Button>
+            </form>
+            <form action={goToNextPage}>
+                <Button
+                    isDisabled={isLastPage}
+                    type={"ghost"}
+                    className="bg-blue-500 hover:bg-blue-600">
+                    {"עמוד הבא"} <FcPrevious />
+                </Button>
+            </form>
         </div>
     )
 }

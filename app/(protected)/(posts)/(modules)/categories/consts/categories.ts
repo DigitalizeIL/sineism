@@ -1,4 +1,4 @@
-import { ICategory } from "@/app/(protected)/(posts)/(modules)/categories/lib/interfaces/ICategory"
+import { ICategory } from "@/app/(protected)/(posts)/(modules)/categories/lib/category.interface"
 
 export const UTTERANCES_CATEGORY: ICategory = {
     id: 1,

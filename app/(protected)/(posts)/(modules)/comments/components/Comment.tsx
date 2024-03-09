@@ -1,24 +1,25 @@
 import { AiFillDelete } from "react-icons/ai"
 import { Box } from "@/components/Box"
-import { IComment } from "@/app/(protected)/(posts)/(modules)/comments/lib/interfaces/IComment"
-import { RatingContainer } from "@/app/(protected)/(posts)/(modules)/rating/components/RatingContainer"
+import { Button } from "@/app/_core/components/Button"
+import { COMMENTS_PROPERTY_FOR_CURSOR } from "@/app/_core/consts/pagination.consts"
+import { EMPTY_COMMENT_ID } from "../comments.consts"
+import { IComment } from "@/app/(protected)/(posts)/(modules)/comments/lib/comment.interface"
+import { RatingContainer } from "@/app/(protected)/(posts)/(modules)/rating/components/Rating.container"
 import React from "react"
-import { SaveBookmarkButtonContainer } from "../../bookmark/components/SaveBookmarkButtonContainer"
-import { commentsService } from "@/app/(protected)/(posts)/(modules)/comments/lib/services/CommentsService"
+import { SaveBookmarkButtonContainer } from "../../bookmark/components/SaveBookmarkButton.container"
+import { commentsService } from "@/app/(protected)/(posts)/(modules)/comments/lib/comments.service"
 import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
-import { postsService } from "@/app/(protected)/(posts)/lib/services/PostsService"
+import { postsService } from "@/app/(protected)/(posts)/lib/posts.service"
 import { revalidatePath } from "next/cache"
-import { usersService } from "@/app/(authentication)/lib/services/UsersService"
+import { usersService } from "@/app/(authentication)/lib/services/users.service"
 
 type CommentProps = {
     comment: IComment
     page?: number
 }
 
-export const Comment = async ({
-    page,
-    comment: { content, id, postIds, userId, commentNumber },
-}: CommentProps) => {
+export const Comment = async ({ page, comment }: CommentProps) => {
+    const { content, id, postIds, userId, commentNumber } = comment
     const author = await usersService.getUserById(userId)
     const posts = await postsService.getAllPosts({ ids: postIds })
     const session = await getAppServerSession()
@@ -31,6 +32,8 @@ export const Comment = async ({
         revalidatePath("/posts")
     }
 
+    const isNoReference = postIds.includes(EMPTY_COMMENT_ID)
+
     if (!author) return null
 
     return (
@@ -38,9 +41,11 @@ export const Comment = async ({
             <div className="absolute top-4 left-4 flex flex-row gap-4">
                 {session?.user?.role === "ADMIN" && (
                     <form action={deletePost}>
-                        <button className="border-none bg-none">
+                        <Button
+                            htmlType="submit"
+                            type={["warning-outline"]}>
                             <AiFillDelete />
-                        </button>
+                        </Button>
                     </form>
                 )}
 
@@ -51,7 +56,9 @@ export const Comment = async ({
                             referenceType: "comment",
                             userId: session.user.id,
                         }}
-                        itemIdToBookmark={id.toString()}
+                        itemIdToBookmark={comment[
+                            COMMENTS_PROPERTY_FOR_CURSOR
+                        ].toString()}
                         page={page || 1}
                     />
                 )}
@@ -63,14 +70,16 @@ export const Comment = async ({
                 <span>{commentNumber} |</span>
                 <div>{author?.name}</div>
             </div>
-            <div
-                className={"flex flex-row gap-2"}
-                dir={"rtl"}>
-                <span>{"הגיב על פוסט/ים:"}</span>
-                {posts.map((post) => (
-                    <span key={post.id}>{post.title}, </span>
-                ))}
-            </div>
+            {!isNoReference && (
+                <div
+                    className={"flex flex-row gap-2"}
+                    dir={"rtl"}>
+                    <span>{"הגיב על פוסט/ים:"}</span>
+                    {posts.map((post) => (
+                        <span key={post.id}>{post.title}, </span>
+                    ))}
+                </div>
+            )}
             <div className="text-gray-700">{content}</div>
         </Box>
     )

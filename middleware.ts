@@ -1,5 +1,5 @@
+import { UserRole } from "@/app/(authentication)/lib/types/userRole.types"
 import { withAuth } from "next-auth/middleware"
-import { USER_ROLES } from "@/app/(authentication)/lib/models/UserRole"
 
 if (!process.env.NEXTAUTH_SECRET)
     throw new Error("NEXTAUTH_SECRET is not defined")
@@ -17,7 +17,7 @@ export default withAuth({
             switch (path) {
                 case "/posts":
                 case "/management":
-                    return token?.role === USER_ROLES.admin
+                    return token?.role === UserRole.admin
                 default:
                     return !!token
             }

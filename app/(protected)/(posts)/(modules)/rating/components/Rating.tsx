@@ -6,7 +6,7 @@ import { useTransition } from "react"
 type RatingProps = {
     userRating: number | null
     totalRating: number | null
-    onChange: (rating: number | null, path: string) => {}
+    onChange?: (rating: number | null, path: string) => {}
 }
 
 export const Rating = ({ userRating, totalRating, onChange }: RatingProps) => {
@@ -23,7 +23,7 @@ export const Rating = ({ userRating, totalRating, onChange }: RatingProps) => {
                 value={userRating}
                 onChange={(event, value) => {
                     startTransition(() => {
-                        onChange(value, window.location.pathname)
+                        onChange?.(value, window.location.pathname)
                     })
                 }}
             />
