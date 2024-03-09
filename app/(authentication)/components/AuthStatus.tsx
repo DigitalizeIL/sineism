@@ -26,7 +26,7 @@ export default function AuthStatus() {
                 </>
             ) : null}
             <span
-                className="text-sm text-slate-400 hover:text-slate-200 transition-all whitespace-nowrap"
+                className="text-sm cursor-pointer text-slate-400 hover:text-slate-200 transition-all whitespace-nowrap"
                 onClick={() => signOut({ callbackUrl: "/" })}>
                 {TEXTS.signOut}
             </span>
