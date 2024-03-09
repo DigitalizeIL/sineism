@@ -1,12 +1,8 @@
-import { CatogoryPagination } from "./CategoryPagination"
-import { DEFAULT_PAGE_SIZE } from "@/app/(protected)/(posts)/(modules)/categories/consts/pagination"
 import { ICategory } from "@/app/(protected)/(posts)/(modules)/categories/lib/category.interface"
-import { PaginationControls } from "@/app/_core/components/PaginationControls"
-import { SettingKey } from "@/app/(protected)/(posts)/(modules)/settings/lib/settings.interface"
+import { PaginationContainer } from "../../../../../_core/components/Pagination/Pagination.container"
 import { SubHeader } from "@/components/Layout"
 import { Suspense } from "react"
-import { categoriesService } from "@/app/(protected)/(posts)/(modules)/categories/lib/categories.service"
-import { settingsService } from "@/app/(protected)/(posts)/(modules)/settings/lib/settings.service"
+import { categoriesService } from "../lib/categories.service"
 
 type CategoryHeaderProps = {
     category: ICategory
@@ -22,14 +18,18 @@ export const CategoryHeader = async ({
             title={category.name}
             bookmarkReferenceType={category.id?.toString()}
             Pagination={
-                category.id && (
-                    <Suspense>
-                        <CatogoryPagination
-                            page={page}
-                            categoryId={category.id}
-                        />
-                    </Suspense>
-                )
+                <Suspense>
+                    <PaginationContainer
+                        page={page}
+                        countFunction={() =>
+                            category.id
+                                ? categoriesService.countCategoryPosts(
+                                      category.id
+                                  )
+                                : Promise.resolve(0)
+                        }
+                    />
+                </Suspense>
             }
         />
     )
