@@ -1,10 +1,12 @@
 import "@/styles/globals.css"
-import { Metadata } from "next"
+
 import { Inter } from "next/font/google"
-import { Toaster } from "react-hot-toast"
-import React from "react"
 import { METADATA } from "@/app/consts"
+import { Metadata } from "next"
 import { Providers } from "@/app/Providers"
+import React from "react"
+import { Toaster } from "react-hot-toast"
+import clsx from "clsx"
 import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
 
 const inter = Inter({
@@ -32,9 +34,10 @@ export default async function RootLayout({
     return (
         <html
             lang="en"
+            className="h-full"
             dir={"rtl"}>
             <body
-                className={inter.variable}
+                className={clsx([inter.variable, "h-full"])}
                 suppressHydrationWarning={true}>
                 <Providers session={session}>
                     <Toaster position={"bottom-center"} />

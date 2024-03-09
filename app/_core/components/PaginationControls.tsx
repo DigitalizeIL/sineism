@@ -28,7 +28,7 @@ export const PaginationControls = async (props: PaginationButtonsProps) => {
     }
 
     return (
-        <div className={"flex items-center justify-center h-full px-4"}>
+        <div className={"flex items-center justify-center px-4"}>
             {!isFirstPage ? (
                 <form action={prevPage}>
                     <Button
