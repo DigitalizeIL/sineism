@@ -1,7 +1,7 @@
-import { postsService } from "@/app/(protected)/(posts)/lib/services/PostsService"
-import { notFound } from "next/navigation"
+import { CommentFormContainer } from "@/app/(protected)/(posts)/(modules)/comments/components/CommentForm.container"
 import { PostComments } from "@/app/(protected)/(posts)/(modules)/comments/components/PostComments"
-import { CommentFormContainer } from "@/app/(protected)/(posts)/(modules)/comments/components/CommentFormContainer"
+import { notFound } from "next/navigation"
+import { postsService } from "@/app/(protected)/(posts)/lib/posts.service"
 
 type PostPageProps = {
     params: { postId: number }

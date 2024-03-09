@@ -1,10 +1,10 @@
 import { CategoryFeed } from "@/app/(protected)/(posts)/(modules)/categories/components/CategoryFeed"
 import { DEFAULT_PAGE_SIZE } from "@/app/(protected)/(posts)/(modules)/categories/consts/pagination"
-import { SettingKey } from "@/app/(protected)/(posts)/(modules)/settings/lib/interfaces/ISettings"
+import { SettingKey } from "@/app/(protected)/(posts)/(modules)/settings/lib/settings.interface"
 import { UTTERANCES_CATEGORY } from "@/app/(protected)/(posts)/(modules)/categories/consts/categories"
-import { categoriesService } from "@/app/(protected)/(posts)/(modules)/categories/lib/services/CategoriesService"
+import { categoriesService } from "@/app/(protected)/(posts)/(modules)/categories/lib/categories.service"
 import { notFound } from "next/navigation"
-import { settingsService } from "@/app/(protected)/(posts)/(modules)/settings/lib/services/SettingsService"
+import { settingsService } from "@/app/(protected)/(posts)/(modules)/settings/lib/settings.service"
 
 type PageProps = {
     params: {

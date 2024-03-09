@@ -2,12 +2,12 @@ import React, { Suspense } from "react"
 
 import { Card } from "@/components/Card"
 import { DeletePostButton } from "@/app/(protected)/(posts)/components/DeletePostButton"
-import { IPost } from "@/app/(protected)/(posts)/lib/interfaces/IPost"
+import { IPost } from "@/app/(protected)/(posts)/lib/post.interface"
 import { LoadingDots } from "@/app/_core/components/LoadingDots"
-import { PostCreateOrEditFormServer } from "@/app/(protected)/(posts)/components/PostCreateOrEditFormServer"
-import { RatingContainer } from "@/app/(protected)/(posts)/(modules)/rating/components/RatingContainer"
-import { SaveBookmarkButtonContainer } from "@/app/(protected)/(posts)/(modules)/bookmark/components/SaveBookmarkButtonContainer"
-import { USER_ROLES } from "@/app/(authentication)/lib/models/UserRole"
+import { PostCreateOrEditFormContainer } from "@/app/(protected)/(posts)/components/PostCreateOrEditForm.container"
+import { RatingContainer } from "@/app/(protected)/(posts)/(modules)/rating/components/Rating.container"
+import { SaveBookmarkButtonContainer } from "@/app/(protected)/(posts)/(modules)/bookmark/components/SaveBookmarkButton.container"
+import { UserRole } from "@/app/(authentication)/lib/types/userRole.types"
 import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
 
 type PostFeedItemProps = {
@@ -53,10 +53,10 @@ export const PostFeedItem = async ({ post, page }: PostFeedItemProps) => {
                         </Suspense>
                     </div>
                     <Suspense>
-                        {session?.user?.role === USER_ROLES.admin ? (
+                        {session?.user?.role === UserRole.admin ? (
                             <>
                                 <DeletePostButton postId={post.id} />
-                                <PostCreateOrEditFormServer post={post} />
+                                <PostCreateOrEditFormContainer post={post} />
                             </>
                         ) : null}
                         <RatingContainer postId={post.id} />

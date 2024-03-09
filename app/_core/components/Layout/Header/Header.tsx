@@ -1,9 +1,9 @@
-import React from "react"
 import AuthStatus from "@/app/(authentication)/components/AuthStatus"
-import { Logo } from "@/components/Logo"
-import { LINKS } from "@/components/Layout/Header/consts"
-import { HeaderLink } from "@/components/Layout/Header/HeaderLink"
 import { CATEGORIES } from "@/app/(protected)/(posts)/(modules)/categories/consts/categories"
+import { HeaderLink } from "@/components/Layout/Header/HeaderLink"
+import { LINKS } from "@/components/Layout/Header/consts"
+import { Logo } from "@/components/Logo"
+import React from "react"
 
 export const Header = async () => {
     return (

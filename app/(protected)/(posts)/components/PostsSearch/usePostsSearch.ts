@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
-import { IPost } from "@/app/(protected)/(posts)/lib/interfaces/IPost"
+
+import { IPost } from "@/app/(protected)/(posts)/lib/post.interface"
 
 export const usePostsSearch = (posts: IPost[]) => {
     const [searchText, setSearchText] = useState<string>("")

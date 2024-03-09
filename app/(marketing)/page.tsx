@@ -1,11 +1,12 @@
-import Link from "next/link"
-import { TEXTS } from "@/app/(marketing)/consts"
 import {
     ADMIN_REDIRECT_URL,
     LOGIN_REDIRECT_URL,
-} from "@/app/(authentication)/components/AuthForm/consts"
+} from "@/app/(authentication)/components/AuthForm/auth.consts"
+
+import Link from "next/link"
 import { Logo } from "@/components/Logo"
-import { USER_ROLES } from "@/app/(authentication)/lib/models/UserRole"
+import { TEXTS } from "@/app/(marketing)/marketing.consts"
+import { UserRole } from "@/app/(authentication)/lib/types/userRole.types"
 import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
 
 export default async function Page() {
@@ -25,7 +26,7 @@ export default async function Page() {
                         className="text-xl text-stone-400 underline hover:text-stone-200 transition-all">
                         {TEXTS.getStarted}
                     </Link>
-                    {session?.user?.role === USER_ROLES.admin ? (
+                    {session?.user?.role === UserRole.admin ? (
                         <Link
                             href={ADMIN_REDIRECT_URL}
                             prefetch={false}

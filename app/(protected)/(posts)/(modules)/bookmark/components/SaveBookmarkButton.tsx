@@ -3,14 +3,14 @@
 import {
     BookmarkIdentifiers,
     IBookmark,
-} from "@/app/(protected)/(posts)/(modules)/bookmark/lib/interfaces/IBookmark"
+} from "@/app/(protected)/(posts)/(modules)/bookmark/lib/bookmark.interface"
 
 import { BsBookmarkPlus } from "react-icons/bs"
 import { Button } from "@/components/Button"
-import { SaveBookmarkButtonContainerProps } from "./SaveBookmarkButtonContainer"
-import { bookmarkService } from "@/app/(protected)/(posts)/(modules)/bookmark/lib/services/BookmarkService"
+import { SaveBookmarkButtonContainerProps } from "./SaveBookmarkButton.container"
+import { bookmarkService } from "@/app/(protected)/(posts)/(modules)/bookmark/lib/bookmark.service"
 import { revalidatePath } from "next/cache"
-import { saveBookmark } from "../actions/saveBookmark"
+import { saveBookmark } from "../lib/saveBookmark.action"
 import { useState } from "react"
 
 type SaveBookmarkButtonProps = SaveBookmarkButtonContainerProps & {

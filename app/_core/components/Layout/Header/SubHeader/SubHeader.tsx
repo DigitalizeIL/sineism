@@ -1,9 +1,9 @@
-import { PaginationControls } from "@/components/PaginationControls"
-import { redirect } from "next/navigation"
-import { CommentWithPaymentContainer } from "@/app/(protected)/(payment)/(modules)/comments/components/CommentWithPaymentContainer"
+import { BookmarkIdentifiers } from "@/app/(protected)/(posts)/(modules)/bookmark/lib/bookmark.interface"
+import { CommentWithPaymentContainer } from "@/app/(protected)/(payment)/(modules)/comments/components/CommentWithPayment.container"
 import { MoveToBookmarkButton } from "@/app/(protected)/(posts)/(modules)/bookmark/components/MoveToBookmarkButton"
+import { PaginationControls } from "@/components/PaginationControls"
 import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
-import { BookmarkIdentifiers } from "@/app/(protected)/(posts)/(modules)/bookmark/lib/interfaces/IBookmark"
+import { redirect } from "next/navigation"
 
 type CategoryHeaderProps = {
     title?: string

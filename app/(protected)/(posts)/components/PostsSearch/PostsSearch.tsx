@@ -1,10 +1,11 @@
 "use client"
 
+import React, { ReactNode, useEffect } from "react"
+
+import { IPost } from "@/app/(protected)/(posts)/lib/post.interface"
 import Styles from "./PostsSearch.module.css"
 import { TEXTS } from "@/app/(protected)/(posts)/components/PostsSearch/texts"
 import { usePostsSearch } from "@/app/(protected)/(posts)/components/PostsSearch/usePostsSearch"
-import React, { ReactNode, useEffect } from "react"
-import { IPost } from "@/app/(protected)/(posts)/lib/interfaces/IPost"
 
 export const PostsSearch = (props: {
     posts: IPost[]

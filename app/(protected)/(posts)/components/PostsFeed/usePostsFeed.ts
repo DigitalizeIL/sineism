@@ -1,9 +1,10 @@
 "use client"
 
-import { useQuery } from "@tanstack/react-query"
-import { getAllPosts } from "@/app/(protected)/(posts)/queries/GetAllPosts"
 import { useEffect, useState } from "react"
-import { IPost } from "@/app/(protected)/(posts)/lib/interfaces/IPost"
+
+import { IPost } from "@/app/(protected)/(posts)/lib/post.interface"
+import { getAllPosts } from "@/app/(protected)/(posts)/queries/posts.query"
+import { useQuery } from "@tanstack/react-query"
 
 export const usePostsFeed = (initialPosts: IPost[] = []) => {
     const { error, data, isLoading } = useQuery({

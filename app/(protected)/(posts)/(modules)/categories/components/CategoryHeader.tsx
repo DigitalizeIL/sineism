@@ -1,9 +1,9 @@
-import { ICategory } from "@/app/(protected)/(posts)/(modules)/categories/lib/interfaces/ICategory"
-import { categoriesService } from "@/app/(protected)/(posts)/(modules)/categories/lib/services/CategoriesService"
 import { DEFAULT_PAGE_SIZE } from "@/app/(protected)/(posts)/(modules)/categories/consts/pagination"
-import { settingsService } from "@/app/(protected)/(posts)/(modules)/settings/lib/services/SettingsService"
-import { SettingKey } from "@/app/(protected)/(posts)/(modules)/settings/lib/interfaces/ISettings"
+import { ICategory } from "@/app/(protected)/(posts)/(modules)/categories/lib/category.interface"
+import { SettingKey } from "@/app/(protected)/(posts)/(modules)/settings/lib/settings.interface"
 import { SubHeader } from "@/components/Layout"
+import { categoriesService } from "@/app/(protected)/(posts)/(modules)/categories/lib/categories.service"
+import { settingsService } from "@/app/(protected)/(posts)/(modules)/settings/lib/settings.service"
 
 type CategoryHeaderProps = {
     category: ICategory

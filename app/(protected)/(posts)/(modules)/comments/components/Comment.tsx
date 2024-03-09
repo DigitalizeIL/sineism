@@ -1,14 +1,14 @@
 import { AiFillDelete } from "react-icons/ai"
 import { Box } from "@/components/Box"
-import { IComment } from "@/app/(protected)/(posts)/(modules)/comments/lib/interfaces/IComment"
-import { RatingContainer } from "@/app/(protected)/(posts)/(modules)/rating/components/RatingContainer"
+import { IComment } from "@/app/(protected)/(posts)/(modules)/comments/lib/comment.interface"
+import { RatingContainer } from "@/app/(protected)/(posts)/(modules)/rating/components/Rating.container"
 import React from "react"
-import { SaveBookmarkButtonContainer } from "../../bookmark/components/SaveBookmarkButtonContainer"
-import { commentsService } from "@/app/(protected)/(posts)/(modules)/comments/lib/services/CommentsService"
+import { SaveBookmarkButtonContainer } from "../../bookmark/components/SaveBookmarkButton.container"
+import { commentsService } from "@/app/(protected)/(posts)/(modules)/comments/lib/comments.service"
 import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
-import { postsService } from "@/app/(protected)/(posts)/lib/services/PostsService"
+import { postsService } from "@/app/(protected)/(posts)/lib/posts.service"
 import { revalidatePath } from "next/cache"
-import { usersService } from "@/app/(authentication)/lib/services/UsersService"
+import { usersService } from "@/app/(authentication)/lib/services/users.service"
 
 type CommentProps = {
     comment: IComment

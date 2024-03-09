@@ -4,11 +4,11 @@ import {
     REGISTER_API_URL,
     REGISTER_PAYMENT_URL,
     TEXTS,
-} from "@/app/(authentication)/components/AuthForm/consts"
+} from "@/app/(authentication)/components/AuthForm/auth.consts"
 import {
     LoginCredentials,
     RegisterArgs,
-} from "@/app/(authentication)/lib/types/AuthenticationTypes"
+} from "@/app/(authentication)/lib/types/authentication.types"
 
 import { signIn as NextSignIt } from "next-auth/react"
 import toast from "react-hot-toast"

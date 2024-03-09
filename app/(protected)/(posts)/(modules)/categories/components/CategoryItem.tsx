@@ -1,5 +1,5 @@
-import { ICategory } from "@/app/(protected)/(posts)/(modules)/categories/lib/interfaces/ICategory"
 import { DeleteCategoryButton } from "@/app/(protected)/(posts)/(modules)/categories/components/DeleteCategoryButton"
+import { ICategory } from "@/app/(protected)/(posts)/(modules)/categories/lib/category.interface"
 
 type CategoryItemProps = {
     category: ICategory

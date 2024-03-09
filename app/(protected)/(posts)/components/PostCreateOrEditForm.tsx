@@ -1,23 +1,25 @@
 "use client"
-import { Button } from "@/components/Button"
-import { Input } from "@/components/Form/Input/Input"
-import { TextArea } from "@/components/Form/TextArea"
-import {
-    CreatePostDto,
-    EditPostDto,
-    IPost,
-} from "@/app/(protected)/(posts)/lib/interfaces/IPost"
-import { ICategory } from "@/app/(protected)/(posts)/(modules)/categories/lib/interfaces/ICategory"
-import { Select } from "@/components/Form/Select"
-import { ModalWithButton } from "@/components/Modal"
-import React, { FormEvent, useEffect, useState } from "react"
-import { useSession } from "next-auth/react"
-import { AiOutlineEdit } from "react-icons/ai"
+
 import {
     CATEGORIES,
     UTTERANCES_CATEGORY,
 } from "@/app/(protected)/(posts)/(modules)/categories/consts/categories"
+import {
+    CreatePostDto,
+    EditPostDto,
+    IPost,
+} from "@/app/(protected)/(posts)/lib/post.interface"
+import React, { FormEvent, useEffect, useState } from "react"
+
+import { AiOutlineEdit } from "react-icons/ai"
+import { Button } from "@/components/Button"
+import { ICategory } from "@/app/(protected)/(posts)/(modules)/categories/lib/category.interface"
+import { Input } from "@/components/Form/Input/Input"
+import { ModalWithButton } from "@/components/Modal"
+import { Select } from "@/components/Form/Select"
+import { TextArea } from "@/components/Form/TextArea"
 import toast from "react-hot-toast"
+import { useSession } from "next-auth/react"
 
 export const PostCreateOrEditForm = (props: {
     post?: IPost

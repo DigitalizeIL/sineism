@@ -1,7 +1,7 @@
 import { CategoryHeader } from "@/app/(protected)/(posts)/(modules)/categories/components/CategoryHeader"
-import { ICategory } from "@/app/(protected)/(posts)/(modules)/categories/lib/interfaces/ICategory"
+import { ICategory } from "@/app/(protected)/(posts)/(modules)/categories/lib/category.interface"
 import { PostFeedItem } from "@/app/(protected)/(posts)/components/PostsFeed/PostFeedItem"
-import { PostFeedItemSkelleton } from "../../../components/PostsFeed/PostFeedItemSkeleton"
+import { PostFeedItemSkelleton } from "../../../components/PostsFeed/PostFeedItem.skeleton"
 import { Suspense } from "react"
 
 type CategoryFeedProps = {

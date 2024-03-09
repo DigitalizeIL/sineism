@@ -1,6 +1,6 @@
-import { authenticationService } from "@/app/(authentication)/lib/services/AuthenticationService"
 import CredentialsProvider from "next-auth/providers/credentials"
 import type { NextAuthOptions } from "next-auth"
+import { authenticationService } from "@/app/(authentication)/lib/services/authentication.service"
 
 export const authOptions: NextAuthOptions = {
     providers: [
@@ -23,7 +23,7 @@ export const authOptions: NextAuthOptions = {
                 return authenticationService.authenticate({
                     email: credentials.email,
                     password: credentials.password,
-                })
+                }) as any
             },
         }),
     ],

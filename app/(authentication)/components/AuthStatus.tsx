@@ -1,8 +1,10 @@
 "use client"
+
 import { signOut, useSession } from "next-auth/react"
-import { TEXTS } from "@/app/(authentication)/components/consts"
-import { useEffect } from "react"
+
+import { TEXTS } from "@/app/(authentication)/authentication.texts"
 import { redirect } from "next/navigation"
+import { useEffect } from "react"
 
 export default function AuthStatus() {
     const session = useSession()

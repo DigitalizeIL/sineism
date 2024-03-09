@@ -1,5 +1,6 @@
 import { createContext, useContext } from "react"
-import { IUser } from "@/app/(authentication)/lib/interfaces/IUser"
+
+import { IUser } from "@/app/(authentication)/lib/user.interface"
 
 export type UserContextType = {
     user: IUser

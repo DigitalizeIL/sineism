@@ -1,9 +1,10 @@
 import { Metadata, Viewport } from "next"
 import React, { ReactNode } from "react"
-import { METADATA } from "@/app/(protected)/(posts)/consts"
+
 import { Header } from "@/components/Layout"
+import { METADATA } from "@/app/(protected)/(posts)/posts.consts"
+import { PostCreateOrEditFormContainer } from "@/app/(protected)/(posts)/components/PostCreateOrEditForm.container"
 import { PostsFloatingQuickActions } from "@/app/(protected)/(posts)/components/PostsFloatingQuickActions"
-import { PostCreateOrEditFormServer } from "@/app/(protected)/(posts)/components/PostCreateOrEditFormServer"
 
 export const metadata: Metadata = {
     title: METADATA.title,
@@ -29,7 +30,7 @@ export default async function Layout({ children }: LayoutProps) {
             <Header />
             {children}
             <PostsFloatingQuickActions>
-                <PostCreateOrEditFormServer />
+                <PostCreateOrEditFormContainer />
             </PostsFloatingQuickActions>
         </>
     )

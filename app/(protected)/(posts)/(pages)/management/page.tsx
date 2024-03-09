@@ -1,6 +1,6 @@
 import { CreateCategoryForm } from "@/app/(protected)/(posts)/(modules)/categories/components/CreateCategoryForm"
 import { ModalWithButton } from "@/components/Modal"
-import { PostCreateOrEditFormServer } from "@/app/(protected)/(posts)/components/PostCreateOrEditFormServer"
+import { PostCreateOrEditFormContainer } from "@/app/(protected)/(posts)/components/PostCreateOrEditForm.container"
 import { PostsFeed } from "@/app/(protected)/(posts)/components/PostsFeed"
 import React from "react"
 import { Settings } from "@/app/(protected)/(posts)/(modules)/settings/components/Settings"
@@ -11,7 +11,7 @@ export default function PostsPage() {
             <div className="w-screen h-screen flex flex-col space-y-5 justify-start items-center">
                 <h2 className="text-4xl font-bold">Admin Only Page</h2>
                 <div className="flex justify-center mt-4">
-                    <PostCreateOrEditFormServer />
+                    <PostCreateOrEditFormContainer />
                     <ModalWithButton buttonText={"Create Category"}>
                         <CreateCategoryForm />
                     </ModalWithButton>

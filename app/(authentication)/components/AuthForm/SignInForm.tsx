@@ -4,7 +4,7 @@ import {
     LOGIN_URL,
     REGISTER_URL,
     TEXTS,
-} from "@/app/(authentication)/components/AuthForm/consts"
+} from "@/app/(authentication)/components/AuthForm/auth.consts"
 
 import { Button } from "@/components/Button"
 import { FormEvent } from "react"

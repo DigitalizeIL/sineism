@@ -4,13 +4,13 @@ import {
     GET_USER_API_URL,
     REGISTER_PAYMENT_URL,
     REGISTER_URL,
-} from "../components/AuthForm/consts"
+} from "../components/AuthForm/auth.consts"
 import { ReactNode, useCallback, useEffect, useMemo, useState } from "react"
 
-import { IUser } from "@/app/(authentication)/lib/interfaces/IUser"
+import { IUser } from "@/app/(authentication)/lib/user.interface"
 import { LoadingDotsOverlay } from "@/components/LoadingDots"
-import { USER_ROLES } from "@/app/(authentication)/lib/models/UserRole"
 import { UserContext } from "@/app/(authentication)/context/UserContext"
+import { UserRole } from "@/app/(authentication)/lib/types/userRole.types"
 import axios from "axios"
 import { useRouter } from "next/navigation"
 import { useSession } from "next-auth/react"
@@ -44,9 +44,9 @@ export const UserProvider = (props: {
         getUser()
     }, [getUser])
 
-    const isAdmin = useMemo(() => user?.role === USER_ROLES.admin, [user?.role])
-    const isUser = useMemo(() => user?.role === USER_ROLES.user, [user?.role])
-    const isGuest = useMemo(() => user?.role === USER_ROLES.guest, [user?.role])
+    const isAdmin = useMemo(() => user?.role === UserRole.admin, [user?.role])
+    const isUser = useMemo(() => user?.role === UserRole.user, [user?.role])
+    const isGuest = useMemo(() => user?.role === UserRole.guest, [user?.role])
 
     if (!user) {
         return <LoadingDotsOverlay />

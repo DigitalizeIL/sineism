@@ -1,10 +1,10 @@
 import { Button } from "@/components/Button"
-import { ICategory } from "@/app/(protected)/(posts)/(modules)/categories/lib/interfaces/ICategory"
-import { revalidatePath } from "next/cache"
+import { ICategory } from "@/app/(protected)/(posts)/(modules)/categories/lib/category.interface"
+import { IPost } from "@/app/(protected)/(posts)/lib/post.interface"
+import { categoriesService } from "@/app/(protected)/(posts)/(modules)/categories/lib/categories.service"
 import clsx from "clsx"
-import { categoriesService } from "@/app/(protected)/(posts)/(modules)/categories/lib/services/CategoriesService"
-import { IPost } from "@/app/(protected)/(posts)/lib/interfaces/IPost"
-import { postsService } from "@/app/(protected)/(posts)/lib/services/PostsService"
+import { postsService } from "@/app/(protected)/(posts)/lib/posts.service"
+import { revalidatePath } from "next/cache"
 
 type CreateCategoryButtonProps = {
     post: IPost

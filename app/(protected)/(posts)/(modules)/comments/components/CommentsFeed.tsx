@@ -1,8 +1,8 @@
 import { Comment } from "@/app/(protected)/(posts)/(modules)/comments/components/Comment"
 import { DEFAULT_PAGE_SIZE } from "@/app/(protected)/(posts)/(modules)/categories/consts/pagination"
-import { SettingKey } from "@/app/(protected)/(posts)/(modules)/settings/lib/interfaces/ISettings"
-import { commentsService } from "@/app/(protected)/(posts)/(modules)/comments/lib/services/CommentsService"
-import { settingsService } from "@/app/(protected)/(posts)/(modules)/settings/lib/services/SettingsService"
+import { SettingKey } from "@/app/(protected)/(posts)/(modules)/settings/lib/settings.interface"
+import { commentsService } from "@/app/(protected)/(posts)/(modules)/comments/lib/comments.service"
+import { settingsService } from "@/app/(protected)/(posts)/(modules)/settings/lib/settings.service"
 
 type PageProps = {
     page: number

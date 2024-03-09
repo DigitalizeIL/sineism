@@ -1,8 +1,8 @@
 import { DEFAULT_PAGE_SIZE } from "@/app/(protected)/(posts)/(modules)/categories/consts/pagination"
-import { settingsService } from "@/app/(protected)/(posts)/(modules)/settings/lib/services/SettingsService"
-import { SettingKey } from "@/app/(protected)/(posts)/(modules)/settings/lib/interfaces/ISettings"
+import { SettingKey } from "@/app/(protected)/(posts)/(modules)/settings/lib/settings.interface"
 import { SubHeader } from "@/components/Layout"
-import { commentsService } from "@/app/(protected)/(posts)/(modules)/comments/lib/services/CommentsService"
+import { commentsService } from "@/app/(protected)/(posts)/(modules)/comments/lib/comments.service"
+import { settingsService } from "@/app/(protected)/(posts)/(modules)/settings/lib/settings.service"
 
 type CategoryHeaderProps = { page: number }
 

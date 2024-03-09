@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
-import { authenticationService } from "@/app/(authentication)/lib/services/AuthenticationService"
+import { RegisterArgs } from "@/app/(authentication)/lib/types/authentication.types"
 import { UserAlreadyExists } from "@/app/(authentication)/lib/errors/UserAlreadyExists"
-import { RegisterArgs } from "@/app/(authentication)/lib/types/AuthenticationTypes"
+import { authenticationService } from "@/app/(authentication)/lib/services/authentication.service"
 
 export async function POST(req: Request) {
     const registerData: RegisterArgs = await req.json()

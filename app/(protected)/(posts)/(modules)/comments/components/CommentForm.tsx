@@ -1,12 +1,13 @@
 "use client"
 
+import Select2, { MultiValue } from "react-select"
+import { useRef, useState } from "react"
+
 import { Button } from "@/components/Button"
-import { IPost } from "@/app/(protected)/(posts)/lib/interfaces/IPost"
+import { IPost } from "@/app/(protected)/(posts)/lib/post.interface"
+import { Option } from "@/components/Form/Select"
 import { TextArea } from "@/components/Form/TextArea"
 import clsx from "clsx"
-import { useRef, useState } from "react"
-import { Option } from "@/components/Form/Select"
-import Select2, { MultiValue } from "react-select"
 import toast from "react-hot-toast"
 
 type CommentFormProps = {
