@@ -5,6 +5,7 @@ import { METADATA } from "@/app/consts"
 import { Metadata } from "next"
 import { Providers } from "@/app/Providers"
 import React from "react"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Toaster } from "react-hot-toast"
 import clsx from "clsx"
 import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
@@ -43,6 +44,7 @@ export default async function RootLayout({
                     <Toaster position={"bottom-center"} />
                     {children}
                 </Providers>
+                <SpeedInsights />
             </body>
         </html>
     )
