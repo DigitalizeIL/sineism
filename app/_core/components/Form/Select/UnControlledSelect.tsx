@@ -1,7 +1,7 @@
 "use client"
 
-import clsx from "clsx"
 import { ChangeEvent } from "react"
+import clsx from "clsx"
 
 export const UnControlledSelect = (props: {
     name: string
@@ -17,7 +17,6 @@ export const UnControlledSelect = (props: {
             multiple={props.multiple}
             name={props.name}
             onChange={props.onChange}
-            aria-placeholder={props.placeholder}
             className={clsx([
                 props.className,
                 "w-full",
