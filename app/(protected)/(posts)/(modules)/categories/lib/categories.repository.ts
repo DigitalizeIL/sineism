@@ -3,6 +3,7 @@ import "server-only"
 import { DBPagination } from "@/app/_core/lib/pagination.types"
 import { GetCategoryFilter } from "@/app/(protected)/(posts)/(modules)/categories/lib/categories.service"
 import { ICategory } from "@/app/(protected)/(posts)/(modules)/categories/lib/category.interface"
+import { POST_PROPERTY_FOR_CURSOR } from "@/app/_core/consts/pagination.consts"
 import prisma from "@/lib/prisma"
 
 export type CategoryWithoutPosts = Omit<ICategory, "posts">
@@ -36,7 +37,7 @@ export class CategoriesDbRepository {
                           ...(pagination && {
                               ...(pagination.cursor && {
                                   where: {
-                                      postNumber: {
+                                      [POST_PROPERTY_FOR_CURSOR]: {
                                           gte: pagination.cursor || 0,
                                       },
                                   },

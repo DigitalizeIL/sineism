@@ -1,5 +1,6 @@
 import { CategoryFeed } from "@/app/(protected)/(posts)/(modules)/categories/components/CategoryFeed"
 import { DEFAULT_PAGE_SIZE } from "@/app/(protected)/(posts)/(modules)/categories/consts/pagination"
+import { PAGINATION_URL_PARAM_KEY } from "@/app/_core/consts/pagination.consts"
 import { SettingKey } from "@/app/(protected)/(posts)/(modules)/settings/lib/settings.interface"
 import { UTTERANCES_CATEGORY } from "@/app/(protected)/(posts)/(modules)/categories/consts/categories"
 import { categoriesService } from "@/app/(protected)/(posts)/(modules)/categories/lib/categories.service"
@@ -14,8 +15,8 @@ type PageProps = {
 }
 
 export default async function Page(props: PageProps) {
-    let page = Number(props.searchParams?.page)
-    if (isNaN(page)) page = 1
+    let paginationId = Number(props.searchParams?.[PAGINATION_URL_PARAM_KEY])
+    if (isNaN(paginationId)) paginationId = 1
 
     const postsPerPage = await settingsService.getSettingByKey(
         SettingKey.posts_per_page
@@ -27,7 +28,7 @@ export default async function Page(props: PageProps) {
         },
         withPosts: true,
         pagination: {
-            id: page,
+            id: paginationId,
             perPage: postsPerPage?.value
                 ? Number(postsPerPage?.value)
                 : DEFAULT_PAGE_SIZE,
@@ -41,7 +42,7 @@ export default async function Page(props: PageProps) {
     return (
         <CategoryFeed
             category={category}
-            page={page}
+            page={paginationId}
         />
     )
 }
