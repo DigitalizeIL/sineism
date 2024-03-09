@@ -1,5 +1,6 @@
 import { AiFillDelete } from "react-icons/ai"
 import { Box } from "@/components/Box"
+import { Button } from "@/app/_core/components/Button"
 import { EMPTY_COMMENT_ID } from "../comments.consts"
 import { IComment } from "@/app/(protected)/(posts)/(modules)/comments/lib/comment.interface"
 import { RatingContainer } from "@/app/(protected)/(posts)/(modules)/rating/components/Rating.container"
@@ -41,9 +42,11 @@ export const Comment = async ({
             <div className="absolute top-4 left-4 flex flex-row gap-4">
                 {session?.user?.role === "ADMIN" && (
                     <form action={deletePost}>
-                        <button className="border-none bg-none">
+                        <Button
+                            htmlType="submit"
+                            type={["warning-outline"]}>
                             <AiFillDelete />
-                        </button>
+                        </Button>
                     </form>
                 )}
 

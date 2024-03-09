@@ -56,4 +56,5 @@ const typesStyle = {
     primary: "bg-black text-white hover:bg-white hover:text-black",
     ghost: "border-transparent bg-transparent text-black hover:bg-black hover:text-white",
     slim: "p-0 h-auto",
+    "warning-outline": "border-yellow-600",
 }
