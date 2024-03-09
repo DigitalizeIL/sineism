@@ -1,16 +1,27 @@
-import { Button } from "@/components/Button"
 import { FcNext, FcPrevious } from "react-icons/fc"
+
+import { Button } from "@/components/Button"
+import { redirect } from "next/navigation"
 
 type PaginationButtonsProps = {
     page: number
     totalPages: number
     shouldHidePageNumber?: boolean
-    nextPage?: () => void
-    prevPage?: () => void
 }
 export const PaginationControls = async (props: PaginationButtonsProps) => {
     const isFirstPage = props.page === 1
     const isLastPage = props.page === props.totalPages
+
+    const nextPage = async () => {
+        "use server"
+
+        redirect(`?page=${props.page + 1}`)
+    }
+    const prevPage = async () => {
+        "use server"
+
+        redirect(`?page=${props.page - 1}`)
+    }
 
     if (!props.totalPages) {
         return <div></div>
@@ -18,8 +29,8 @@ export const PaginationControls = async (props: PaginationButtonsProps) => {
 
     return (
         <div className={"flex items-center justify-center h-full px-4"}>
-            {props.prevPage && !isFirstPage ? (
-                <form action={props.prevPage}>
+            {!isFirstPage ? (
+                <form action={prevPage}>
                     <Button
                         type={"ghost"}
                         className="bg-blue-500 hover:bg-blue-600">
@@ -33,8 +44,8 @@ export const PaginationControls = async (props: PaginationButtonsProps) => {
                     {props.totalPages ? ` / ${props.totalPages}` : null}
                 </span>
             ) : null}
-            {props.nextPage && !isLastPage ? (
-                <form action={props.nextPage}>
+            {!isLastPage ? (
+                <form action={nextPage}>
                     <Button
                         type={"ghost"}
                         className="bg-blue-500 hover:bg-blue-600">

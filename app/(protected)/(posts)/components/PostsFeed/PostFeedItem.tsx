@@ -5,6 +5,7 @@ import { DeletePostButton } from "@/app/(protected)/(posts)/components/DeletePos
 import { IPost } from "@/app/(protected)/(posts)/lib/post.interface"
 import { LoadingDots } from "@/app/_core/components/LoadingDots"
 import { PostCreateOrEditFormContainer } from "@/app/(protected)/(posts)/components/PostCreateOrEditForm.container"
+import { Rating } from "../../(modules)/rating/components/Rating"
 import { RatingContainer } from "@/app/(protected)/(posts)/(modules)/rating/components/Rating.container"
 import { SaveBookmarkButtonContainer } from "@/app/(protected)/(posts)/(modules)/bookmark/components/SaveBookmarkButton.container"
 import { UserRole } from "@/app/(authentication)/lib/types/userRole.types"
@@ -37,7 +38,7 @@ export const PostFeedItem = async ({ post, page }: PostFeedItemProps) => {
                     </div>
 
                     <div className={"flex flex-row"}>
-                        <Suspense fallback={<LoadingDots />}>
+                        <Suspense fallback={<LoadingDots height={40} />}>
                             {session?.user?.id && (
                                 <SaveBookmarkButtonContainer
                                     pathForRevalidation={`/categories/${post.categoryId}`}
@@ -59,6 +60,14 @@ export const PostFeedItem = async ({ post, page }: PostFeedItemProps) => {
                                 <PostCreateOrEditFormContainer post={post} />
                             </>
                         ) : null}
+                    </Suspense>
+                    <Suspense
+                        fallback={
+                            <Rating
+                                totalRating={0}
+                                userRating={0}
+                            />
+                        }>
                         <RatingContainer postId={post.id} />
                     </Suspense>
                 </div>

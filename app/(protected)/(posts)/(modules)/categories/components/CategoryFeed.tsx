@@ -1,7 +1,6 @@
 import { CategoryHeader } from "@/app/(protected)/(posts)/(modules)/categories/components/CategoryHeader"
 import { ICategory } from "@/app/(protected)/(posts)/(modules)/categories/lib/category.interface"
 import { PostFeedItem } from "@/app/(protected)/(posts)/components/PostsFeed/PostFeedItem"
-import { PostFeedItemSkelleton } from "../../../components/PostsFeed/PostFeedItem.skeleton"
 import { Suspense } from "react"
 
 type CategoryFeedProps = {
@@ -12,12 +11,10 @@ type CategoryFeedProps = {
 export function CategoryFeed({ category, page }: CategoryFeedProps) {
     return (
         <>
-            <Suspense>
-                <CategoryHeader
-                    category={category}
-                    page={page}
-                />
-            </Suspense>
+            <CategoryHeader
+                category={category}
+                page={page}
+            />
             <div className={"flex flex-col justify-center items-center w-full"}>
                 {category.posts?.map((post) => (
                     <PostFeedItem

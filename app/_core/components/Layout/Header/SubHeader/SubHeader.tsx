@@ -2,8 +2,8 @@ import { BookmarkIdentifiers } from "@/app/(protected)/(posts)/(modules)/bookmar
 import { CommentWithPaymentContainer } from "@/app/(protected)/(payment)/(modules)/comments/components/CommentWithPayment.container"
 import { MoveToBookmarkButton } from "@/app/(protected)/(posts)/(modules)/bookmark/components/MoveToBookmarkButton"
 import { PaginationControls } from "@/components/PaginationControls"
+import { Suspense } from "react"
 import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
-import { redirect } from "next/navigation"
 
 type CategoryHeaderProps = {
     title?: string
@@ -22,17 +22,6 @@ export const SubHeader = async ({
 }: CategoryHeaderProps) => {
     const session = await getAppServerSession()
 
-    const nextPage = async () => {
-        "use server"
-
-        redirect(`?page=${page + 1}`)
-    }
-    const prevPage = async () => {
-        "use server"
-
-        redirect(`?page=${page - 1}`)
-    }
-
     return (
         <div
             className={
@@ -46,24 +35,28 @@ export const SubHeader = async ({
                     {title}
                 </h2>
 
-                {session?.user && bookmarkReferenceType && (
-                    <MoveToBookmarkButton
-                        referenceType={bookmarkReferenceType}
-                        userId={session.user.id}
-                    />
-                )}
+                <Suspense>
+                    {session?.user && bookmarkReferenceType && (
+                        <MoveToBookmarkButton
+                            referenceType={bookmarkReferenceType}
+                            userId={session.user.id}
+                        />
+                    )}
+                </Suspense>
             </div>
             <div className={"flex items-center justify-center"}>
-                <CommentWithPaymentContainer />
+                <Suspense>
+                    <CommentWithPaymentContainer />
+                </Suspense>
             </div>
             <div className={"flex items-center justify-end"}>
-                <PaginationControls
-                    shouldHidePageNumber={true}
-                    totalPages={Math.ceil(itemsCount / pageSize)}
-                    page={page}
-                    nextPage={nextPage}
-                    prevPage={prevPage}
-                />
+                <Suspense>
+                    <PaginationControls
+                        shouldHidePageNumber={true}
+                        totalPages={Math.ceil(itemsCount / pageSize)}
+                        page={page}
+                    />
+                </Suspense>
             </div>
         </div>
     )
