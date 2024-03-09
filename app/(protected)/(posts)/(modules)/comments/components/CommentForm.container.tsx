@@ -1,4 +1,5 @@
 import { CommentForm } from "@/app/(protected)/(posts)/(modules)/comments/components/CommentForm"
+import { CommentsModal } from "@/app/(protected)/(payment)/(modules)/comments/components/CommentsModal"
 import { CreateComment } from "@/app/(protected)/(posts)/(modules)/comments/lib/comment.interface"
 import { EMPTY_COMMENT_ID } from "../comments.consts"
 import { IPost } from "@/app/(protected)/(posts)/lib/post.interface"
@@ -55,7 +56,7 @@ export const CommentFormContainer = async (
     }))
 
     return (
-        <CommentForm
+        <CommentsModal
             post={props.specificPost}
             createComment={createComment}
             postOptions={[

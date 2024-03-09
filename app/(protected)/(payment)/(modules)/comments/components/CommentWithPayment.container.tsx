@@ -43,7 +43,7 @@ export const CommentWithPaymentContainer = async () => {
                         price={price}
                     />
                 ) : (
-                    <CommentsModal>
+                    <>
                         <CommentFormContainer />
                         {price > 0 && (
                             <div
@@ -53,7 +53,7 @@ export const CommentWithPaymentContainer = async () => {
                                 <span>{TEXTS.comments}</span>
                             </div>
                         )}
-                    </CommentsModal>
+                    </>
                 )}
             </div>
         </div>

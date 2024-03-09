@@ -14,7 +14,7 @@ import { TextArea } from "@/components/Form/TextArea"
 import clsx from "clsx"
 import toast from "react-hot-toast"
 
-type CommentFormProps = {
+export type CommentFormProps = {
     createComment: (formData: FormData) => Promise<void>
     post?: IPost
     postOptions: Option[]
