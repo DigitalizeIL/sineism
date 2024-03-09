@@ -11,9 +11,7 @@ export default async function CommentsPage(props: PageProps) {
 
     return (
         <div className={"flex justify-center flex-col"}>
-            <Suspense>
-                <CommentHeader page={page} />
-            </Suspense>
+            <CommentHeader page={page} />
             <Suspense>
                 <CommentsFeed page={page} />
             </Suspense>

@@ -1,24 +1,20 @@
+import { ReactNode, Suspense } from "react"
+
 import { BookmarkIdentifiers } from "@/app/(protected)/(posts)/(modules)/bookmark/lib/bookmark.interface"
 import { CommentWithPaymentContainer } from "@/app/(protected)/(payment)/(modules)/comments/components/CommentWithPayment.container"
 import { MoveToBookmarkButton } from "@/app/(protected)/(posts)/(modules)/bookmark/components/MoveToBookmarkButton"
-import { PaginationControls } from "@/components/PaginationControls"
-import { Suspense } from "react"
 import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
 
 type CategoryHeaderProps = {
     title?: string
-    page: number
-    pageSize: number
-    itemsCount: number
     bookmarkReferenceType?: BookmarkIdentifiers["referenceType"]
+    Pagination?: ReactNode
 }
 
 export const SubHeader = async ({
     title,
-    page,
-    pageSize,
-    itemsCount,
     bookmarkReferenceType,
+    Pagination,
 }: CategoryHeaderProps) => {
     const session = await getAppServerSession()
 
@@ -49,15 +45,11 @@ export const SubHeader = async ({
                     <CommentWithPaymentContainer />
                 </Suspense>
             </div>
-            <div className={"flex items-center justify-end"}>
-                <Suspense>
-                    <PaginationControls
-                        shouldHidePageNumber={true}
-                        totalPages={Math.ceil(itemsCount / pageSize)}
-                        page={page}
-                    />
-                </Suspense>
-            </div>
+            {Pagination && (
+                <div className={"flex items-center justify-end"}>
+                    {Pagination}
+                </div>
+            )}
         </div>
     )
 }
