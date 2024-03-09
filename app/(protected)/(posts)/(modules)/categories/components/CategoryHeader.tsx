@@ -1,3 +1,4 @@
+import { CatogoryPagination } from "./CategoryPagination"
 import { DEFAULT_PAGE_SIZE } from "@/app/(protected)/(posts)/(modules)/categories/consts/pagination"
 import { ICategory } from "@/app/(protected)/(posts)/(modules)/categories/lib/category.interface"
 import { PaginationControls } from "@/app/_core/components/PaginationControls"
@@ -23,31 +24,13 @@ export const CategoryHeader = async ({
             Pagination={
                 category.id && (
                     <Suspense>
-                        <Pagination
+                        <CatogoryPagination
                             page={page}
                             categoryId={category.id}
                         />
                     </Suspense>
                 )
             }
-        />
-    )
-}
-
-const Pagination = async (props: { page: number; categoryId: number }) => {
-    const postsCount = await categoriesService.countCategoryPosts(
-        props.categoryId
-    )
-    const postsPerPage = await settingsService.getSettingByKey(
-        SettingKey.posts_per_page
-    )
-    const pageSize = Number(postsPerPage?.value) || DEFAULT_PAGE_SIZE
-
-    return (
-        <PaginationControls
-            shouldHidePageNumber={true}
-            totalPages={Math.ceil(postsCount / pageSize)}
-            page={props.page}
         />
     )
 }
