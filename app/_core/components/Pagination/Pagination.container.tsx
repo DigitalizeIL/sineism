@@ -1,21 +1,17 @@
 import { DEFAULT_PAGE_SIZE } from "@/app/(protected)/(posts)/(modules)/categories/consts/pagination"
 import { PaginationControls } from "@/app/_core/components/Pagination/PaginationControls"
 import { SettingKey } from "@/app/(protected)/(posts)/(modules)/settings/lib/settings.interface"
+import { getPaginationId } from "@/app/(protected)/(posts)/(modules)/categories/(pages)/[category-slug]/page"
+import { getPostsPerPage } from "@/app/(protected)/(posts)/layout"
 import { settingsService } from "@/app/(protected)/(posts)/(modules)/settings/lib/settings.service"
 
 type PaginationContainerProps = {
-    page: number
     ids: number[]
 }
 
 export const PaginationContainer = async (props: PaginationContainerProps) => {
-    const itemsPerPage = await settingsService.getSettingByKey(
-        SettingKey.posts_per_page
-    )
-
-    const pageSize = Number(itemsPerPage?.value) || DEFAULT_PAGE_SIZE
-
-    const page = props.page || 0
+    const pageSize = getPostsPerPage()
+    const page = getPaginationId() || 0
     const firstId = props.ids && props.ids[0]
     const lastId =
         props.ids &&
