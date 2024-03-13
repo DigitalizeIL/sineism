@@ -1,4 +1,3 @@
-import { COMMENTS_PROPERTY_FOR_CURSOR } from "@/app/_core/consts/pagination.consts"
 import { IComment } from "../lib/comment.interface"
 import { PaginationContainer } from "@/app/_core/components/Pagination/Pagination.container"
 import { SubHeader } from "@/components/Layout"
@@ -6,10 +5,7 @@ import { Suspense } from "react"
 
 type CategoryHeaderProps = { page: number; comments: IComment[] }
 
-export const CommentHeader = async ({
-    page,
-    comments,
-}: CategoryHeaderProps) => {
+export const CommentHeader = async ({ page }: CategoryHeaderProps) => {
     return (
         <SubHeader
             title={"תגובות"}
@@ -18,9 +14,7 @@ export const CommentHeader = async ({
                 <Suspense>
                     <PaginationContainer
                         page={page}
-                        ids={comments.map(
-                            (comment) => comment[COMMENTS_PROPERTY_FOR_CURSOR]
-                        )}
+                        lastCursor={0}
                     />
                 </Suspense>
             }

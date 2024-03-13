@@ -37,6 +37,7 @@ export default async function CommentsPage(props: PageProps) {
 
     return (
         <ContentFeed
+            items={comments}
             Header={
                 <CommentHeader
                     page={paginationId}
@@ -54,9 +55,7 @@ export default async function CommentsPage(props: PageProps) {
                 <Suspense>
                     <PaginationContainer
                         page={paginationId}
-                        ids={comments.map(
-                            (item) => item[COMMENTS_PROPERTY_FOR_CURSOR]
-                        )}
+                        lastCursor={0}
                     />
                 </Suspense>
             }

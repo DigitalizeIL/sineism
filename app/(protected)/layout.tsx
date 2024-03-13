@@ -1,7 +1,12 @@
 import "@/styles/globals.css"
 
+import {
+    SettingOptions,
+    SettingsObject,
+} from "./(posts)/(modules)/settings/lib/settings.interface"
+
 import React from "react"
-import { SettingKey } from "./(posts)/(modules)/settings/lib/settings.interface"
+import { SettingsProvider } from "./(posts)/(modules)/settings/context/SettingsProvider"
 import { UserProvider } from "@/app/(authentication)/context/UserProvider"
 import { settingsService } from "./(posts)/(modules)/settings/lib/settings.service"
 
@@ -10,12 +15,20 @@ export default async function Layout({
 }: {
     children: React.ReactNode
 }) {
-    const priceSetting = await settingsService.getSettingByKey(
-        SettingKey.registration_cost_usd
+    const settings = await settingsService.getSettings()
+    const settingsObject = settings.reduce(
+        (acc, setting) => ({
+            ...acc,
+            [setting.key]: isNaN(Number(setting.value))
+                ? setting.value
+                : Number(setting.value),
+        }),
+        {} as SettingsObject
     )
 
-    const price = Number(priceSetting?.value)
-    const shouldPay = !!price && !isNaN(price)
-
-    return <UserProvider isPaymentRequired={shouldPay}>{children}</UserProvider>
+    return (
+        <SettingsProvider settings={settingsObject}>
+            <UserProvider>{children}</UserProvider>
+        </SettingsProvider>
+    )
 }

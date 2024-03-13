@@ -37,6 +37,10 @@ export class PostsService {
     public async deletePost(id: number): Promise<void> {
         await this.dbRepository.deleteItem(id)
     }
+
+    public getLastPaginationCursor(categoryId: number) {
+        return this.dbRepository.getLastPaginationCursor(categoryId)
+    }
 }
 
 export const postsService = new PostsService({

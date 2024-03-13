@@ -1,6 +1,5 @@
 import "server-only"
 
-import { INewUser, IUser } from "@/app/(authentication)/lib/user.interface"
 import {
     LoginCredentials,
     RegisterArgs,
@@ -10,6 +9,7 @@ import {
     usersDbRepository,
 } from "@/app/(authentication)/lib/users.repository"
 
+import { INewUser } from "@/app/(authentication)/lib/user.interface"
 import { NoUserFoundError } from "@/app/(authentication)/lib/errors/NoUserFoundError"
 import { PasswordsDontMatch } from "@/app/(authentication)/lib/errors/PasswordsDontMatch"
 import { User } from "@/app/(authentication)/lib/user.model"

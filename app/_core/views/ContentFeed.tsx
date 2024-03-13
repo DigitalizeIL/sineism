@@ -1,19 +1,49 @@
-import { ReactNode } from "react"
+"use client"
 
-type CategoryFeedProps = {
+import { ReactNode, createContext, useContext } from "react"
+
+type BaseItem = { id: number }
+
+type CategoryFeedProps<T extends BaseItem> = {
     Header?: ReactNode
     FeedItems?: ReactNode
     Footer?: ReactNode
+    items: T[]
 }
 
-export function ContentFeed({ Header, FeedItems, Footer }: CategoryFeedProps) {
+type ContentContextState<T = unknown> = {
+    items: T[]
+}
+
+const contentContext = createContext<ContentContextState<BaseItem>>({
+    items: [],
+})
+
+export const useContent = () => {
+    return useContext(contentContext)
+}
+
+export function ContentFeed<T extends BaseItem>({
+    Header,
+    FeedItems,
+    Footer,
+    items,
+}: CategoryFeedProps<T>) {
     return (
-        <div className="flex flex-col h-full">
-            <div>{Header}</div>
-            <div className={"flex flex-col justify-start items-center w-full"}>
-                {FeedItems}
+        <contentContext.Provider
+            value={{
+                items,
+            }}>
+            <div className="flex flex-col h-full">
+                <div>{Header}</div>
+                <div
+                    className={
+                        "flex flex-col justify-start items-center w-full"
+                    }>
+                    {FeedItems}
+                </div>
+                <div className="mt-auto">{Footer}</div>
             </div>
-            <div className="mt-auto">{Footer}</div>
-        </div>
+        </contentContext.Provider>
     )
 }
