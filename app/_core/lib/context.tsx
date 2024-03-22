@@ -4,7 +4,6 @@ import { cache } from "react"
 
 export enum REQUEST_CONTEXT_KEYS {
     lastCursor = "lastCursor",
-    paginationId = "paginationId",
 }
 
 const requestContext = cache(() => {

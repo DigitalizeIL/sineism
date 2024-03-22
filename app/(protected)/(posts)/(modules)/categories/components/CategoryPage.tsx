@@ -1,8 +1,4 @@
 import { FC, Suspense } from "react"
-import {
-    REQUEST_CONTEXT_KEYS,
-    getRequestContext,
-} from "@/app/_core/lib/context"
 
 import { CategoryHeader } from "./CategoryHeader"
 import { ContentFeed } from "@/app/_core/views/ContentFeed"
@@ -17,15 +13,17 @@ import { settingsService } from "../../settings/lib/settings.service"
 
 type PageProps = {
     categorySlug: string
+    paginationId: number
 }
 
-export const CategoryPage: FC<PageProps> = async ({ categorySlug }) => {
+export const CategoryPage: FC<PageProps> = async ({
+    categorySlug,
+    paginationId,
+}) => {
     const pageSize = await settingsService.getSettingValueByKey(
         SettingKey.posts_per_page,
         Number
     )
-
-    const page = getRequestContext<number>(REQUEST_CONTEXT_KEYS.paginationId)
 
     const category = await categoriesService.getCategory({
         filter: {
@@ -33,7 +31,7 @@ export const CategoryPage: FC<PageProps> = async ({ categorySlug }) => {
         },
         withPosts: true,
         pagination: {
-            id: page,
+            id: paginationId,
             perPage: pageSize || DEFAULT_PAGE_SIZE,
         },
     })
@@ -49,6 +47,7 @@ export const CategoryPage: FC<PageProps> = async ({ categorySlug }) => {
             items={category.posts || []}
             Header={
                 <CategoryHeader
+                    paginationId={paginationId}
                     lastCursor={lastCursor}
                     category={category}
                 />
@@ -63,7 +62,7 @@ export const CategoryPage: FC<PageProps> = async ({ categorySlug }) => {
                 <Suspense>
                     <PaginationContainer
                         lastCursor={lastCursor}
-                        page={page}
+                        page={paginationId}
                     />
                 </Suspense>
             }
