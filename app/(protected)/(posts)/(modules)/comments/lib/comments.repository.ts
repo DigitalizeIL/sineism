@@ -9,7 +9,7 @@ import { COMMENTS_PROPERTY_FOR_CURSOR } from "@/app/_core/consts/pagination.cons
 import { DBPagination } from "@/app/_core/lib/pagination.types"
 import prisma from "@/lib/prisma"
 
-export class CommentsDbRepository {
+export class CommentsRepository {
     constructor() {}
 
     getAll = async (pagination?: DBPagination): Promise<IComment[]> => {
@@ -91,4 +91,4 @@ export class CommentsDbRepository {
     }
 }
 
-export const commentsDbRepository = new CommentsDbRepository()
+export const commentsRepository = new CommentsRepository()

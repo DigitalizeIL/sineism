@@ -1,8 +1,8 @@
 import "server-only"
 
 import {
-    CommentsDbRepository,
-    commentsDbRepository,
+    CommentsRepository,
+    commentsRepository,
 } from "@/app/(protected)/(posts)/(modules)/comments/lib/comments.repository"
 import {
     CreateComment,
@@ -19,12 +19,12 @@ import { settingsService } from "@/app/(protected)/(posts)/(modules)/settings/li
 
 export class CommentsService {
     constructor(
-        private readonly commentsDbRepository: CommentsDbRepository,
+        private readonly commentsRepository: CommentsRepository,
         private readonly quotaService: QuotaRepository
     ) {}
 
     getAllComments = async (pagination: Pagination): Promise<IComment[]> => {
-        return await this.commentsDbRepository.getAll({
+        return await this.commentsRepository.getAll({
             ...(pagination && {
                 cursor: pagination.id,
                 take: pagination.perPage,
@@ -33,15 +33,15 @@ export class CommentsService {
     }
 
     getPostComments = async (postId: number): Promise<IComment[]> => {
-        return await this.commentsDbRepository.getAllForPost(postId)
+        return await this.commentsRepository.getAllForPost(postId)
     }
 
     getComment = async (id: number): Promise<IComment | null> => {
-        return await this.commentsDbRepository.get(id)
+        return await this.commentsRepository.get(id)
     }
 
     createComment = async (comment: CreateComment): Promise<IComment> => {
-        const createdComment = await this.commentsDbRepository.create(comment)
+        const createdComment = await this.commentsRepository.create(comment)
 
         const priceSetting = await settingsService.getSettingByKey(
             SettingKey.comments_cost_usd
@@ -59,22 +59,21 @@ export class CommentsService {
         id: number,
         comment: IComment
     ): Promise<IComment> => {
-        return await this.commentsDbRepository.update(id, comment)
+        return await this.commentsRepository.update(id, comment)
     }
 
     deleteComment = async (id: number): Promise<void> => {
-        const deleted = await this.commentsDbRepository.deleteItem(id)
+        const deleted = await this.commentsRepository.deleteItem(id)
         await this.quotaService.addQuota(deleted.userId, 1)
     }
 
     count = (): Promise<number> => {
-        return this.commentsDbRepository.count()
+        return this.commentsRepository.count()
     }
 
     public async getPaginationCursorBoundery() {
-        const first =
-            await this.commentsDbRepository.getPaginationCursor("first")
-        const last = await this.commentsDbRepository.getPaginationCursor("last")
+        const first = await this.commentsRepository.getPaginationCursor("first")
+        const last = await this.commentsRepository.getPaginationCursor("last")
 
         return {
             first,
@@ -84,6 +83,6 @@ export class CommentsService {
 }
 
 export const commentsService = new CommentsService(
-    commentsDbRepository,
+    commentsRepository,
     quotaRepository
 )
