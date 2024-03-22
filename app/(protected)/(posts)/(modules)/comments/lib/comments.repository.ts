@@ -71,6 +71,24 @@ export class CommentsDbRepository {
     count = () => {
         return prisma.comment.count()
     }
+
+    public async getPaginationCursor(side: "first" | "last"): Promise<number> {
+        const commentNumbers = await prisma.comment.findMany({
+            select: {
+                [COMMENTS_PROPERTY_FOR_CURSOR]: true,
+            },
+            orderBy: {
+                id: side === "first" ? "asc" : "desc",
+            },
+            take: 1,
+        })
+
+        const cursor = commentNumbers[0][
+            COMMENTS_PROPERTY_FOR_CURSOR
+        ] as unknown as number
+
+        return cursor
+    }
 }
 
 export const commentsDbRepository = new CommentsDbRepository()

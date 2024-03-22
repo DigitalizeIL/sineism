@@ -1,9 +1,9 @@
 "use client"
 
+import { FC, useMemo } from "react"
 import { FcNext, FcPrevious } from "react-icons/fc"
 
 import { Button } from "../Button"
-import { FC } from "react"
 import { PAGINATION_URL_PARAM_KEY } from "../../consts/pagination.consts"
 import { TEXTS } from "./pagination.texts"
 import { useContent } from "../../views/ContentFeed"
@@ -27,12 +27,24 @@ export const PaginationContainer: FC<PaginationContainerProps> = async ({
     const ids = items.map((item) => item.id)
     const { posts_per_page } = useSettings()
 
-    const firstId = ids[0]
-    const lastId = ids[ids?.length - 1]
+    const firstId = ids[0] || cursorBoundery.first
+    const lastId = ids[ids?.length - 1] || cursorBoundery.last
 
-    const nextPage = (lastId ?? page) + 1
-    let previousPage = (firstId ?? page) - posts_per_page
-    if (previousPage < 0) previousPage = 0
+    const nextPage = lastId + 1
+
+    const previousPage = useMemo(() => {
+        const previousPage = firstId - posts_per_page
+
+        if (previousPage < cursorBoundery.first) {
+            return cursorBoundery.first
+        }
+
+        if (page > cursorBoundery.last) {
+            return cursorBoundery.last
+        }
+
+        return previousPage
+    }, [firstId, page, posts_per_page, cursorBoundery])
 
     const isFirstPage =
         previousPage < cursorBoundery.first ||

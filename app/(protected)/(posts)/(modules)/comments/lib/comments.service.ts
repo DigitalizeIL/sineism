@@ -18,20 +18,12 @@ import { SettingKey } from "@/app/(protected)/(posts)/(modules)/settings/lib/set
 import { settingsService } from "@/app/(protected)/(posts)/(modules)/settings/lib/settings.service"
 
 export class CommentsService {
-    private readonly quotaService: QuotaService
-
     constructor(
-        private commentsDbRepository: CommentsDbRepository,
-        quotaService: QuotaService
-    ) {
-        this.quotaService = quotaService
-    }
+        private readonly commentsDbRepository: CommentsDbRepository,
+        private readonly quotaService: QuotaService
+    ) {}
 
-    getAllComments = async ({
-        pagination,
-    }: {
-        pagination: Pagination
-    }): Promise<IComment[]> => {
+    getAllComments = async (pagination: Pagination): Promise<IComment[]> => {
         return await this.commentsDbRepository.getAll({
             ...(pagination && {
                 cursor: pagination.id,
@@ -76,6 +68,17 @@ export class CommentsService {
 
     count = (): Promise<number> => {
         return this.commentsDbRepository.count()
+    }
+
+    public async getPaginationCursorBoundery() {
+        const first =
+            await this.commentsDbRepository.getPaginationCursor("first")
+        const last = await this.commentsDbRepository.getPaginationCursor("last")
+
+        return {
+            first,
+            last,
+        }
     }
 }
 
