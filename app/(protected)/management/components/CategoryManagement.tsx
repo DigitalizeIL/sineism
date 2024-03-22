@@ -80,7 +80,7 @@ export const CategoryManagement = async () => {
                     name="path"
                     placeholder="Category Slug"
                 />
-                <Button>Create New Category</Button>
+                <Button type="primary">Create New Category</Button>
             </form>
         </div>
     )
