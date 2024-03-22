@@ -9,14 +9,19 @@ import { TEXTS } from "./pagination.texts"
 import { useContent } from "../../views/ContentFeed"
 import { useSettings } from "@/app/(protected)/(posts)/(modules)/settings/context/SettingsContext"
 
+export type PaginationCursorBoundery = {
+    first: number
+    last: number
+}
+
 type PaginationContainerProps = {
     page: number
-    lastCursor: number
+    cursorBoundery: PaginationCursorBoundery
 }
 
 export const PaginationContainer: FC<PaginationContainerProps> = async ({
     page,
-    lastCursor,
+    cursorBoundery,
 }) => {
     const { items } = useContent()
     const ids = items.map((item) => item.id)
@@ -30,13 +35,13 @@ export const PaginationContainer: FC<PaginationContainerProps> = async ({
     if (previousPage < 0) previousPage = 0
 
     const isFirstPage =
-        ids.includes(page) ||
+        previousPage < cursorBoundery.first ||
         previousPage === page ||
         page <= 1 ||
         previousPage <= 0
 
     const isLastPage =
-        page >= nextPage - 1 || nextPage === 1 || nextPage > lastCursor
+        nextPage > cursorBoundery.last || page >= nextPage - 1 || nextPage === 1
 
     const goToNextPage = () => {
         location.search = `?${PAGINATION_URL_PARAM_KEY}=${nextPage}`

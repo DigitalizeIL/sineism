@@ -32,7 +32,10 @@ export class PostsDbRepository {
         return numbers.length + 1
     }
 
-    public async getLastPaginationCursor(categoryId: number): Promise<number> {
+    public async getPaginationCursor(
+        categoryId: number,
+        side: "first" | "last"
+    ): Promise<number> {
         const postNumbers = await prisma.post.findMany({
             where: {
                 categoryId,
@@ -41,7 +44,7 @@ export class PostsDbRepository {
                 [POST_PROPERTY_FOR_CURSOR]: true,
             },
             orderBy: {
-                id: "desc",
+                id: side === "first" ? "asc" : "desc",
             },
             take: 1,
         })

@@ -1,18 +1,21 @@
 import { FC, Suspense } from "react"
+import {
+    PaginationContainer,
+    PaginationCursorBoundery,
+} from "@/app/_core/components/Pagination/Pagination.container"
 
 import { ICategory } from "@/app/(protected)/(posts)/(modules)/categories/lib/category.interface"
-import { PaginationContainer } from "../../../../../_core/components/Pagination/Pagination.container"
 import { SubHeader } from "@/components/Layout"
 
 type CategoryHeaderProps = {
     category: ICategory
-    lastCursor: number
+    paginationCursorBoundery: PaginationCursorBoundery
     paginationId: number
 }
 
 export const CategoryHeader: FC<CategoryHeaderProps> = async ({
     category,
-    lastCursor,
+    paginationCursorBoundery,
     paginationId,
 }) => {
     return (
@@ -22,7 +25,7 @@ export const CategoryHeader: FC<CategoryHeaderProps> = async ({
             Pagination={
                 <Suspense>
                     <PaginationContainer
-                        lastCursor={lastCursor}
+                        cursorBoundery={paginationCursorBoundery}
                         page={paginationId}
                     />
                 </Suspense>

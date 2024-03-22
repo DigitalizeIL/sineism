@@ -40,7 +40,8 @@ export const CategoryPage: FC<PageProps> = async ({
         return notFound()
     }
 
-    const lastCursor = await postsService.getLastPaginationCursor(category.id)
+    const paginationCursorBoundery =
+        await postsService.getPaginationCursorBoundery(category.id)
 
     return (
         <ContentFeed
@@ -48,7 +49,7 @@ export const CategoryPage: FC<PageProps> = async ({
             Header={
                 <CategoryHeader
                     paginationId={paginationId}
-                    lastCursor={lastCursor}
+                    paginationCursorBoundery={paginationCursorBoundery}
                     category={category}
                 />
             }
@@ -61,7 +62,7 @@ export const CategoryPage: FC<PageProps> = async ({
             Footer={
                 <Suspense>
                     <PaginationContainer
-                        lastCursor={lastCursor}
+                        cursorBoundery={paginationCursorBoundery}
                         page={paginationId}
                     />
                 </Suspense>
