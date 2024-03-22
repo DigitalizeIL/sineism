@@ -60,4 +60,5 @@ const typesStyle = {
     ghost: "border-transparent bg-transparent text-black hover:bg-black hover:text-white",
     slim: "p-0 h-auto",
     "warning-outline": "border-yellow-600",
+    danger: "border-red-600",
 }

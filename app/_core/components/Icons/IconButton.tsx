@@ -6,11 +6,13 @@ export type IconProps = {
     onClick?: MouseEventHandler<HTMLButtonElement>
     loading?: boolean
     children?: ReactNode
+    submit?: boolean
 }
 
 export const IconButton = (props: IconProps) => {
     return (
         <button
+            type={props.submit ? "submit" : "button"}
             style={{
                 border: "none",
                 background: "none",
