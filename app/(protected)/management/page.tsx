@@ -16,6 +16,7 @@ export default function PostsPage() {
                         <CreateCategoryForm />
                     </ModalWithButton>
                     <Settings />
+                    
                 </div>
                 <h3 className="text-2xl font-bold">All Posts</h3>
                 {/* <PostsFeed /> */}
