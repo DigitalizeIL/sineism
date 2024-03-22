@@ -17,6 +17,7 @@ import { ICategory } from "@/app/(protected)/(posts)/(modules)/categories/lib/ca
 import { Input } from "@/components/Form/Input/Input"
 import { ModalWithButton } from "@/components/Modal"
 import { Select } from "@/components/Form/Select"
+import { TEXTS } from "../posts.texts"
 import { TextArea } from "@/components/Form/TextArea"
 import toast from "react-hot-toast"
 import { useSession } from "next-auth/react"
@@ -142,7 +143,7 @@ export const PostCreateOrEditForm = (props: {
                         loading={isLoading}
                         type="ghost"
                         className={"text-3xl text-black"}>
-                        {props.post?.id ? "Edit" : "Create"}
+                        {props.post?.id ? TEXTS.save : TEXTS.create}
                     </Button>
                 </div>
             </form>
