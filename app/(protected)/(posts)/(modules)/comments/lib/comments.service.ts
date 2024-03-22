@@ -9,9 +9,9 @@ import {
     IComment,
 } from "@/app/(protected)/(posts)/(modules)/comments/lib/comment.interface"
 import {
-    QuotaService,
-    quotaService,
-} from "@/app/(protected)/(payment)/(modules)/comments/lib/quota.service"
+    QuotaRepository,
+    quotaRepository,
+} from "@/app/(protected)/(payment)/(modules)/comments/lib/quota.repository"
 
 import { Pagination } from "@/app/_core/lib/pagination.types"
 import { SettingKey } from "@/app/(protected)/(posts)/(modules)/settings/lib/settings.interface"
@@ -20,7 +20,7 @@ import { settingsService } from "@/app/(protected)/(posts)/(modules)/settings/li
 export class CommentsService {
     constructor(
         private readonly commentsDbRepository: CommentsDbRepository,
-        private readonly quotaService: QuotaService
+        private readonly quotaService: QuotaRepository
     ) {}
 
     getAllComments = async (pagination: Pagination): Promise<IComment[]> => {
@@ -85,5 +85,5 @@ export class CommentsService {
 
 export const commentsService = new CommentsService(
     commentsDbRepository,
-    quotaService
+    quotaRepository
 )

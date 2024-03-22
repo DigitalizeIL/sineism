@@ -4,14 +4,14 @@ import { PaymentContainer } from "./Payment.container"
 import { SettingKey } from "@/app/(protected)/(posts)/(modules)/settings/lib/settings.interface"
 import { TEXTS } from "../commentsPayment.texts"
 import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
-import { quotaService } from "@/app/(protected)/(payment)/(modules)/comments/lib/quota.service"
+import { quotaRepository } from "@/app/(protected)/(payment)/(modules)/comments/lib/quota.repository"
 import { settingsService } from "@/app/(protected)/(posts)/(modules)/settings/lib/settings.service"
 
 export const CommentWithPaymentContainer = async () => {
     const session = await getAppServerSession()
     if (!session?.user) return
 
-    const quotaObject = await quotaService.getQuota(session.user.id)
+    const quotaObject = await quotaRepository.getQuota(session.user.id)
     const amountSetting = await settingsService.getSettingByKey(
         SettingKey.comments_amount_per_purchase
     )

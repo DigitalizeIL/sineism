@@ -3,7 +3,7 @@ import "server-only"
 import { IQuota } from "@/app/(protected)/(payment)/(modules)/comments/lib/quota.interface"
 import prisma from "@/lib/prisma"
 
-export class QuotaService {
+export class QuotaRepository {
     async getQuota(userId: number): Promise<IQuota | null> {
         return prisma.userCommentQuota.findUnique({
             where: { userId },
@@ -40,4 +40,4 @@ export class QuotaService {
     }
 }
 
-export const quotaService = new QuotaService()
+export const quotaRepository = new QuotaRepository()
