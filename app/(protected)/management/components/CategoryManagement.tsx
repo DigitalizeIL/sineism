@@ -1,6 +1,5 @@
 import { Button } from "@/app/_core/components/Button"
 import { CreateCategory } from "../../(posts)/(modules)/categories/lib/category.interface"
-import { DeleteIcon } from "@/app/_core/components/Icons/DeleteIcon"
 import { Input } from "@/app/_core/components/Form/Input"
 import Link from "next/link"
 import { MANAGEMENT_PATH } from "@/app/_core/components/Layout/Header/consts"
@@ -20,7 +19,7 @@ export const CategoryManagement = async () => {
         }
 
         await categoriesService.createCategory(newCategory)
-        
+
         revalidatePath(MANAGEMENT_PATH)
     }
 
