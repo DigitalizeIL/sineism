@@ -12,7 +12,7 @@ export const EDITED_UTTERANCES_CATEGORY: ICategory = {
     path: "edited-utterances",
 }
 
-export const CATEGORIES: ICategory[] = [
+export const INITIAL_CATEGORIES: ICategory[] = [
     UTTERANCES_CATEGORY,
     EDITED_UTTERANCES_CATEGORY,
 ]

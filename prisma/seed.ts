@@ -1,4 +1,4 @@
-import { CATEGORIES } from "../app/(protected)/(posts)/(modules)/categories/consts/categories"
+import { INITIAL_CATEGORIES } from "../app/(protected)/(posts)/(modules)/categories/consts/categories"
 import { SettingKey } from "@/app/(protected)/(posts)/(modules)/settings/lib/settings.interface"
 import { hash } from "bcryptjs"
 import prisma from "../app/_core/lib/prisma"
@@ -28,7 +28,7 @@ async function createUsers() {
 async function createCategories() {
     try {
         const categories = await prisma.category.createMany({
-            data: CATEGORIES,
+            data: INITIAL_CATEGORIES,
         })
 
         console.log(`Created ${categories.count} categories`)

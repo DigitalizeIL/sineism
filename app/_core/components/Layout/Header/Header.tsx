@@ -1,15 +1,17 @@
 import { LINKS, MANAGEMENT_PATH } from "@/components/Layout/Header/consts"
 
 import AuthStatus from "@/app/(authentication)/components/AuthStatus"
-import { CATEGORIES } from "@/app/(protected)/(posts)/(modules)/categories/consts/categories"
 import { HeaderLink } from "@/components/Layout/Header/HeaderLink"
 import { Logo } from "@/components/Logo"
 import React from "react"
 import { UserRole } from "@/app/(authentication)/lib/types/userRole.types"
+import { categoriesService } from "@/app/(protected)/(posts)/(modules)/categories/lib/categories.service"
 import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
 
 export const Header = async () => {
     const session = await getAppServerSession()
+
+    const categories = await categoriesService.getAllCategories()
 
     return (
         <div
@@ -29,7 +31,7 @@ export const Header = async () => {
                     />
                 ))}
                 <div className={"flex flex-row-reverse h-full"}>
-                    {CATEGORIES.map((category) => (
+                    {categories.map((category) => (
                         <HeaderLink
                             key={category.id}
                             href={`/categories/${category.path}`}
