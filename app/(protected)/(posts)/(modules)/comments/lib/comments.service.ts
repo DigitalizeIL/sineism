@@ -63,7 +63,8 @@ export class CommentsService {
     }
 
     deleteComment = async (id: number): Promise<void> => {
-        await this.commentsDbRepository.deleteItem(id)
+        const deleted = await this.commentsDbRepository.deleteItem(id)
+        await this.quotaService.addQuota(deleted.userId, 1)
     }
 
     count = (): Promise<number> => {
