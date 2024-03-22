@@ -1,36 +1,83 @@
-import { DEFAULT_PAGE_SIZE } from "@/app/(protected)/(posts)/(modules)/categories/consts/pagination"
-import { PaginationControls } from "@/app/_core/components/PaginationControls"
-import { SettingKey } from "@/app/(protected)/(posts)/(modules)/settings/lib/settings.interface"
-import { settingsService } from "@/app/(protected)/(posts)/(modules)/settings/lib/settings.service"
+"use client"
+
+import { FC, useMemo } from "react"
+import { FcNext, FcPrevious } from "react-icons/fc"
+
+import { Button } from "../Button"
+import { PAGINATION_URL_PARAM_KEY } from "../../consts/pagination.consts"
+import { TEXTS } from "./pagination.texts"
+import { useContent } from "../../views/ContentFeed"
+import { useSettings } from "@/app/(protected)/(posts)/(modules)/settings/context/SettingsContext"
+
+export type PaginationCursorBoundery = {
+    first: number
+    last: number
+}
 
 type PaginationContainerProps = {
     page: number
-    ids: number[]
+    cursorBoundery: PaginationCursorBoundery
 }
 
-export const PaginationContainer = async (props: PaginationContainerProps) => {
-    const itemsPerPage = await settingsService.getSettingByKey(
-        SettingKey.posts_per_page
-    )
+export const PaginationContainer: FC<PaginationContainerProps> = async ({
+    page,
+    cursorBoundery,
+}) => {
+    const { items } = useContent()
+    const ids = items.map((item) => item.id)
+    const { posts_per_page } = useSettings()
 
-    const pageSize = Number(itemsPerPage?.value) || DEFAULT_PAGE_SIZE
+    const firstId = ids[0] || cursorBoundery.first
+    const lastId = ids[ids?.length - 1] || cursorBoundery.last
 
-    const page = props.page || 0
-    const firstId = props.ids && props.ids[0]
-    const lastId =
-        props.ids &&
-        (props.ids.length > 0 || undefined) &&
-        props.ids[props.ids?.length - 1]
+    const nextPage = lastId + 1
 
-    const nextPage = (lastId ?? page) + 1
-    let previousPage = (firstId ?? page) - pageSize
-    if (previousPage < 0) previousPage = 0
+    const previousPage = useMemo(() => {
+        const previousPage = firstId - posts_per_page
+
+        if (previousPage < cursorBoundery.first) {
+            return cursorBoundery.first
+        }
+
+        if (page > cursorBoundery.last) {
+            return cursorBoundery.last
+        }
+
+        return previousPage
+    }, [firstId, page, posts_per_page, cursorBoundery])
+
+    const isFirstPage =
+        previousPage < cursorBoundery.first ||
+        previousPage === page ||
+        page <= 1 ||
+        previousPage <= 0
+
+    const isLastPage =
+        !nextPage || isNaN(nextPage) || nextPage > cursorBoundery.last || page >= nextPage - 1 || nextPage === 1
+
+    const goToNextPage = () => {
+        location.search = `?${PAGINATION_URL_PARAM_KEY}=${nextPage}`
+    }
+    const goToPrevPage = () => {
+        location.search = `?${PAGINATION_URL_PARAM_KEY}=${previousPage}`
+    }
 
     return (
-        <PaginationControls
-            nextPage={nextPage}
-            page={page}
-            previousPage={previousPage}
-        />
+        <div className={"flex items-center justify-center px-4 gap-2"}>
+            <Button
+                onClick={goToPrevPage}
+                isDisabled={isFirstPage}
+                type={"ghost"}
+                className="bg-blue-500 hover:bg-blue-600">
+                <FcNext /> {TEXTS.previousPage}
+            </Button>
+            <Button
+                onClick={goToNextPage}
+                isDisabled={isLastPage}
+                type={"ghost"}
+                className="bg-blue-500 hover:bg-blue-600">
+                {TEXTS.nextPage} <FcPrevious />
+            </Button>
+        </div>
     )
 }

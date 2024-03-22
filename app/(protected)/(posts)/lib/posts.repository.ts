@@ -7,6 +7,7 @@ import {
     IPost,
 } from "@/app/(protected)/(posts)/lib/post.interface"
 
+import { POST_PROPERTY_FOR_CURSOR } from "@/app/_core/consts/pagination.consts"
 import prisma from "@/lib/prisma"
 
 export class PostsDbRepository {
@@ -29,6 +30,30 @@ export class PostsDbRepository {
         }
 
         return numbers.length + 1
+    }
+
+    public async getPaginationCursor(
+        categoryId: number,
+        side: "first" | "last"
+    ): Promise<number> {
+        const postNumbers = await prisma.post.findMany({
+            where: {
+                categoryId,
+            },
+            select: {
+                [POST_PROPERTY_FOR_CURSOR]: true,
+            },
+            orderBy: {
+                id: side === "first" ? "asc" : "desc",
+            },
+            take: 1,
+        })
+
+        const cursor = postNumbers[0]?.[
+            POST_PROPERTY_FOR_CURSOR
+        ] as unknown as number
+
+        return cursor
     }
 
     public async getAll(query?: GetAllPostsQuery): Promise<IPost[]> {

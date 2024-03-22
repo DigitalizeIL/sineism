@@ -1,6 +1,10 @@
+import {
+    CreateCategory,
+    ICategory,
+} from "@/app/(protected)/(posts)/(modules)/categories/lib/category.interface"
+
 import { Button } from "@/components/Button"
 import { CategoryItem } from "@/app/(protected)/(posts)/(modules)/categories/components/CategoryItem"
-import { ICategory } from "@/app/(protected)/(posts)/(modules)/categories/lib/category.interface"
 import { Input } from "@/components/Form/Input"
 import { categoriesService } from "@/app/(protected)/(posts)/(modules)/categories/lib/categories.service"
 import clsx from "clsx"
@@ -26,7 +30,7 @@ export const CreateCategoryForm = async (props: CreateCategoryButtonProps) => {
             return
         }
 
-        const newCategory: ICategory = {
+        const newCategory: CreateCategory = {
             name,
             path,
         }

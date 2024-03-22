@@ -16,3 +16,5 @@ export const LINKS: Link[] = [
     },
     COMMENTS_LINK,
 ]
+
+export const MANAGEMENT_PATH = "/management"

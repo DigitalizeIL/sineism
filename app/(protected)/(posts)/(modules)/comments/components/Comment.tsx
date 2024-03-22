@@ -33,13 +33,14 @@ export const Comment = async ({ page, comment }: CommentProps) => {
     }
 
     const isNoReference = postIds.includes(EMPTY_COMMENT_ID)
+    const canDelete =
+        session?.user?.id === userId || session?.user?.role === "ADMIN"
 
     if (!author) return null
-
     return (
         <Box>
             <div className="absolute top-4 left-4 flex flex-row gap-4">
-                {session?.user?.role === "ADMIN" && (
+                {canDelete && (
                     <form action={deletePost}>
                         <Button
                             htmlType="submit"

@@ -1,14 +1,14 @@
 "use client"
 
+import { FC, useMemo, useRef, useState } from "react"
+import { Option, Select } from "@/components/Form/Select"
 import Select2, { MultiValue } from "react-select"
-import { useMemo, useRef, useState } from "react"
 
 import { Button } from "@/components/Button"
 import { EMPTY_COMMENT_ID } from "../comments.consts"
-import { FormControl } from "@mui/material"
+import { ICategory } from "../../categories/lib/category.interface"
 import { IPost } from "@/app/(protected)/(posts)/lib/post.interface"
 import { Label } from "@/app/_core/components/Form/Label"
-import { Option } from "@/components/Form/Select"
 import { TEXTS } from "../comments.texts"
 import { TextArea } from "@/components/Form/TextArea"
 import clsx from "clsx"
@@ -17,31 +17,47 @@ import toast from "react-hot-toast"
 export type CommentFormProps = {
     createComment: (formData: FormData) => Promise<void>
     post?: IPost
-    postOptions: Option[]
+    posts: IPost[]
     className?: string
+    categories: ICategory[]
 }
 
-export const CommentForm = (props: CommentFormProps) => {
+export const CommentForm: FC<CommentFormProps> = ({
+    post,
+    posts,
+    className,
+    categories,
+    createComment,
+}) => {
     const formRef = useRef<HTMLFormElement>(null)
     const [selectValue, setSelectValue] = useState<MultiValue<Option>>([])
+    const [selectedCategortyId, setSelectedCategory] = useState<number>()
     const [loading, setLoading] = useState(false)
-
+    const [categoryKey, setCategoryKey] = useState(Math.random())
     const action = async (formData: FormData) => {
-        const content = formData.get("content") as string
+        try {
+            const content = formData.get("content") as string
 
-        if (!selectValue.length || !content) {
-            toast.error("Content and posts are required")
-            return
+            if (!selectValue.length || !content) {
+                toast.error("Content and posts are required")
+                return
+            }
+
+            const postIds = selectValue.map((option) => option.value).join("|")
+            formData.set("postIds", postIds)
+
+            await createComment(formData)
+
+            formRef.current?.reset()
+            setSelectedCategory(undefined)
+            setCategoryKey(Math.random())
+            setSelectValue([])
+        } catch (e) {
+            console.error(e)
+            toast.error("Something went wrong")
+        } finally {
+            setLoading(false)
         }
-
-        const postIds = selectValue.map((option) => option.value).join("|")
-        formData.set("postIds", postIds)
-
-        await props.createComment(formData)
-
-        formRef.current?.reset()
-        setSelectValue([])
-        setLoading(false)
     }
 
     const isNoReference = useMemo(
@@ -54,8 +70,23 @@ export const CommentForm = (props: CommentFormProps) => {
         [selectValue]
     )
 
+    const postOptions = useMemo(() => {
+        return [
+            {
+                value: EMPTY_COMMENT_ID,
+                label: "#",
+            },
+            ...posts
+                .filter((post) => post.categoryId === selectedCategortyId)
+                .map((post) => ({
+                    value: post.id,
+                    label: post.postNumber.toString(),
+                })),
+        ]
+    }, [posts, selectedCategortyId])
+
     return (
-        <div className={clsx(["flex flex-col space-y-2 p-3", props.className])}>
+        <div className={clsx(["flex flex-col space-y-2 p-3", className])}>
             <form
                 ref={formRef}
                 action={action}
@@ -63,17 +94,30 @@ export const CommentForm = (props: CommentFormProps) => {
                     setLoading(true)
                 }}
                 className={"flex flex-col gap-2"}>
-                {props.post ? (
+                <Label text={TEXTS.whichCategory}>
+                    <Select
+                        key={categoryKey}
+                        onChange={(id) => {
+                            setSelectedCategory(Number(id))
+                        }}
+                        placeholder={TEXTS.category}
+                        name="category"
+                        options={categories.map((category) => ({
+                            label: category.name,
+                            value: category.id,
+                        }))}
+                    />
+                </Label>
+                {post ? (
                     <input
                         type={"hidden"}
                         name={"postIds"}
-                        value={props.post.id}
+                        value={post.id}
                     />
                 ) : (
-                    <Label
-                        text={TEXTS.postsSelectionLabel}
-                        className="text-right">
+                    <Label text={TEXTS.postsSelectionLabel}>
                         <Select2
+                            isDisabled={!selectedCategortyId}
                             placeholder={TEXTS.postsSelectionPlaceholder}
                             isMulti={!isNoReference}
                             isSearchable
@@ -94,7 +138,7 @@ export const CommentForm = (props: CommentFormProps) => {
                                 setSelectValue("value" in id ? [id] : id)
                             }}
                             name={"postIds"}
-                            options={props.postOptions as any}
+                            options={postOptions as any}
                             styles={{
                                 option: (base, props) => ({
                                     ...base,
@@ -109,16 +153,18 @@ export const CommentForm = (props: CommentFormProps) => {
                         />
                     </Label>
                 )}
-                <TextArea
-                    name="content"
-                    className="w-full"
-                    placeholder={"לתגובה על פוסט/ים"}
-                />
+                <Label text={TEXTS.commentContentLabel}>
+                    <TextArea
+                        name="content"
+                        className="w-full"
+                        placeholder={TEXTS.commentContent}
+                    />
+                </Label>
                 <Button
                     loading={loading}
                     type="ghost"
                     className={"text-3xl text-black"}>
-                    יצירת תגובה
+                    {TEXTS.submit}
                 </Button>
             </form>
         </div>

@@ -35,10 +35,8 @@ export type SettingOptions =
           value: number
       }
     | {
-          key: "site_name"
-          value: string
-      }
-    | {
           key: "registration_cost_usd"
           value: number
       }
+
+export type SettingsObject = Record<SettingOptions["key"], number>

@@ -27,8 +27,6 @@ export const Select = (props: SelectProps) => {
         setValue(props.value)
     }, [props.value])
 
-    const options: readonly Option[] = props.options
-
     const change = (e: ChangeEvent<HTMLSelectElement>) => {
         setValue(e.target.value)
         props.onChange?.(e.target.value)
@@ -56,23 +54,16 @@ export const Select = (props: SelectProps) => {
             />
         )
     }
+
     return (
         <select
             value={value || "empty"}
             onChange={change}
             name={props.name}
-            aria-placeholder={props.placeholder}
             className={clsx([
                 props.className,
-                "w-full",
-                "border-2",
-                "border-gray-300",
-                "rounded-md",
-                "focus:outline-none",
-                "focus:ring-2",
-                "focus:ring-blue-400",
-                "focus:border-transparent",
-                "p-2",
+                "w-full border-2 border-gray-300 rounded-md  p-2",
+                "focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent",
                 !value && "text-gray-400",
             ])}>
             <option

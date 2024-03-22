@@ -8,16 +8,10 @@ import {
 
 import prisma from "@/lib/prisma"
 
-export interface SettingsService {
-    getSettingByKey: (key: SettingKey) => Promise<ISetting | null>
-    updateSettingByKey: (setting: CreateSetting) => Promise<ISetting>
-    getSettings: () => Promise<ISetting[]>
-}
+type ValueParser = (value: any) => any
 
-export const createSettingsService = (): SettingsService => {
-    const getSettingByKey = async (
-        key: SettingKey
-    ): Promise<ISetting | null> => {
+export class SettingsService {
+    async getSettingByKey(key: SettingKey): Promise<ISetting | null> {
         const found = await prisma.settings.findUnique({
             where: { key },
         })
@@ -25,7 +19,22 @@ export const createSettingsService = (): SettingsService => {
         return found as ISetting | null
     }
 
-    const updateSettingByKey = async (setting: CreateSetting) => {
+    async getSettingValueByKey<T extends ValueParser>(
+        key: SettingKey,
+        parser: T
+    ): Promise<ReturnType<T> | null> {
+        const found = await prisma.settings.findUnique({
+            where: { key },
+        })
+
+        if (found?.value) {
+            return parser(found.value)
+        }
+
+        return null
+    }
+
+    async updateSettingByKey(setting: CreateSetting) {
         const update = await prisma.settings.update({
             where: { key: setting.key },
             data: { value: setting.value.toString() },
@@ -34,17 +43,11 @@ export const createSettingsService = (): SettingsService => {
         return update as unknown as ISetting
     }
 
-    const getSettings = async (): Promise<ISetting[]> => {
+    async getSettings(): Promise<ISetting[]> {
         const found = await prisma.settings.findMany()
 
         return found as unknown as ISetting[]
     }
-
-    return {
-        updateSettingByKey,
-        getSettingByKey,
-        getSettings,
-    }
 }
 
-export const settingsService = createSettingsService()
+export const settingsService = new SettingsService()

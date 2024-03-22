@@ -1,8 +1,12 @@
 import "server-only"
 
+import {
+    CreateCategory,
+    ICategory,
+} from "@/app/(protected)/(posts)/(modules)/categories/lib/category.interface"
+
 import { DBPagination } from "@/app/_core/lib/pagination.types"
 import { GetCategoryFilter } from "@/app/(protected)/(posts)/(modules)/categories/lib/categories.service"
-import { ICategory } from "@/app/(protected)/(posts)/(modules)/categories/lib/category.interface"
 import { POST_PROPERTY_FOR_CURSOR } from "@/app/_core/consts/pagination.consts"
 import prisma from "@/lib/prisma"
 
@@ -56,7 +60,7 @@ export class CategoriesDbRepository {
         })
     }
 
-    async create(item: CategoryWithoutPosts): Promise<ICategory> {
+    async create(item: CreateCategory): Promise<ICategory> {
         return prisma.category.create({
             data: item,
         })

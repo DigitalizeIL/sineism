@@ -14,12 +14,12 @@ import { UserRole } from "@/app/(authentication)/lib/types/userRole.types"
 import axios from "axios"
 import { useRouter } from "next/navigation"
 import { useSession } from "next-auth/react"
+import { useSettings } from "@/app/(protected)/(posts)/(modules)/settings/context/SettingsContext"
 
-export const UserProvider = (props: {
-    children: ReactNode
-    isPaymentRequired: boolean
-}) => {
+export const UserProvider = (props: { children: ReactNode }) => {
     const { data } = useSession()
+    const { registration_cost_usd } = useSettings()
+    const isPaymentRequired = !!registration_cost_usd
 
     const [user, setUser] = useState<IUser>()
     const router = useRouter()
@@ -33,12 +33,12 @@ export const UserProvider = (props: {
 
         if (res.data === null) {
             return router.push(REGISTER_URL)
-        } else if (!res.data.isSubscribed && props.isPaymentRequired) {
+        } else if (!res.data.isSubscribed && isPaymentRequired) {
             return router.push(REGISTER_PAYMENT_URL)
         }
 
         setUser(res.data)
-    }, [data?.user, router, props.isPaymentRequired])
+    }, [data?.user, router, isPaymentRequired])
 
     useEffect(() => {
         getUser()
@@ -52,7 +52,7 @@ export const UserProvider = (props: {
         return <LoadingDotsOverlay />
     }
 
-    if (!user.isSubscribed && props.isPaymentRequired) {
+    if (!user.isSubscribed && isPaymentRequired) {
         return <div>You are not authorized to view this page</div>
     }
 

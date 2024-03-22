@@ -22,37 +22,49 @@ type InputProps = {
     name?: string
     hidden?: boolean
     placeholder?: string
+    ltr?: boolean
 } & (TextInputProps | NumberInputProps)
 
-export function Input<T extends string | number>(props: InputProps) {
-    const onChange = (event: ChangeEvent<HTMLInputElement>) => {
-        if (!props.onChange) {
+export function Input({
+    onChange,
+    name,
+    hidden,
+    placeholder,
+    ltr,
+    value,
+    className,
+    defaultValue,
+    type,
+}: InputProps) {
+    const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+        if (!onChange) {
             return
         }
 
-        if (props.type === "number") {
-            props.onChange(Number(event.target.value), event)
-        } else if (props.type === "text") {
-            props.onChange(event.target.value, event)
+        if (type === "number") {
+            onChange(Number(event.target.value), event)
+        } else if (type === "text") {
+            onChange(event.target.value, event)
         }
     }
 
     return (
         <input
-            placeholder={props.placeholder}
-            defaultValue={props.defaultValue}
-            name={props.name}
-            type={props.hidden ? "hidden" : props.type || "text"}
+            placeholder={placeholder}
+            defaultValue={defaultValue}
+            name={name}
+            dir={ltr ? "ltr" : "rtl"}
+            type={hidden ? "hidden" : type || "text"}
             className={clsx([
                 "border-2 border-gray-300 rounded-md p-2",
                 "focus:outline-none",
                 "focus:ring-2",
                 "focus:ring-blue-400",
                 "focus:border-transparent",
-                props.className,
+                className,
             ])}
-            value={props.value}
-            onChange={onChange}
+            value={value}
+            onChange={onChangeHandler}
         />
     )
 }

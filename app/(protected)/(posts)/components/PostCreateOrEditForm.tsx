@@ -1,15 +1,11 @@
 "use client"
 
 import {
-    CATEGORIES,
-    UTTERANCES_CATEGORY,
-} from "@/app/(protected)/(posts)/(modules)/categories/consts/categories"
-import {
     CreatePostDto,
     EditPostDto,
     IPost,
 } from "@/app/(protected)/(posts)/lib/post.interface"
-import React, { FormEvent, useEffect, useState } from "react"
+import React, { FC, FormEvent, useEffect, useState } from "react"
 
 import { AiOutlineEdit } from "react-icons/ai"
 import { Button } from "@/components/Button"
@@ -17,35 +13,46 @@ import { ICategory } from "@/app/(protected)/(posts)/(modules)/categories/lib/ca
 import { Input } from "@/components/Form/Input/Input"
 import { ModalWithButton } from "@/components/Modal"
 import { Select } from "@/components/Form/Select"
+import { TEXTS } from "../posts.texts"
 import { TextArea } from "@/components/Form/TextArea"
+import {
+    UTTERANCES_CATEGORY,
+} from "@/app/(protected)/(posts)/(modules)/categories/consts/categories"
 import toast from "react-hot-toast"
 import { useSession } from "next-auth/react"
 
-export const PostCreateOrEditForm = (props: {
+type FormProps = {
     post?: IPost
     categories: ICategory[]
     createPost: (post: CreatePostDto) => Promise<IPost>
     editPost: (postId: number, post: EditPostDto) => Promise<void>
+}
+
+export const PostCreateOrEditForm: FC<FormProps> = ({
+    post,
+    categories,
+    createPost,
+    editPost,
 }) => {
     const { data } = useSession()
     const [isOpen, setIsOpen] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
 
-    const [number, setNumber] = useState(props.post?.postNumber)
-    const [title, setTitle] = useState(props.post?.title)
-    const [content, setContent] = useState(props.post?.content)
+    const [number, setNumber] = useState(post?.postNumber)
+    const [title, setTitle] = useState(post?.title)
+    const [content, setContent] = useState(post?.content)
     const [category, setCategory] = useState(
-        props.post?.categoryId || UTTERANCES_CATEGORY.id
+        post?.categoryId || UTTERANCES_CATEGORY.id
     )
 
     useEffect(() => {
-        if (props.post) {
-            setTitle(props.post.title)
-            setContent(props.post.content)
-            setCategory(props.post.categoryId)
-            setNumber(props.post.postNumber)
+        if (post) {
+            setTitle(post.title)
+            setContent(post.content)
+            setCategory(post.categoryId)
+            setNumber(post.postNumber)
         }
-    }, [props.post])
+    }, [post])
 
     const confirm = async (e: FormEvent) => {
         e.preventDefault()
@@ -57,15 +64,15 @@ export const PostCreateOrEditForm = (props: {
 
             setIsLoading(true)
 
-            if (props.post?.id) {
-                await props.editPost(props.post.id, {
+            if (post?.id) {
+                await editPost(post.id, {
                     title,
                     content,
                     categoryId: category,
                     postNumber: number,
                 })
             } else if (data?.user?.id) {
-                await props.createPost({
+                await createPost({
                     title,
                     content,
                     categoryId: category,
@@ -94,7 +101,7 @@ export const PostCreateOrEditForm = (props: {
         <ModalWithButton
             onClose={() => setIsOpen(false)}
             onOpen={() => setIsOpen(true)}
-            buttonText={props.post ? <AiOutlineEdit /> : "Create Post"}
+            buttonText={post ? <AiOutlineEdit /> : "Create Post"}
             isOpen={isOpen}>
             <form onSubmit={confirm}>
                 <div className="flex flex-col space-y-2 p-3">
@@ -131,7 +138,7 @@ export const PostCreateOrEditForm = (props: {
                         onChange={(value) => setCategory(Number(value))}
                         defaultValue={UTTERANCES_CATEGORY.id}
                         options={
-                            (CATEGORIES?.map((category: ICategory) => ({
+                            (categories?.map((category) => ({
                                 label: category.name,
                                 value: category.id,
                             })) as any) || []
@@ -142,7 +149,7 @@ export const PostCreateOrEditForm = (props: {
                         loading={isLoading}
                         type="ghost"
                         className={"text-3xl text-black"}>
-                        {props.post?.id ? "Edit" : "Create"}
+                        {post?.id ? TEXTS.save : TEXTS.create}
                     </Button>
                 </div>
             </form>
