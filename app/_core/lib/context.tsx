@@ -2,19 +2,20 @@ import "server-only"
 
 import { cache } from "react"
 
-type SetterFunction<T> = (value: T) => void
-type GetterFunction<T> = () => T
+export enum REQUEST_CONTEXT_KEYS {
+    postsPerPage = "posts_per_page",
+    postIds = "postIds",
+    lastCursor = "lastCursor",
+    paginationId = "paginationId",
+}
 
-export function serverContext<T>(
-    defaultValue: T
-): [GetterFunction<T>, SetterFunction<T>] {
-    const getRef = cache(() => ({ current: defaultValue }))
+const requestContext = cache(() => {
+    return new Map<REQUEST_CONTEXT_KEYS, any>()
+})
 
-    const getValue = (): T => getRef().current
+export const setRequestContext = (key: REQUEST_CONTEXT_KEYS, value?: any) =>
+    requestContext().set(key, value)
 
-    const setValue = (value: T) => {
-        getRef().current = value
-    }
-
-    return [getValue, setValue]
+export function getRequestContext<T>(key: REQUEST_CONTEXT_KEYS) {
+    return requestContext().get(key) as T
 }
