@@ -3,6 +3,7 @@ import { FC, Suspense } from "react"
 import { CategoryHeader } from "./CategoryHeader"
 import { ContentFeed } from "@/app/_core/views/ContentFeed"
 import { DEFAULT_PAGE_SIZE } from "../consts/pagination"
+import { Footer } from "@/app/_core/components/Layout/Footer/Footer"
 import { PaginationContainer } from "@/app/_core/components/Pagination/Pagination.container"
 import { PostFeedItem } from "@/app/(protected)/(posts)/components/PostsFeed/PostFeedItem"
 import { SettingKey } from "../../settings/lib/settings.interface"
@@ -61,10 +62,14 @@ export const CategoryPage: FC<PageProps> = async ({
             ))}
             Footer={
                 <Suspense>
-                    <PaginationContainer
-                        cursorBoundery={paginationCursorBoundery}
-                        page={paginationId}
-                    />
+                    <Footer>
+                        <div className="w-2/12 ">
+                            <PaginationContainer
+                                cursorBoundery={paginationCursorBoundery}
+                                page={paginationId}
+                            />
+                        </div>
+                    </Footer>
                 </Suspense>
             }
         />
