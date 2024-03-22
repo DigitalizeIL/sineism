@@ -83,7 +83,7 @@ export class CommentsRepository {
             take: 1,
         })
 
-        const cursor = commentNumbers[0][
+        const cursor = commentNumbers[0]?.[
             COMMENTS_PROPERTY_FOR_CURSOR
         ] as unknown as number
 

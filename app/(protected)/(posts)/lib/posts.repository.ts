@@ -49,7 +49,7 @@ export class PostsDbRepository {
             take: 1,
         })
 
-        const cursor = postNumbers[0][
+        const cursor = postNumbers[0]?.[
             POST_PROPERTY_FOR_CURSOR
         ] as unknown as number
 

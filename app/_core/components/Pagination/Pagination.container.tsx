@@ -53,7 +53,7 @@ export const PaginationContainer: FC<PaginationContainerProps> = async ({
         previousPage <= 0
 
     const isLastPage =
-        nextPage > cursorBoundery.last || page >= nextPage - 1 || nextPage === 1
+        !nextPage || isNaN(nextPage) || nextPage > cursorBoundery.last || page >= nextPage - 1 || nextPage === 1
 
     const goToNextPage = () => {
         location.search = `?${PAGINATION_URL_PARAM_KEY}=${nextPage}`
