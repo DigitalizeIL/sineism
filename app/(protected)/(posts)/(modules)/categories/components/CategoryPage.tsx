@@ -20,10 +20,10 @@ type PageProps = {
 }
 
 export const CategoryPage: FC<PageProps> = async ({ categorySlug }) => {
-    const pageSizeValue = await settingsService.getSettingByKey(
-        SettingKey.posts_per_page
+    const pageSize = await settingsService.getSettingValueByKey(
+        SettingKey.posts_per_page,
+        Number
     )
-    const pageSize = Number(pageSizeValue?.value || DEFAULT_PAGE_SIZE)
 
     const page = getRequestContext<number>(REQUEST_CONTEXT_KEYS.paginationId)
 
@@ -34,7 +34,7 @@ export const CategoryPage: FC<PageProps> = async ({ categorySlug }) => {
         withPosts: true,
         pagination: {
             id: page,
-            perPage: pageSize,
+            perPage: pageSize || DEFAULT_PAGE_SIZE,
         },
     })
 
