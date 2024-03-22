@@ -62,14 +62,12 @@ export const CategoryPage: FC<PageProps> = async ({
             ))}
             Footer={
                 <Suspense>
-                    <Footer>
-                        <div className="w-2/12 ">
-                            <PaginationContainer
-                                cursorBoundery={paginationCursorBoundery}
-                                page={paginationId}
-                            />
-                        </div>
-                    </Footer>
+                    <div className="w-2/12">
+                        <PaginationContainer
+                            cursorBoundery={paginationCursorBoundery}
+                            page={paginationId}
+                        />
+                    </div>
                 </Suspense>
             }
         />

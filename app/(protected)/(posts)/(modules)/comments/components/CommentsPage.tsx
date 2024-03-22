@@ -45,10 +45,12 @@ export const CommentsPage: FC<PageProps> = async ({ paginationId }) => {
             ))}
             Footer={
                 <Suspense>
-                    <PaginationContainer
-                        page={paginationId}
-                        cursorBoundery={paginationCursorBoundery}
-                    />
+                    <div className="w-2/12">
+                        <PaginationContainer
+                            page={paginationId}
+                            cursorBoundery={paginationCursorBoundery}
+                        />
+                    </div>
                 </Suspense>
             }
         />

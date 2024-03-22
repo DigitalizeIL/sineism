@@ -1,6 +1,6 @@
 "use client"
 
-import { ReactNode, useMemo } from "react"
+import { FC, ReactNode, useMemo } from "react"
 
 import { LoadingDots } from "@/components/LoadingDots"
 import clsx from "clsx"
@@ -14,18 +14,20 @@ export type ButtonProps = {
     htmlType?: "button" | "submit" | "reset"
     className?: string
     isDisabled?: boolean
+    fullWidth?: boolean
     onClick?: () => void
 }
 
-export const Button = ({
+export const Button: FC<ButtonProps> = ({
     loading,
     children,
     type,
     htmlType,
     isDisabled,
     className,
+    fullWidth,
     onClick,
-}: ButtonProps) => {
+}) => {
     const styleClassnames = useMemo(() => {
         if (!type) return ""
 
@@ -44,7 +46,8 @@ export const Button = ({
             className={clsx([
                 className,
                 loading && "cursor-not-allowed border-gray-200 bg-gray-100",
-                "flex h-10 px-2 w-full items-center justify-center rounded-md border text-sm transition-all focus:outline-none",
+                "flex h-10 px-2 items-center justify-center rounded-md border text-sm transition-all focus:outline-none",
+                fullWidth && "w-full",
                 isDisabled ? "bg-gray-200 hover:bg-gray-200" : styleClassnames,
             ])}>
             {loading ? <LoadingDots color="#808080" /> : children}

@@ -2,6 +2,8 @@
 
 import { ReactNode, createContext, useContext } from "react"
 
+import { Footer } from "../components/Layout/Footer/Footer"
+
 type BaseItem = { id: number }
 
 type CategoryFeedProps<T extends BaseItem> = {
@@ -26,7 +28,7 @@ export const useContent = () => {
 export function ContentFeed<T extends BaseItem>({
     Header,
     FeedItems,
-    Footer,
+    Footer: FooterChildren,
     items,
 }: CategoryFeedProps<T>) {
     return (
@@ -42,7 +44,9 @@ export function ContentFeed<T extends BaseItem>({
                     }>
                     {FeedItems}
                 </div>
-                <div className="mt-auto">{Footer}</div>
+                <div className="mt-auto">
+                    <Footer>{FooterChildren}</Footer>
+                </div>
             </div>
         </contentContext.Provider>
     )
