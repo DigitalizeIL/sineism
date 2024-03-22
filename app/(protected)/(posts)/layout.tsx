@@ -32,17 +32,6 @@ type LayoutProps = {
 }
 
 export default async function Layout({ children }: LayoutProps) {
-    const itemsPerPageValue = await settingsService.getSettingByKey(
-        SettingKey.posts_per_page
-    )
-
-    if (itemsPerPageValue?.value) {
-        setRequestContext(
-            REQUEST_CONTEXT_KEYS.postsPerPage,
-            Number(itemsPerPageValue?.value || DEFAULT_PAGE_SIZE)
-        )
-    }
-
     return (
         <>
             <Header />

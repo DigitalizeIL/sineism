@@ -3,8 +3,6 @@ import "server-only"
 import { cache } from "react"
 
 export enum REQUEST_CONTEXT_KEYS {
-    postsPerPage = "posts_per_page",
-    postIds = "postIds",
     lastCursor = "lastCursor",
     paginationId = "paginationId",
 }
