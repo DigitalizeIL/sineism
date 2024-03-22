@@ -4,18 +4,17 @@ import {
     CommentForm,
     CommentFormProps,
 } from "@/app/(protected)/(posts)/(modules)/comments/components/CommentForm"
-import { Modal, ModalWithButton } from "@/components/Modal"
-import { ReactNode, useState } from "react"
+import { FC, useState } from "react"
 
 import { BiComment } from "react-icons/bi"
-import { Button } from "@/components/Button"
-import { EMPTY_COMMENT_ID } from "@/app/(protected)/(posts)/(modules)/comments/comments.consts"
+import { ModalWithButton } from "@/components/Modal"
 
-export const CommentsModal = ({
+export const CommentsModal: FC<CommentFormProps> = ({
     createComment,
-    postOptions,
+    posts,
     post,
-}: CommentFormProps) => {
+    categories,
+}) => {
     const [isCommentModalOpen, setIsCommentModalOpen] = useState(false)
 
     const onSubmit = async (formData: FormData) => {
@@ -30,9 +29,10 @@ export const CommentsModal = ({
             buttonText={<BiComment />}
             isOpen={isCommentModalOpen}>
             <CommentForm
+                categories={categories}
                 post={post}
                 createComment={onSubmit}
-                postOptions={postOptions}
+                posts={posts}
             />
         </ModalWithButton>
     )

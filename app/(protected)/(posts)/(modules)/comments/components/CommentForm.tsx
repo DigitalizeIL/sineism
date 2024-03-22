@@ -1,14 +1,14 @@
 "use client"
 
+import { FC, useMemo, useRef, useState } from "react"
+import { Option, Select } from "@/components/Form/Select"
 import Select2, { MultiValue } from "react-select"
-import { useMemo, useRef, useState } from "react"
 
 import { Button } from "@/components/Button"
 import { EMPTY_COMMENT_ID } from "../comments.consts"
-import { FormControl } from "@mui/material"
+import { ICategory } from "../../categories/lib/category.interface"
 import { IPost } from "@/app/(protected)/(posts)/lib/post.interface"
 import { Label } from "@/app/_core/components/Form/Label"
-import { Option } from "@/components/Form/Select"
 import { TEXTS } from "../comments.texts"
 import { TextArea } from "@/components/Form/TextArea"
 import clsx from "clsx"
@@ -17,13 +17,21 @@ import toast from "react-hot-toast"
 export type CommentFormProps = {
     createComment: (formData: FormData) => Promise<void>
     post?: IPost
-    postOptions: Option[]
+    posts: IPost[]
     className?: string
+    categories: ICategory[]
 }
 
-export const CommentForm = (props: CommentFormProps) => {
+export const CommentForm: FC<CommentFormProps> = ({
+    post,
+    posts,
+    className,
+    categories,
+    createComment,
+}) => {
     const formRef = useRef<HTMLFormElement>(null)
     const [selectValue, setSelectValue] = useState<MultiValue<Option>>([])
+    const [selectedCategortyId, setSelectedCategory] = useState<number>()
     const [loading, setLoading] = useState(false)
 
     const action = async (formData: FormData) => {
@@ -37,7 +45,7 @@ export const CommentForm = (props: CommentFormProps) => {
         const postIds = selectValue.map((option) => option.value).join("|")
         formData.set("postIds", postIds)
 
-        await props.createComment(formData)
+        await createComment(formData)
 
         formRef.current?.reset()
         setSelectValue([])
@@ -54,8 +62,23 @@ export const CommentForm = (props: CommentFormProps) => {
         [selectValue]
     )
 
+    const postOptions = useMemo(() => {
+        return [
+            {
+                value: EMPTY_COMMENT_ID,
+                label: "#",
+            },
+            ...posts
+                .filter((post) => post.categoryId === selectedCategortyId)
+                .map((post) => ({
+                    value: post.id,
+                    label: post.postNumber.toString(),
+                })),
+        ]
+    }, [posts, selectedCategortyId])
+
     return (
-        <div className={clsx(["flex flex-col space-y-2 p-3", props.className])}>
+        <div className={clsx(["flex flex-col space-y-2 p-3", className])}>
             <form
                 ref={formRef}
                 action={action}
@@ -63,17 +86,29 @@ export const CommentForm = (props: CommentFormProps) => {
                     setLoading(true)
                 }}
                 className={"flex flex-col gap-2"}>
-                {props.post ? (
+                <Select
+                    onChange={(id) => {
+                        setSelectedCategory(Number(id))
+                    }}
+                    placeholder={TEXTS.whichCategory}
+                    name="category"
+                    options={categories.map((category) => ({
+                        label: category.name,
+                        value: category.id,
+                    }))}
+                />
+                {post ? (
                     <input
                         type={"hidden"}
                         name={"postIds"}
-                        value={props.post.id}
+                        value={post.id}
                     />
                 ) : (
                     <Label
                         text={TEXTS.postsSelectionLabel}
                         className="text-right">
                         <Select2
+                            isDisabled={!selectedCategortyId}
                             placeholder={TEXTS.postsSelectionPlaceholder}
                             isMulti={!isNoReference}
                             isSearchable
@@ -94,7 +129,7 @@ export const CommentForm = (props: CommentFormProps) => {
                                 setSelectValue("value" in id ? [id] : id)
                             }}
                             name={"postIds"}
-                            options={props.postOptions as any}
+                            options={postOptions as any}
                             styles={{
                                 option: (base, props) => ({
                                     ...base,

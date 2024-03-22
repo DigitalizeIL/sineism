@@ -1,5 +1,4 @@
 import { CommentFormContainer } from "@/app/(protected)/(posts)/(modules)/comments/components/CommentForm.container"
-import { CommentsModal } from "@/app/(protected)/(payment)/(modules)/comments/components/CommentsModal"
 import { PaymentContainer } from "./Payment.container"
 import { SettingKey } from "@/app/(protected)/(posts)/(modules)/settings/lib/settings.interface"
 import { TEXTS } from "../commentsPayment.texts"

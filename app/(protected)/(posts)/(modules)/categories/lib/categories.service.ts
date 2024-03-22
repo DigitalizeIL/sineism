@@ -5,8 +5,11 @@ import {
     CategoryWithoutPosts,
     categoriesDbRepository,
 } from "@/app/(protected)/(posts)/(modules)/categories/lib/categories.repository"
+import {
+    CreateCategory,
+    ICategory,
+} from "@/app/(protected)/(posts)/(modules)/categories/lib/category.interface"
 
-import { ICategory } from "@/app/(protected)/(posts)/(modules)/categories/lib/category.interface"
 import { Pagination } from "@/app/_core/lib/pagination.types"
 
 export type GetCategoryFilter = {
@@ -44,7 +47,7 @@ export class CategoriesService {
         )
     }
 
-    async createCategory(category: ICategory): Promise<ICategory> {
+    async createCategory(category: CreateCategory): Promise<ICategory> {
         return await this.dbRepository.create(category)
     }
 

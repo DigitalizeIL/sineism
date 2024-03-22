@@ -1,8 +1,7 @@
-import { CommentForm } from "@/app/(protected)/(posts)/(modules)/comments/components/CommentForm"
 import { CommentsModal } from "@/app/(protected)/(payment)/(modules)/comments/components/CommentsModal"
 import { CreateComment } from "@/app/(protected)/(posts)/(modules)/comments/lib/comment.interface"
-import { EMPTY_COMMENT_ID } from "../comments.consts"
 import { IPost } from "@/app/(protected)/(posts)/lib/post.interface"
+import { categoriesService } from "../../categories/lib/categories.service"
 import { commentsService } from "@/app/(protected)/(posts)/(modules)/comments/lib/comments.service"
 import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
 import { postsService } from "@/app/(protected)/(posts)/lib/posts.service"
@@ -21,6 +20,8 @@ export const CommentFormContainer = async (
     if (!session?.user) {
         return null
     }
+
+    const categories = await categoriesService.getAllCategories()
 
     if (!props.specificPost) {
         posts = await postsService.getAllPosts()
@@ -50,22 +51,12 @@ export const CommentFormContainer = async (
         revalidatePath("/posts")
     }
 
-    const postOptions = posts.map((post) => ({
-        value: post.id,
-        label: post.postNumber.toString(),
-    }))
-
     return (
         <CommentsModal
+            categories={categories}
             post={props.specificPost}
             createComment={createComment}
-            postOptions={[
-                {
-                    value: EMPTY_COMMENT_ID,
-                    label: "#",
-                },
-                ...postOptions,
-            ]}
+            posts={posts}
         />
     )
 }
