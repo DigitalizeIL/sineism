@@ -11,8 +11,13 @@ import { POST_PROPERTY_FOR_CURSOR } from "@/app/_core/consts/pagination.consts"
 import prisma from "@/lib/prisma"
 
 export class PostsDbRepository {
-    private async getLowestAvailablePostNumber(): Promise<number> {
+    private async getLowestAvailablePostNumber(
+        categoryId: number
+    ): Promise<number> {
         const postNumbers = await prisma.post.findMany({
+            where: {
+                categoryId,
+            },
             select: {
                 postNumber: true,
             },
@@ -84,7 +89,7 @@ export class PostsDbRepository {
                 title: item.title || "",
                 categoryId: item.categoryId,
                 authorId: item.authorId,
-                postNumber: await this.getLowestAvailablePostNumber(),
+                postNumber: await this.getLowestAvailablePostNumber(item.categoryId),
             },
         })
     }
