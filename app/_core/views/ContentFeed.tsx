@@ -10,15 +10,21 @@ type CategoryFeedProps<T extends BaseItem> = {
     Header?: ReactNode
     FeedItems?: ReactNode
     Footer?: ReactNode
-    items: T[]
+    items: T[],
+    previousPageCursorId: number | null,
+    nextPageCursorId: number | null
 }
 
 type ContentContextState<T = unknown> = {
-    items: T[]
+    items: T[],
+    previousPageCursorId: number | null,
+    nextPageCursorId: number | null
 }
 
 const contentContext = createContext<ContentContextState<BaseItem>>({
     items: [],
+    nextPageCursorId: null,
+    previousPageCursorId: null
 })
 
 export const useContent = () => {
@@ -30,11 +36,15 @@ export function ContentFeed<T extends BaseItem>({
     FeedItems,
     Footer: FooterChildren,
     items,
+    previousPageCursorId: previous,
+    nextPageCursorId: next
 }: CategoryFeedProps<T>) {
     return (
         <contentContext.Provider
             value={{
                 items,
+                nextPageCursorId: next,
+                previousPageCursorId: previous
             }}>
             <div className="flex flex-col h-full">
                 <div>{Header}</div>

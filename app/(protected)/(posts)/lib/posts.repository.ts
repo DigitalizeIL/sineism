@@ -9,8 +9,22 @@ import {
 
 import { POST_PROPERTY_FOR_CURSOR } from "@/app/_core/consts/pagination.consts"
 import prisma from "@/lib/prisma"
+import { DEFAULT_PAGE_SIZE } from "../(modules)/categories/consts/pagination";
+import { settingsService } from "../(modules)/settings/lib/settings.service";
+import { SettingKey } from "../(modules)/settings/lib/settings.interface";
 
 export class PostsDbRepository {
+
+    private itemsPerPage: number = DEFAULT_PAGE_SIZE;
+
+    constructor() {
+        this.initSettings()
+    }
+
+    private async initSettings() {
+        this.itemsPerPage = await settingsService.getSettingValueByKey(SettingKey.posts_per_page, Number) || DEFAULT_PAGE_SIZE
+    }
+
     private async getLowestAvailablePostNumber(
         categoryId: number
     ): Promise<number> {
@@ -37,7 +51,7 @@ export class PostsDbRepository {
         return numbers.length + 1
     }
 
-    public async getPaginationCursor(
+    public async getPaginationCursorBoundary(
         categoryId: number,
         side: "first" | "last"
     ): Promise<number> {
@@ -59,6 +73,38 @@ export class PostsDbRepository {
         ] as unknown as number
 
         return cursor
+    }
+
+
+    public async getPaginationCursor(
+        categoryId: number,
+        currentCursor: number
+    ): Promise<Array<number | null>> {
+        const postNumbers = await prisma.post.findMany({
+            where: {
+                categoryId,
+            },
+            select: {
+                [POST_PROPERTY_FOR_CURSOR]: true,
+            },
+            orderBy: {
+                [POST_PROPERTY_FOR_CURSOR]: "asc",
+            },
+        });
+
+        const cursors = postNumbers?.map((item) => item[POST_PROPERTY_FOR_CURSOR] as unknown as number) || [];
+
+        const currentIndex = cursors.indexOf(currentCursor);
+
+
+        if (currentIndex === -1) {
+            return [1, cursors[cursors.length - 1]];
+        }
+
+        const previousCursor = cursors[currentIndex - this.itemsPerPage] ?? 1
+        const nextCursor = cursors[currentIndex + this.itemsPerPage] ?? cursors[cursors.length - 1]
+
+        return [previousCursor, nextCursor];
     }
 
     public async getAll(query?: GetAllPostsQuery): Promise<IPost[]> {

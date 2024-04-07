@@ -8,9 +8,21 @@ import {
 import { COMMENTS_PROPERTY_FOR_CURSOR } from "@/app/_core/consts/pagination.consts"
 import { DBPagination } from "@/app/_core/lib/pagination.types"
 import prisma from "@/lib/prisma"
+import { DEFAULT_PAGE_SIZE } from "../../categories/consts/pagination"
+import { settingsService } from "../../settings/lib/settings.service"
+import { SettingKey } from "../../settings/lib/settings.interface"
 
 export class CommentsRepository {
-    constructor() {}
+    private itemsPerPage: number = DEFAULT_PAGE_SIZE;
+
+    constructor() {
+        this.initSettings()
+    }
+
+    private async initSettings() {
+        this.itemsPerPage = await settingsService.getSettingValueByKey(SettingKey.posts_per_page, Number) || DEFAULT_PAGE_SIZE
+    }
+
 
     getAll = async (pagination?: DBPagination): Promise<IComment[]> => {
         return prisma.comment.findMany({
@@ -72,23 +84,33 @@ export class CommentsRepository {
         return prisma.comment.count()
     }
 
-    public async getPaginationCursor(side: "first" | "last"): Promise<number> {
-        const commentNumbers = await prisma.comment.findMany({
+
+    public async getPaginationCursor(
+        currentCursor: number
+    ): Promise<Array<number | null>> {
+        const postNumbers = await prisma.comment.findMany({
             select: {
                 [COMMENTS_PROPERTY_FOR_CURSOR]: true,
             },
             orderBy: {
-                id: side === "first" ? "asc" : "desc",
+                [COMMENTS_PROPERTY_FOR_CURSOR]: "asc",
             },
-            take: 1,
-        })
+        });
 
-        const cursor = commentNumbers[0]?.[
-            COMMENTS_PROPERTY_FOR_CURSOR
-        ] as unknown as number
+        const cursors = postNumbers?.map((item) => item[COMMENTS_PROPERTY_FOR_CURSOR] as unknown as number) || [];
 
-        return cursor
+        const currentIndex = cursors.indexOf(currentCursor);
+
+        if (currentIndex === -1) {
+            return [1, cursors[cursors.length - 1]];
+        }
+
+        const previousCursor = cursors[currentIndex - this.itemsPerPage] ?? 1
+        const nextCursor = cursors[currentIndex + this.itemsPerPage] ?? cursors[cursors.length - 1]
+
+        return [previousCursor, nextCursor];
     }
+
 }
 
 export const commentsRepository = new CommentsRepository()

@@ -70,15 +70,9 @@ export class CommentsService {
     count = (): Promise<number> => {
         return this.commentsRepository.count()
     }
-
-    public async getPaginationCursorBoundery() {
-        const first = await this.commentsRepository.getPaginationCursor("first")
-        const last = await this.commentsRepository.getPaginationCursor("last")
-
-        return {
-            first,
-            last,
-        }
+    
+    public async getPaginationCursors(currentCursor?: number) {
+        return this.commentsRepository.getPaginationCursor(currentCursor || 1)
     }
 }
 
