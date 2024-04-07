@@ -1,14 +1,14 @@
 #!/bin/zsh
 
 # Install dependencies
-pnpm install
+bun install
 
 # Generate the prisma client
-npx prisma generate
+bunx prisma generate
 
 # Start the db
 docker-compose up -d
 
 # Push the db schema
-npx prisma db push
+bunx prisma db push
 
