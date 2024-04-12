@@ -48,12 +48,22 @@ export const CommentForm: FC<CommentFormProps> = ({
             const postIds = selectValue.map((option) => option.value).join("|")
             formData.set("postIds", postIds)
 
-            await createComment(formData)
+            const response = await createComment(formData)
+
+            if (response.error) {
+                toast.error(response.error.message)
+                console.error(response)
+
+                return;
+            }
+
+            toast.success("Comment created")
 
             formRef.current?.reset()
             setSelectedCategory(undefined)
             setCategoryKey(Math.random())
             setSelectValue([])
+
         } catch (e) {
             console.error(e)
             toast.error("Something went wrong")
