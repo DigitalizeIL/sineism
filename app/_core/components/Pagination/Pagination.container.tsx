@@ -17,18 +17,13 @@ type PaginationContainerProps = {
     page: number
 }
 
-export const PaginationContainer: FC<PaginationContainerProps> = async ({
+export const PaginationContainer: FC<PaginationContainerProps> = ({
     page,
 }) => {
     const { nextPageCursorId: nextPage, previousPageCursorId: previousPage } = useContent()
 
     const isLastPage = !nextPage || page === nextPage
     const isFirstPage = !previousPage || page === previousPage
-
-    useEffect(() => {
-        console.log({ nextPage, previousPage, page })
-    }, [nextPage, previousPage, page])
-
 
     const goToNextPage = () => {
         location.search = `?${PAGINATION_URL_PARAM_KEY}=${nextPage}`

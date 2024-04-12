@@ -13,9 +13,10 @@ import { TEXTS } from "../comments.texts"
 import { TextArea } from "@/components/Form/TextArea"
 import clsx from "clsx"
 import toast from "react-hot-toast"
+import { FormSubmitResponse } from "@/app/_core/types/FormSubmitResponse"
 
 export type CommentFormProps = {
-    createComment: (formData: FormData) => Promise<void>
+    createComment: (formData: FormData) => Promise<FormSubmitResponse>
     post?: IPost
     posts: IPost[]
     className?: string
@@ -34,6 +35,7 @@ export const CommentForm: FC<CommentFormProps> = ({
     const [selectedCategortyId, setSelectedCategory] = useState<number>()
     const [loading, setLoading] = useState(false)
     const [categoryKey, setCategoryKey] = useState(Math.random())
+
     const action = async (formData: FormData) => {
         try {
             const content = formData.get("content") as string
@@ -65,8 +67,8 @@ export const CommentForm: FC<CommentFormProps> = ({
             !Array.isArray(selectValue) && "value" in selectValue
                 ? selectValue.value === EMPTY_COMMENT_ID
                 : selectValue?.some(
-                      (value) => value.value === EMPTY_COMMENT_ID
-                  ),
+                    (value) => value.value === EMPTY_COMMENT_ID
+                ),
         [selectValue]
     )
 
@@ -124,9 +126,9 @@ export const CommentForm: FC<CommentFormProps> = ({
                             value={
                                 isNoReference
                                     ? ({
-                                          label: TEXTS.allItems,
-                                          value: { EMPTY_COMMENT_ID },
-                                      } as any)
+                                        label: TEXTS.allItems,
+                                        value: { EMPTY_COMMENT_ID },
+                                    } as any)
                                     : selectValue
                             }
                             onChange={(id) => {
