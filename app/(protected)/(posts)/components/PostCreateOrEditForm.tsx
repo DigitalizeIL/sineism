@@ -15,9 +15,6 @@ import { ModalWithButton } from "@/components/Modal"
 import { Select } from "@/components/Form/Select"
 import { TEXTS } from "../posts.texts"
 import { TextArea } from "@/components/Form/TextArea"
-import {
-    UTTERANCES_CATEGORY,
-} from "@/app/(protected)/(posts)/(modules)/categories/consts/categories"
 import toast from "react-hot-toast"
 import { useSession } from "next-auth/react"
 
@@ -41,9 +38,7 @@ export const PostCreateOrEditForm: FC<FormProps> = ({
     const [number, setNumber] = useState(post?.postNumber)
     const [title, setTitle] = useState(post?.title)
     const [content, setContent] = useState(post?.content)
-    const [category, setCategory] = useState(
-        post?.categoryId || UTTERANCES_CATEGORY.id
-    )
+    const [category, setCategory] = useState(post?.categoryId || categories?.[0]?.id)
 
     useEffect(() => {
         if (post) {
@@ -136,7 +131,6 @@ export const PostCreateOrEditForm: FC<FormProps> = ({
                         name={"category"}
                         value={category}
                         onChange={(value) => setCategory(Number(value))}
-                        defaultValue={UTTERANCES_CATEGORY.id}
                         options={
                             (categories?.map((category) => ({
                                 label: category.name,

@@ -1,7 +1,8 @@
-import { INITIAL_CATEGORIES } from "../app/(protected)/(posts)/(modules)/categories/consts/categories"
 import { SettingKey } from "@/app/(protected)/(posts)/(modules)/settings/lib/settings.interface"
 import { hash } from "bcryptjs"
 import prisma from "../app/_core/lib/prisma"
+
+import { ICategory } from "@/app/(protected)/(posts)/(modules)/categories/lib/category.interface"
 
 async function createUsers() {
     try {
@@ -27,6 +28,19 @@ async function createUsers() {
 
 async function createCategories() {
     try {
+        const INITIAL_CATEGORIES: ICategory[] = [
+            {
+                id: -1,
+                name: "אמרות",
+                path: "utterances",
+            },
+            {
+                id: -2,
+                name: "אמרות ערוכות",
+                path: "edited-utterances",
+            },
+        ]
+
         const categories = await prisma.category.createMany({
             data: INITIAL_CATEGORIES,
         })
@@ -71,7 +85,7 @@ async function createSettings() {
 async function main() {
     try {
         await createUsers()
-        await createCategories()
+        // await createCategories()
         await createSettings()
     } catch (e) {
         console.error(e)
