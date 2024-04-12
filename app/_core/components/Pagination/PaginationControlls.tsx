@@ -17,10 +17,10 @@ type PaginationContainerProps = {
     page: number
 }
 
-export const PaginationContainer: FC<PaginationContainerProps> = ({
+export const PaginationControlles: FC<PaginationContainerProps> = ({
     page,
 }) => {
-    const { nextPageCursorId: nextPage, previousPageCursorId: previousPage } = useContent()
+    const { nextPageCursorId: nextPage, previousPageCursorId: previousPage, items, pageSize } = useContent()
 
     const isLastPage = !nextPage || page === nextPage
     const isFirstPage = !previousPage || page === previousPage

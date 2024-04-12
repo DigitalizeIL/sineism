@@ -4,7 +4,7 @@ import { Comment } from "./Comment"
 import { CommentHeader } from "@/app/(protected)/(posts)/(modules)/comments/components/CommentHeader"
 import { ContentFeed } from "@/app/_core/views/ContentFeed"
 import { DEFAULT_PAGE_SIZE } from "../../categories/consts/pagination"
-import { PaginationContainer } from "@/app/_core/components/Pagination/Pagination.container"
+import { PaginationControlles } from "@/app/_core/components/Pagination/PaginationControlls"
 import { SettingKey } from "../../settings/lib/settings.interface"
 import { commentsService } from "../lib/comments.service"
 import { settingsService } from "../../settings/lib/settings.service"
@@ -29,6 +29,7 @@ export const CommentsPage: FC<PageProps> = async ({ paginationId }) => {
 
     return (
         <ContentFeed
+            pageSize={itemsPerPage}
             items={comments}
             nextPageCursorId={nextPageCursorId}
             previousPageCursorId={previousPageCursorId}
@@ -47,7 +48,7 @@ export const CommentsPage: FC<PageProps> = async ({ paginationId }) => {
             Footer={
                 <Suspense>
                     <div className="w-2/12">
-                        <PaginationContainer
+                        <PaginationControlles
                             page={paginationId}
                         />
                     </div>

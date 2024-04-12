@@ -1,7 +1,7 @@
 import { FC, Suspense } from "react"
 import {
-    PaginationContainer,
-} from "@/app/_core/components/Pagination/Pagination.container"
+    PaginationControlles,
+} from "@/app/_core/components/Pagination/PaginationControlls"
 
 import { SubHeader } from "@/components/Layout"
 
@@ -18,7 +18,7 @@ export const CommentHeader: FC<CategoryHeaderProps> = async ({
             bookmarkReferenceType={"comment"}
             Pagination={
                 <Suspense>
-                    <PaginationContainer
+                    <PaginationControlles
                         page={page}
                     />
                 </Suspense>
