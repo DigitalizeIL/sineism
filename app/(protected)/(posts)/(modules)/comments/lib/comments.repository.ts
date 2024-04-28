@@ -7,10 +7,10 @@ import {
 
 import { COMMENTS_PROPERTY_FOR_CURSOR } from "@/app/_core/consts/pagination.consts"
 import { DBPagination } from "@/app/_core/lib/pagination.types"
-import prisma from "@/lib/prisma"
 import { DEFAULT_PAGE_SIZE } from "../../categories/consts/pagination"
-import { settingsService } from "../../settings/lib/settings.service"
 import { SettingKey } from "../../settings/lib/settings.interface"
+import prisma from "@/lib/prisma"
+import { settingsService } from "../../settings/lib/settings.service"
 
 export class CommentsRepository {
     private itemsPerPage: number = DEFAULT_PAGE_SIZE;
@@ -98,15 +98,17 @@ export class CommentsRepository {
         });
 
         const cursors = postNumbers?.map((item) => item[COMMENTS_PROPERTY_FOR_CURSOR] as unknown as number) || [];
-
+        const lastCursor = cursors[cursors.length - 1]
         const currentIndex = cursors.indexOf(currentCursor);
-
+        
+        debugger
+        
         if (currentIndex === -1) {
-            return [1, cursors[cursors.length - 1]];
+            return [1, lastCursor];
         }
 
         const previousCursor = cursors[currentIndex - this.itemsPerPage] ?? 1
-        const nextCursor = cursors[currentIndex + this.itemsPerPage] ?? cursors[cursors.length - 1]
+        const nextCursor = cursors[currentIndex + this.itemsPerPage] ?? lastCursor
 
         return [previousCursor, nextCursor];
     }

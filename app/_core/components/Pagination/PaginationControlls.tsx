@@ -8,9 +8,9 @@ import { PAGINATION_URL_PARAM_KEY } from "../../consts/pagination.consts"
 import { TEXTS } from "./pagination.texts"
 import { useContent } from "../../views/ContentFeed"
 
-export type PagimationCursors = {
-    previous: number,
-    next: number
+export type PaginationCursors = {
+    previous: number | null,
+    next: number | null
 }
 
 type PaginationContainerProps = {
@@ -20,7 +20,7 @@ type PaginationContainerProps = {
 export const PaginationControlles: FC<PaginationContainerProps> = ({
     page,
 }) => {
-    const { nextPageCursorId: nextPage, previousPageCursorId: previousPage, items, pageSize } = useContent()
+    const { cursors: {next: nextPage, previous: previousPage} } = useContent()
 
     const isLastPage = !nextPage || page === nextPage
     const isFirstPage = !previousPage || page === previousPage

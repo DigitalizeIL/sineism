@@ -2,8 +2,9 @@
 
 import { ReactNode, createContext, useContext } from "react"
 
-import { Footer } from "../components/Layout/Footer/Footer"
 import { DEFAULT_PAGE_SIZE } from "@/app/(protected)/(posts)/(modules)/categories/consts/pagination"
+import { Footer } from "../components/Layout/Footer/Footer"
+import { PaginationCursors } from "../components/Pagination/PaginationControlls"
 
 type BaseItem = { id: number }
 
@@ -12,8 +13,7 @@ type CategoryFeedProps<T extends BaseItem> = {
     FeedItems?: ReactNode
     Footer?: ReactNode
     items: T[],
-    previousPageCursorId: number | null,
-    nextPageCursorId: number | null,
+    cursors: PaginationCursors,
     pageSize: number | null
 }
 
@@ -40,16 +40,14 @@ export function ContentFeed<T extends BaseItem>({
     FeedItems,
     Footer: FooterChildren,
     items,
-    previousPageCursorId: previous,
-    nextPageCursorId: next,
+    cursors,
     pageSize
 }: CategoryFeedProps<T>) {
     return (
         <ContentContext.Provider
             value={{
                 items,
-                nextPageCursorId: next,
-                previousPageCursorId: previous,
+                cursors,
                 pageSize: pageSize || DEFAULT_PAGE_SIZE
             }}>
             <div className="flex flex-col h-full">

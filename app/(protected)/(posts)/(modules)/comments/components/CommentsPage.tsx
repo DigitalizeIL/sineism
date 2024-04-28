@@ -31,8 +31,10 @@ export const CommentsPage: FC<PageProps> = async ({ paginationId }) => {
         <ContentFeed
             pageSize={itemsPerPage}
             items={comments}
-            nextPageCursorId={nextPageCursorId}
-            previousPageCursorId={previousPageCursorId}
+            cursors={{
+                next: nextPageCursorId,
+                previous: previousPageCursorId
+            }}
             Header={
                 <CommentHeader
                     page={paginationId}
