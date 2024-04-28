@@ -5,17 +5,18 @@ import {
     IComment,
 } from "@/app/(protected)/(posts)/(modules)/comments/lib/comment.interface"
 
+import { BaseContentRepository } from "@/app/_core/lib/repository/baseContent.repository"
 import { COMMENTS_PROPERTY_FOR_CURSOR } from "@/app/_core/consts/pagination.consts"
 import { DBPagination } from "@/app/_core/lib/pagination.types"
 import { DEFAULT_PAGE_SIZE } from "../../categories/consts/pagination"
+import { PaginationCursorResponse } from "@/app/_core/types/pagination.types"
 import { SettingKey } from "../../settings/lib/settings.interface"
 import prisma from "@/lib/prisma"
 import { settingsService } from "../../settings/lib/settings.service"
 
-export class CommentsRepository {
-    private itemsPerPage: number = DEFAULT_PAGE_SIZE;
-
+export class CommentsRepository extends BaseContentRepository {
     constructor() {
+        super()
         this.initSettings()
     }
 
@@ -87,8 +88,8 @@ export class CommentsRepository {
 
     public async getPaginationCursor(
         currentCursor: number
-    ): Promise<Array<number | null>> {
-        const postNumbers = await prisma.comment.findMany({
+    ): Promise<PaginationCursorResponse> {
+        const comments = await prisma.comment.findMany({
             select: {
                 [COMMENTS_PROPERTY_FOR_CURSOR]: true,
             },
@@ -97,20 +98,19 @@ export class CommentsRepository {
             },
         });
 
-        const cursors = postNumbers?.map((item) => item[COMMENTS_PROPERTY_FOR_CURSOR] as unknown as number) || [];
-        const lastCursor = cursors[cursors.length - 1]
-        const currentIndex = cursors.indexOf(currentCursor);
         
-        debugger
-        
-        if (currentIndex === -1) {
-            return [1, lastCursor];
+        if(!comments) {
+            return {
+                first: 0,
+                last: 0,
+                next: 0,
+                previous: 0
+            }
         }
 
-        const previousCursor = cursors[currentIndex - this.itemsPerPage] ?? 1
-        const nextCursor = cursors[currentIndex + this.itemsPerPage] ?? lastCursor
-
-        return [previousCursor, nextCursor];
+        const cursors = comments.map((item: IComment) => item[COMMENTS_PROPERTY_FOR_CURSOR] as unknown as number);
+        
+        return this.getPaginationCursors(cursors, currentCursor)
     }
 
 }

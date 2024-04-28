@@ -1,19 +1,17 @@
 import { FC, Suspense } from "react"
+
+import { ICategory } from "@/app/(protected)/(posts)/(modules)/categories/lib/category.interface"
 import {
     PaginationControlles,
 } from "@/app/_core/components/Pagination/PaginationControlls"
-
-import { ICategory } from "@/app/(protected)/(posts)/(modules)/categories/lib/category.interface"
 import { SubHeader } from "@/components/Layout"
 
 type CategoryHeaderProps = {
     category: ICategory
-    paginationId: number
 }
 
 export const CategoryHeader: FC<CategoryHeaderProps> = async ({
     category,
-    paginationId,
 }) => {
     return (
         <SubHeader
@@ -21,9 +19,7 @@ export const CategoryHeader: FC<CategoryHeaderProps> = async ({
             bookmarkReferenceType={category.id?.toString()}
             Pagination={
                 <Suspense>
-                    <PaginationControlles
-                        page={paginationId}
-                    />
+                    <PaginationControlles />
                 </Suspense>
             }
         />

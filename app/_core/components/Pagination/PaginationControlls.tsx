@@ -8,28 +8,17 @@ import { PAGINATION_URL_PARAM_KEY } from "../../consts/pagination.consts"
 import { TEXTS } from "./pagination.texts"
 import { useContent } from "../../views/ContentFeed"
 
-export type PaginationCursors = {
-    previous: number | null,
-    next: number | null
-}
+export const PaginationControlles = () => {
+    const { page, cursors: {next, previous, last, first} } = useContent()
 
-type PaginationContainerProps = {
-    page: number
-}
-
-export const PaginationControlles: FC<PaginationContainerProps> = ({
-    page,
-}) => {
-    const { cursors: {next: nextPage, previous: previousPage} } = useContent()
-
-    const isLastPage = !nextPage || page === nextPage
-    const isFirstPage = !previousPage || page === previousPage
+    const isLastPage = !next || page === next
+    const isFirstPage = !previous || !page
 
     const goToNextPage = () => {
-        location.search = `?${PAGINATION_URL_PARAM_KEY}=${nextPage}`
+        location.search = `?${PAGINATION_URL_PARAM_KEY}=${next || last}`
     }
     const goToPrevPage = () => {
-        location.search = `?${PAGINATION_URL_PARAM_KEY}=${previousPage}`
+        location.search = `?${PAGINATION_URL_PARAM_KEY}=${previous || first}`
     }
 
     return (

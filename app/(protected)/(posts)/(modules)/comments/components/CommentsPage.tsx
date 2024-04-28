@@ -24,17 +24,14 @@ export const CommentsPage: FC<PageProps> = async ({ paginationId }) => {
         perPage: itemsPerPage || DEFAULT_PAGE_SIZE,
     })
 
-    const [previousPageCursorId, nextPageCursorId] =
+    const paginationCursors =
         await commentsService.getPaginationCursors()
 
     return (
         <ContentFeed
             pageSize={itemsPerPage}
             items={comments}
-            cursors={{
-                next: nextPageCursorId,
-                previous: previousPageCursorId
-            }}
+            cursors={paginationCursors}
             Header={
                 <CommentHeader
                     page={paginationId}
@@ -50,9 +47,7 @@ export const CommentsPage: FC<PageProps> = async ({ paginationId }) => {
             Footer={
                 <Suspense>
                     <div className="w-2/12">
-                        <PaginationControlles
-                            page={paginationId}
-                        />
+                        <PaginationControlles />
                     </div>
                 </Suspense>
             }

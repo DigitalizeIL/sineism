@@ -7,17 +7,18 @@ import {
     IPost,
 } from "@/app/(protected)/(posts)/lib/post.interface"
 
-import { POST_PROPERTY_FOR_CURSOR } from "@/app/_core/consts/pagination.consts"
-import prisma from "@/lib/prisma"
+import { BaseContentRepository } from "@/app/_core/lib/repository/baseContent.repository";
 import { DEFAULT_PAGE_SIZE } from "../(modules)/categories/consts/pagination";
-import { settingsService } from "../(modules)/settings/lib/settings.service";
+import { POST_PROPERTY_FOR_CURSOR } from "@/app/_core/consts/pagination.consts"
+import { PaginationCursorResponse } from "@/app/_core/types/pagination.types";
 import { SettingKey } from "../(modules)/settings/lib/settings.interface";
+import prisma from "@/lib/prisma"
+import { settingsService } from "../(modules)/settings/lib/settings.service";
 
-export class PostsDbRepository {
-
-    private itemsPerPage: number = DEFAULT_PAGE_SIZE;
+export class PostsDbRepository extends BaseContentRepository {
 
     constructor() {
+        super()
         this.initSettings()
     }
 
@@ -40,7 +41,7 @@ export class PostsDbRepository {
             },
         })
 
-        const numbers = postNumbers.map((p) => p.postNumber)
+        const numbers = postNumbers.map((p: IPost) => p.postNumber)
 
         for (let i = 0; i < numbers.length; i++) {
             if (numbers[i] !== i + 1) {
@@ -79,7 +80,7 @@ export class PostsDbRepository {
     public async getPaginationCursor(
         categoryId: number,
         currentCursor: number
-    ): Promise<Array<number | null>> {
+    ): Promise<PaginationCursorResponse> {
         const postNumbers = await prisma.post.findMany({
             where: {
                 categoryId,
@@ -91,20 +92,20 @@ export class PostsDbRepository {
                 [POST_PROPERTY_FOR_CURSOR]: "asc",
             },
         });
-
-        const cursors = postNumbers?.map((item) => item[POST_PROPERTY_FOR_CURSOR] as unknown as number) || [];
-
-        const currentIndex = cursors.indexOf(currentCursor);
-
-
-        if (currentIndex === -1) {
-            return [1, cursors[cursors.length - 1]];
+        
+        
+        if(!postNumbers) {
+            return {
+                first: 0,
+                last: 0,
+                next: 0,
+                previous: 0
+            }
         }
 
-        const previousCursor = cursors[currentIndex - this.itemsPerPage] ?? 1
-        const nextCursor = cursors[currentIndex + this.itemsPerPage] ?? cursors[cursors.length - 1]
+        const cursors = postNumbers.map((item: IPost) => item[POST_PROPERTY_FOR_CURSOR] as unknown as number);
 
-        return [previousCursor, nextCursor];
+        return this.getPaginationCursors(cursors, currentCursor)
     }
 
     public async getAll(query?: GetAllPostsQuery): Promise<IPost[]> {

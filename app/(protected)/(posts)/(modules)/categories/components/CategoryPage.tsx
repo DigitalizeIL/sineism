@@ -40,20 +40,16 @@ export const CategoryPage: FC<PageProps> = async ({
         return notFound()
     }
 
-    const [previousPageCursorId, nextPageCursorId] =
-        await postsService.getPaginationCursors(category.id, paginationId)
+    const paginationCursors = await postsService.getPaginationCursors(category.id, paginationId)
 
     return (
         <ContentFeed
+            page={paginationId}
             pageSize={pageSize}
-            previousPageCursorId={previousPageCursorId}
-            nextPageCursorId={nextPageCursorId}
+            cursors={paginationCursors}
             items={category.posts || []}
             Header={
-                <CategoryHeader
-                    paginationId={paginationId}
-                    category={category}
-                />
+                <CategoryHeader category={category} />
             }
             FeedItems={category.posts?.map((post) => (
                 <PostFeedItem
@@ -64,9 +60,7 @@ export const CategoryPage: FC<PageProps> = async ({
             Footer={
                 <Suspense>
                     <div className="w-2/12">
-                        <PaginationControlles
-                            page={paginationId}
-                        />
+                        <PaginationControlles />
                     </div>
                 </Suspense>
             }
