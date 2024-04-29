@@ -21,9 +21,12 @@ export class CommentsRepository extends BaseContentRepository {
     }
 
     private async initSettings() {
-        this.itemsPerPage = await settingsService.getSettingValueByKey(SettingKey.posts_per_page, Number) || DEFAULT_PAGE_SIZE
+        this.itemsPerPage = await settingsService.getSettingValueByKey(
+            SettingKey.posts_per_page,
+            Number,
+            DEFAULT_PAGE_SIZE
+        )
     }
-
 
     getAll = async (pagination?: DBPagination): Promise<IComment[]> => {
         return prisma.comment.findMany({
@@ -85,34 +88,33 @@ export class CommentsRepository extends BaseContentRepository {
         return prisma.comment.count()
     }
 
-
     public async getPaginationCursor(
         currentCursor: number
     ): Promise<PaginationCursorResponse> {
-        const comments = await prisma.comment.findMany({
+        const comments: Partial<IComment>[] = await prisma.comment.findMany({
             select: {
                 [COMMENTS_PROPERTY_FOR_CURSOR]: true,
             },
             orderBy: {
                 [COMMENTS_PROPERTY_FOR_CURSOR]: "asc",
             },
-        });
+        })
 
-        
-        if(!comments) {
+        if (!comments) {
             return {
                 first: 0,
                 last: 0,
                 next: 0,
-                previous: 0
+                previous: 0,
             }
         }
 
-        const cursors = comments.map((item: IComment) => item[COMMENTS_PROPERTY_FOR_CURSOR] as unknown as number);
-        
+        const cursors = comments.map(
+            (item) => item[COMMENTS_PROPERTY_FOR_CURSOR] as unknown as number
+        )
+
         return this.getPaginationCursors(cursors, currentCursor)
     }
-
 }
 
 export const commentsRepository = new CommentsRepository()

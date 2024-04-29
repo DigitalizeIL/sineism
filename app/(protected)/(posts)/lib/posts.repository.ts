@@ -7,41 +7,45 @@ import {
     IPost,
 } from "@/app/(protected)/(posts)/lib/post.interface"
 
-import { BaseContentRepository } from "@/app/_core/lib/repository/baseContent.repository";
-import { DEFAULT_PAGE_SIZE } from "../(modules)/categories/consts/pagination";
+import { BaseContentRepository } from "@/app/_core/lib/repository/baseContent.repository"
+import { DEFAULT_PAGE_SIZE } from "../(modules)/categories/consts/pagination"
 import { POST_PROPERTY_FOR_CURSOR } from "@/app/_core/consts/pagination.consts"
-import { PaginationCursorResponse } from "@/app/_core/types/pagination.types";
-import { SettingKey } from "../(modules)/settings/lib/settings.interface";
+import { PaginationCursorResponse } from "@/app/_core/types/pagination.types"
+import { SettingKey } from "../(modules)/settings/lib/settings.interface"
 import prisma from "@/lib/prisma"
-import { settingsService } from "../(modules)/settings/lib/settings.service";
+import { settingsService } from "../(modules)/settings/lib/settings.service"
 
 export class PostsDbRepository extends BaseContentRepository {
-
     constructor() {
         super()
         this.initSettings()
     }
 
     private async initSettings() {
-        this.itemsPerPage = await settingsService.getSettingValueByKey(SettingKey.posts_per_page, Number) || DEFAULT_PAGE_SIZE
+        this.itemsPerPage = await settingsService.getSettingValueByKey(
+            SettingKey.posts_per_page,
+            Number,
+            DEFAULT_PAGE_SIZE
+        )
     }
 
     private async getLowestAvailablePostNumber(
         categoryId: number
     ): Promise<number> {
-        const postNumbers = await prisma.post.findMany({
-            where: {
-                categoryId,
-            },
-            select: {
-                postNumber: true,
-            },
-            orderBy: {
-                postNumber: "asc",
-            },
-        })
+        const postNumbers: Pick<IPost, "postNumber">[] =
+            await prisma.post.findMany({
+                where: {
+                    categoryId,
+                },
+                select: {
+                    postNumber: true,
+                },
+                orderBy: {
+                    postNumber: "asc",
+                },
+            })
 
-        const numbers = postNumbers.map((p: IPost) => p.postNumber)
+        const numbers = postNumbers.map((p) => p.postNumber)
 
         for (let i = 0; i < numbers.length; i++) {
             if (numbers[i] !== i + 1) {
@@ -76,12 +80,11 @@ export class PostsDbRepository extends BaseContentRepository {
         return cursor
     }
 
-
     public async getPaginationCursor(
         categoryId: number,
         currentCursor: number
     ): Promise<PaginationCursorResponse> {
-        const postNumbers = await prisma.post.findMany({
+        const postNumbers: Partial<IPost>[] = await prisma.post.findMany({
             where: {
                 categoryId,
             },
@@ -91,19 +94,20 @@ export class PostsDbRepository extends BaseContentRepository {
             orderBy: {
                 [POST_PROPERTY_FOR_CURSOR]: "asc",
             },
-        });
-        
-        
-        if(!postNumbers) {
+        })
+
+        if (!postNumbers) {
             return {
                 first: 0,
                 last: 0,
                 next: 0,
-                previous: 0
+                previous: 0,
             }
         }
 
-        const cursors = postNumbers.map((item: IPost) => item[POST_PROPERTY_FOR_CURSOR] as unknown as number);
+        const cursors = postNumbers.map(
+            (item) => item[POST_PROPERTY_FOR_CURSOR] as unknown as number
+        )
 
         return this.getPaginationCursors(cursors, currentCursor)
     }
@@ -136,7 +140,9 @@ export class PostsDbRepository extends BaseContentRepository {
                 title: item.title || "",
                 categoryId: item.categoryId,
                 authorId: item.authorId,
-                postNumber: await this.getLowestAvailablePostNumber(item.categoryId),
+                postNumber: await this.getLowestAvailablePostNumber(
+                    item.categoryId
+                ),
             },
         })
     }

@@ -22,7 +22,7 @@ export const CommentsPage: FC<PageProps> = async ({ paginationId }) => {
 
     const comments = await commentsService.getAllComments({
         id: paginationId,
-        perPage: itemsPerPage || DEFAULT_PAGE_SIZE,
+        perPage: itemsPerPage,
     })
 
     const paginationCursors = await commentsService.getPaginationCursors()
