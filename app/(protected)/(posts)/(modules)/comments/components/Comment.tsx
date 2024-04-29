@@ -77,7 +77,7 @@ export const Comment = async ({ page, comment }: CommentProps) => {
                     dir={"rtl"}>
                     <span>{"הגיב על פוסט/ים:"}</span>
                     {posts.map((post) => (
-                        <span key={post.id}>{post.title}, </span>
+                        <span key={post.id}>{post.postNumber}, </span>
                     ))}
                 </div>
             )}
