@@ -25,7 +25,8 @@ export const CommentsPage: FC<PageProps> = async ({ paginationId }) => {
         perPage: itemsPerPage,
     })
 
-    const paginationCursors = await commentsService.getPaginationCursors()
+    const paginationCursors =
+        await commentsService.getPaginationCursors(paginationId)
 
     return (
         <ContentFeed
