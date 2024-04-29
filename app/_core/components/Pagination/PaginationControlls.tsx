@@ -12,7 +12,7 @@ export const PaginationControlles = () => {
     const { page, cursors: {next, previous, last, first} } = useContent()
 
     const isLastPage = !next || page === next
-    const isFirstPage = !previous || !page
+    const isFirstPage = !page || page === first
 
     const goToNextPage = () => {
         location.search = `?${PAGINATION_URL_PARAM_KEY}=${next || last}`
