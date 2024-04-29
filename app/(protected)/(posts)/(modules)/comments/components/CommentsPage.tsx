@@ -4,7 +4,7 @@ import { Comment } from "./Comment"
 import { CommentHeader } from "@/app/(protected)/(posts)/(modules)/comments/components/CommentHeader"
 import { ContentFeed } from "@/app/_core/views/ContentFeed"
 import { DEFAULT_PAGE_SIZE } from "../../categories/consts/pagination"
-import { PaginationContainer } from "@/app/_core/components/Pagination/Pagination.container"
+import { PaginationControlles } from "@/app/_core/components/Pagination/PaginationControlls"
 import { SettingKey } from "../../settings/lib/settings.interface"
 import { commentsService } from "../lib/comments.service"
 import { settingsService } from "../../settings/lib/settings.service"
@@ -16,26 +16,25 @@ type PageProps = {
 export const CommentsPage: FC<PageProps> = async ({ paginationId }) => {
     const itemsPerPage = await settingsService.getSettingValueByKey(
         SettingKey.posts_per_page,
-        Number
+        Number,
+        DEFAULT_PAGE_SIZE
     )
 
     const comments = await commentsService.getAllComments({
         id: paginationId,
-        perPage: itemsPerPage || DEFAULT_PAGE_SIZE,
+        perPage: itemsPerPage,
     })
 
-    const paginationCursorBoundery =
-        await commentsService.getPaginationCursorBoundery()
+    const paginationCursors =
+        await commentsService.getPaginationCursors(paginationId)
 
     return (
         <ContentFeed
+            page={paginationId}
+            pageSize={itemsPerPage}
             items={comments}
-            Header={
-                <CommentHeader
-                    paginationCursorBoundery={paginationCursorBoundery}
-                    page={paginationId}
-                />
-            }
+            cursors={paginationCursors}
+            Header={<CommentHeader />}
             FeedItems={comments.map((comment) => (
                 <Comment
                     page={paginationId}
@@ -46,10 +45,7 @@ export const CommentsPage: FC<PageProps> = async ({ paginationId }) => {
             Footer={
                 <Suspense>
                     <div className="w-2/12">
-                        <PaginationContainer
-                            page={paginationId}
-                            cursorBoundery={paginationCursorBoundery}
-                        />
+                        <PaginationControlles />
                     </div>
                 </Suspense>
             }

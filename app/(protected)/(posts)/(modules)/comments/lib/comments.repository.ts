@@ -5,13 +5,13 @@ import {
     IComment,
 } from "@/app/(protected)/(posts)/(modules)/comments/lib/comment.interface"
 
+import { BaseContentRepository } from "@/app/_core/lib/repository/baseContent.repository"
 import { COMMENTS_PROPERTY_FOR_CURSOR } from "@/app/_core/consts/pagination.consts"
 import { DBPagination } from "@/app/_core/lib/pagination.types"
+import { PaginationCursorResponse } from "@/app/_core/types/pagination.types"
 import prisma from "@/lib/prisma"
 
-export class CommentsRepository {
-    constructor() {}
-
+export class CommentsRepository extends BaseContentRepository {
     getAll = async (pagination?: DBPagination): Promise<IComment[]> => {
         return prisma.comment.findMany({
             ...(pagination && {
@@ -72,22 +72,32 @@ export class CommentsRepository {
         return prisma.comment.count()
     }
 
-    public async getPaginationCursor(side: "first" | "last"): Promise<number> {
-        const commentNumbers = await prisma.comment.findMany({
+    public async getPaginationCursor(
+        currentCursor: number
+    ): Promise<PaginationCursorResponse> {
+        const comments: Partial<IComment>[] = await prisma.comment.findMany({
             select: {
                 [COMMENTS_PROPERTY_FOR_CURSOR]: true,
             },
             orderBy: {
-                id: side === "first" ? "asc" : "desc",
+                [COMMENTS_PROPERTY_FOR_CURSOR]: "asc",
             },
-            take: 1,
         })
 
-        const cursor = commentNumbers[0]?.[
-            COMMENTS_PROPERTY_FOR_CURSOR
-        ] as unknown as number
+        if (!comments) {
+            return {
+                first: 0,
+                last: 0,
+                next: 0,
+                previous: 0,
+            }
+        }
 
-        return cursor
+        const cursors = comments.map(
+            (item) => item[COMMENTS_PROPERTY_FOR_CURSOR] as unknown as number
+        )
+
+        return this.getPaginationCursors(cursors, currentCursor)
     }
 }
 

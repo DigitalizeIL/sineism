@@ -7,19 +7,27 @@ import {
     IPost,
 } from "@/app/(protected)/(posts)/lib/post.interface"
 
+import { BaseContentRepository } from "@/app/_core/lib/repository/baseContent.repository"
 import { POST_PROPERTY_FOR_CURSOR } from "@/app/_core/consts/pagination.consts"
+import { PaginationCursorResponse } from "@/app/_core/types/pagination.types"
 import prisma from "@/lib/prisma"
 
-export class PostsDbRepository {
-    private async getLowestAvailablePostNumber(): Promise<number> {
-        const postNumbers = await prisma.post.findMany({
-            select: {
-                postNumber: true,
-            },
-            orderBy: {
-                postNumber: "asc",
-            },
-        })
+export class PostsDbRepository extends BaseContentRepository {
+    private async getLowestAvailablePostNumber(
+        categoryId: number
+    ): Promise<number> {
+        const postNumbers: Pick<IPost, "postNumber">[] =
+            await prisma.post.findMany({
+                where: {
+                    categoryId,
+                },
+                select: {
+                    postNumber: true,
+                },
+                orderBy: {
+                    postNumber: "asc",
+                },
+            })
 
         const numbers = postNumbers.map((p) => p.postNumber)
 
@@ -32,7 +40,7 @@ export class PostsDbRepository {
         return numbers.length + 1
     }
 
-    public async getPaginationCursor(
+    public async getPaginationCursorBoundary(
         categoryId: number,
         side: "first" | "last"
     ): Promise<number> {
@@ -54,6 +62,38 @@ export class PostsDbRepository {
         ] as unknown as number
 
         return cursor
+    }
+
+    public async getPaginationCursor(
+        categoryId: number,
+        currentCursor: number
+    ): Promise<PaginationCursorResponse> {
+        const postNumbers: Partial<IPost>[] = await prisma.post.findMany({
+            where: {
+                categoryId,
+            },
+            select: {
+                [POST_PROPERTY_FOR_CURSOR]: true,
+            },
+            orderBy: {
+                [POST_PROPERTY_FOR_CURSOR]: "asc",
+            },
+        })
+
+        if (!postNumbers) {
+            return {
+                first: 0,
+                last: 0,
+                next: 0,
+                previous: 0,
+            }
+        }
+
+        const cursors = postNumbers.map(
+            (item) => item[POST_PROPERTY_FOR_CURSOR] as unknown as number
+        )
+
+        return this.getPaginationCursors(cursors, currentCursor)
     }
 
     public async getAll(query?: GetAllPostsQuery): Promise<IPost[]> {
@@ -84,7 +124,9 @@ export class PostsDbRepository {
                 title: item.title || "",
                 categoryId: item.categoryId,
                 authorId: item.authorId,
-                postNumber: await this.getLowestAvailablePostNumber(),
+                postNumber: await this.getLowestAvailablePostNumber(
+                    item.categoryId
+                ),
             },
         })
     }

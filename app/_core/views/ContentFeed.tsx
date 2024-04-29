@@ -2,27 +2,42 @@
 
 import { ReactNode, createContext, useContext } from "react"
 
+import { DEFAULT_PAGE_SIZE } from "@/app/(protected)/(posts)/(modules)/categories/consts/pagination"
 import { Footer } from "../components/Layout/Footer/Footer"
+import { ICategory } from "@/app/(protected)/(posts)/(modules)/categories/lib/category.interface"
+import { PaginationCursorResponse } from "../types/pagination.types"
 
 type BaseItem = { id: number }
 
-type CategoryFeedProps<T extends BaseItem> = {
+
+
+type ContentContextState<T = unknown> = {
+    items: T[],
+    cursors: PaginationCursorResponse,
+    page?: number,
+    pageSize: number
+    categories?: ICategory[]
+}
+
+type CategoryFeedProps<T extends BaseItem> = ContentContextState<T> & {
     Header?: ReactNode
     FeedItems?: ReactNode
     Footer?: ReactNode
-    items: T[]
 }
 
-type ContentContextState<T = unknown> = {
-    items: T[]
-}
-
-const contentContext = createContext<ContentContextState<BaseItem>>({
+const ContentContext = createContext<ContentContextState<BaseItem>>({
     items: [],
+    cursors: {
+        first: 0,
+        last: 0,
+        next: 0,
+        previous: 0
+    },
+    pageSize: DEFAULT_PAGE_SIZE
 })
 
 export const useContent = () => {
-    return useContext(contentContext)
+    return useContext(ContentContext)
 }
 
 export function ContentFeed<T extends BaseItem>({
@@ -30,11 +45,19 @@ export function ContentFeed<T extends BaseItem>({
     FeedItems,
     Footer: FooterChildren,
     items,
+    cursors,
+    pageSize,
+    page,
+    categories
 }: CategoryFeedProps<T>) {
     return (
-        <contentContext.Provider
+        <ContentContext.Provider
             value={{
+                categories,
+                page,
                 items,
+                cursors,
+                pageSize: pageSize || DEFAULT_PAGE_SIZE
             }}>
             <div className="flex flex-col h-full">
                 <div>{Header}</div>
@@ -48,6 +71,6 @@ export function ContentFeed<T extends BaseItem>({
                     <Footer>{FooterChildren}</Footer>
                 </div>
             </div>
-        </contentContext.Provider>
+        </ContentContext.Provider>
     )
 }

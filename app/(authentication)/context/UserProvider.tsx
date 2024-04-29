@@ -31,18 +31,18 @@ export const UserProvider = (props: { children: ReactNode }) => {
             `${GET_USER_API_URL}?email=${data.user.email}`
         )
 
-        if (res.data === null) {
+        if (!res.data) {
             return router.push(REGISTER_URL)
-        } else if (!res.data.isSubscribed && isPaymentRequired) {
+        } else if (res.data.isSubscribed === false && isPaymentRequired) {
             return router.push(REGISTER_PAYMENT_URL)
         }
 
         setUser(res.data)
-    }, [data?.user, router, isPaymentRequired])
+    }, [data?.user, isPaymentRequired])
 
     useEffect(() => {
         getUser()
-    }, [getUser])
+    }, [])
 
     const isAdmin = useMemo(() => user?.role === UserRole.admin, [user?.role])
     const isUser = useMemo(() => user?.role === UserRole.user, [user?.role])

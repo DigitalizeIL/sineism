@@ -7,6 +7,7 @@ import { IComment } from "@/app/(protected)/(posts)/(modules)/comments/lib/comme
 import { RatingContainer } from "@/app/(protected)/(posts)/(modules)/rating/components/Rating.container"
 import React from "react"
 import { SaveBookmarkButtonContainer } from "../../bookmark/components/SaveBookmarkButton.container"
+import { TEXTS } from "../comments.texts"
 import { commentsService } from "@/app/(protected)/(posts)/(modules)/comments/lib/comments.service"
 import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
 import { postsService } from "@/app/(protected)/(posts)/lib/posts.service"
@@ -37,6 +38,7 @@ export const Comment = async ({ page, comment }: CommentProps) => {
         session?.user?.id === userId || session?.user?.role === "ADMIN"
 
     if (!author) return null
+
     return (
         <Box>
             <div className="absolute top-4 left-4 flex flex-row gap-4">
@@ -75,9 +77,9 @@ export const Comment = async ({ page, comment }: CommentProps) => {
                 <div
                     className={"flex flex-row gap-2"}
                     dir={"rtl"}>
-                    <span>{"הגיב על פוסט/ים:"}</span>
+                    <span>{TEXTS.commentedOnPosts}</span>
                     {posts.map((post) => (
-                        <span key={post.id}>{post.title}, </span>
+                        <span key={post.id}>{post.postNumber}, </span>
                     ))}
                 </div>
             )}

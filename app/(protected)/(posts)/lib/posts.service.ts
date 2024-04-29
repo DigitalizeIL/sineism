@@ -38,20 +38,8 @@ export class PostsService {
         await this.dbRepository.deleteItem(id)
     }
 
-    public async getPaginationCursorBoundery(categoryId: number) {
-        const first = await this.dbRepository.getPaginationCursor(
-            categoryId,
-            "first"
-        )
-        const last = await this.dbRepository.getPaginationCursor(
-            categoryId,
-            "last"
-        )
-
-        return {
-            first,
-            last,
-        }
+    public async getPaginationCursors(categoryId: number, currentCursor?: number) {
+        return this.dbRepository.getPaginationCursor(categoryId, currentCursor || 1)
     }
 }
 

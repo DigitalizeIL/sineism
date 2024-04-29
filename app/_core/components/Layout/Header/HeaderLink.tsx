@@ -1,10 +1,10 @@
 "use client"
 
-import Link from "next/link"
-import clsx from "clsx"
-import React from "react"
-import { usePathname } from "next/navigation"
 import Icon from "@/components/Icons/Icon"
+import Link from "next/link"
+import React from "react"
+import clsx from "clsx"
+import { usePathname } from "next/navigation"
 
 export const HeaderLink = (props: {
     href: string
@@ -26,6 +26,7 @@ export const HeaderLink = (props: {
                 "text-center",
                 props.className,
             ])}
+            prefetch={true}
             href={props.href}>
             {props.label}
             {props.icon ? (

@@ -18,8 +18,10 @@ export const CommentsModal: FC<CommentFormProps> = ({
     const [isCommentModalOpen, setIsCommentModalOpen] = useState(false)
 
     const onSubmit = async (formData: FormData) => {
-        createComment(formData)
+        const response = createComment(formData)
         setIsCommentModalOpen(false)
+
+        return response;
     }
 
     return (

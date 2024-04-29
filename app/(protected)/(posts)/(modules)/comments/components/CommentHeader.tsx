@@ -1,30 +1,15 @@
-import { FC, Suspense } from "react"
-import {
-    PaginationContainer,
-    PaginationCursorBoundery,
-} from "@/app/_core/components/Pagination/Pagination.container"
-
+import { PaginationControlles } from "@/app/_core/components/Pagination/PaginationControlls"
 import { SubHeader } from "@/components/Layout"
+import { Suspense } from "react"
 
-type CategoryHeaderProps = {
-    page: number
-    paginationCursorBoundery: PaginationCursorBoundery
-}
-
-export const CommentHeader: FC<CategoryHeaderProps> = async ({
-    page,
-    paginationCursorBoundery,
-}) => {
+export const CommentHeader = async ({}) => {
     return (
         <SubHeader
             title={"תגובות"}
             bookmarkReferenceType={"comment"}
             Pagination={
                 <Suspense>
-                    <PaginationContainer
-                        page={page}
-                        cursorBoundery={paginationCursorBoundery}
-                    />
+                    <PaginationControlles />
                 </Suspense>
             }
         />

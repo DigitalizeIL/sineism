@@ -6,6 +6,8 @@ import { commentsService } from "@/app/(protected)/(posts)/(modules)/comments/li
 import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
 import { postsService } from "@/app/(protected)/(posts)/lib/posts.service"
 import { revalidatePath } from "next/cache"
+import { FormSubmitResponse } from "@/app/_core/types/FormSubmitResponse"
+import { FormSubmitError } from "@/app/_core/types/FormSubmitError"
 
 type CommentFormContainerProps = {
     specificPost?: IPost
@@ -27,7 +29,7 @@ export const CommentFormContainer = async (
         posts = await postsService.getAllPosts()
     }
 
-    async function createComment(formData: FormData) {
+    async function createComment(formData: FormData): Promise<FormSubmitResponse> {
         "use server"
         const content = formData.get("content") as string
         const postIds = (formData.get("postIds") as string)
@@ -37,7 +39,7 @@ export const CommentFormContainer = async (
         if (!session?.user || !content || !postIds) {
             // TODO: show error
             console.log("no content", session, content, props.specificPost)
-            return
+            return { error: { message: "missing fields" } }
         }
 
         const newComment: CreateComment = {
@@ -49,6 +51,8 @@ export const CommentFormContainer = async (
         await commentsService.createComment(newComment)
 
         revalidatePath("/posts")
+        
+        return {}
     }
 
     return (

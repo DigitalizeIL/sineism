@@ -12,7 +12,6 @@ export type Option = {
 type SelectProps = {
     name: string
     className?: string
-    defaultValue?: string | number
     value?: string | number
     placeholder?: string
     onChange?: (value: string | number) => void
@@ -68,7 +67,6 @@ export const Select = (props: SelectProps) => {
             ])}>
             <option
                 value={"empty"}
-                selected
                 disabled>
                 {props.placeholder || "Select"}
             </option>

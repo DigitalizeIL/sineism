@@ -1,11 +1,12 @@
 import { Button } from "@/app/_core/components/Button"
-import { CreateCategory } from "../../(posts)/(modules)/categories/lib/category.interface"
+import { CreateCategory, ICategory } from "../../(posts)/(modules)/categories/lib/category.interface"
 import { Input } from "@/app/_core/components/Form/Input"
 import Link from "next/link"
 import { MANAGEMENT_PATH } from "@/app/_core/components/Layout/Header/consts"
 import { ModalWithButton } from "@/app/_core/components/Modal"
 import { categoriesService } from "../../(posts)/(modules)/categories/lib/categories.service"
 import { revalidatePath } from "next/cache"
+import { EditCategory } from "./EditCategory"
 
 export const CategoryManagement = async () => {
     const categories = await categoriesService.getAllCategories()
@@ -21,6 +22,19 @@ export const CategoryManagement = async () => {
         await categoriesService.createCategory(newCategory)
 
         revalidatePath(MANAGEMENT_PATH)
+    }
+
+    const editCategory = async (formData: FormData) => {
+        "use server"
+
+
+        const category: ICategory = {
+            id: Number(formData.get("categoryId") as string),
+            name: formData.get("name") as string,
+            path: formData.get("path") as string,
+        }
+
+        await categoriesService.updateCategory(category.id, category)
     }
 
     const deleteCategory = async (formData: FormData) => {
@@ -43,7 +57,10 @@ export const CategoryManagement = async () => {
                         href={`/categories/${category.path}`}>
                         {category.name}
                     </Link>
-                    <div>
+                    <div className="flex flex-row">
+                        <ModalWithButton buttonText="Edit">
+                            <EditCategory category={category} editCategory={editCategory} />
+                        </ModalWithButton>
                         <ModalWithButton buttonText="Delete">
                             <div
                                 dir="ltr"
@@ -80,7 +97,7 @@ export const CategoryManagement = async () => {
                     name="path"
                     placeholder="Category Slug"
                 />
-                <Button>Create New Category</Button>
+                <Button type="primary">Create New Category</Button>
             </form>
         </div>
     )

@@ -5,7 +5,6 @@ import {
 
 import { Button } from "@/components/Button"
 import { Input } from "@/components/Form/Input"
-import { ModalWithButton } from "@/components/Modal"
 import { TEXTS } from "@/app/(protected)/(posts)/(modules)/settings/components/texts"
 import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
 import { settingsService } from "@/app/(protected)/(posts)/(modules)/settings/lib/settings.service"
@@ -42,33 +41,35 @@ export const Settings = async () => {
     }
 
     return (
-        <ModalWithButton buttonText={TEXTS.settingsModalButton}>
-            <form
-                action={updateSettings}
-                className={
-                    "flex items-center justify-center h-full px-4 flex-wrap gap-10"
-                }>
-                {settings.map((setting) => {
-                    return (
-                        <div
-                            className={"flex flex-col"}
-                            key={setting.id}>
-                            <label htmlFor={setting.key}>
-                                {TEXTS.settingsFieldMap[setting.key]}
-                            </label>
+        <form
+            action={updateSettings}
+            className={
+                "flex items-end justify-center h-full px-4 flex-wrap gap-10"
+            }>
+            {settings.map((setting) => {
+                return (
+                    <div
+                        className={"flex flex-col"}
+                        key={setting.id}>
+                        <label htmlFor={setting.key}>
+                            {TEXTS.settingsFieldMap[setting.key]}
+                        </label>
 
-                            <Input
-                                key={setting.id}
-                                type={"text"}
-                                name={setting.key}
-                                placeholder={setting.key}
-                                defaultValue={setting.value?.toString()}
-                            />
-                        </div>
-                    )
-                })}
-                <Button htmlType={"submit"}>Update</Button>
-            </form>
-        </ModalWithButton>
+                        <Input
+                            key={setting.id}
+                            type={"text"}
+                            name={setting.key}
+                            placeholder={setting.key}
+                            defaultValue={setting.value?.toString()}
+                        />
+                    </div>
+                )
+            })}
+            <Button
+                type={"primary"}
+                htmlType={"submit"}>
+                Update
+            </Button>
+        </form>
     )
 }
