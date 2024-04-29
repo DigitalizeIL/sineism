@@ -6,53 +6,67 @@ import type {
     OnApproveActions,
     OnApproveData,
 } from "@paypal/paypal-js"
+import {
+    PayPalButtons,
+    PayPalButtonsComponentProps,
+} from "@paypal/react-paypal-js"
 
-import { PayPalButtons } from "@paypal/react-paypal-js"
 import { PaymentProps } from "../lib/order.types"
 import { useState } from "react"
 
 export const PaymentForm = (props: PaymentProps) => {
     const [errorMessage, setErrorMessage] = useState<string>()
 
-    const createPaypalOrder = async (
-        data: CreateOrderData,
-        actions: CreateOrderActions
-    ) => {
-        const order = await actions.order.create({
-            purchase_units: [
-                {
-                    description: props.product,
-                    amount: {
-                        currency_code: "USD",
-                        value: props.price.toString(),
-                    },
-                },
-            ],
-        })
+    const createPaypalOrder: PayPalButtonsComponentProps["createOrder"] =
+        async (data, actions) => {
+            try {
+                const order = await actions.order.create({
+                    intent: "CAPTURE",
+                    purchase_units: [
+                        {
+                            description: props.product,
+                            amount: {
+                                currency_code: "USD",
+                                value: props.price.toString(),
+                            },
+                        },
+                    ],
+                })
 
-        if (!order) {
-            setErrorMessage("Something went wrong")
+                if (!order) {
+                    setErrorMessage("Something went wrong")
+                }
+
+                return order
+            } catch (error) {
+                console.error(error)
+                setErrorMessage("Something went wrong")
+            }
+
             return ""
         }
 
-        return order
-    }
-
-    const onApprove = async (
-        data: OnApproveData,
-        actions: OnApproveActions
+    const onApprove: PayPalButtonsComponentProps["onApprove"] = async (
+        data,
+        actions
     ) => {
-        const capture = await actions.order?.capture()
+        try {
+            const capture = await actions.order?.capture()
 
-        if (capture) {
-            const { payer, id, status } = capture
+            if (!capture) {
+                throw new Error("no capture")
+            }
 
-            if (status !== "COMPLETED") {
-                console.log("CAPTURE", capture)
-                return
+            const { id, status } = capture
+
+            if (!id || status !== "COMPLETED") {
+                console.error("CAPTURE", capture)
+                throw new Error("bad capture")
             }
 
             await executeOrder(id)
+        } catch (e) {
+            setErrorMessage("Something went wrong")
         }
     }
 
