@@ -4,29 +4,28 @@ import { ReactNode, createContext, useContext } from "react"
 
 import { DEFAULT_PAGE_SIZE } from "@/app/(protected)/(posts)/(modules)/categories/consts/pagination"
 import { Footer } from "../components/Layout/Footer/Footer"
+import { ICategory } from "@/app/(protected)/(posts)/(modules)/categories/lib/category.interface"
 import { PaginationCursorResponse } from "../types/pagination.types"
 
 type BaseItem = { id: number }
 
-type CategoryFeedProps<T extends BaseItem> = {
-    Header?: ReactNode
-    FeedItems?: ReactNode
-    Footer?: ReactNode
-    items: T[],
-    cursors: PaginationCursorResponse,
-    pageSize: number | null
-    page?: number
-}
+
 
 type ContentContextState<T = unknown> = {
     items: T[],
     cursors: PaginationCursorResponse,
     page?: number,
     pageSize: number
+    categories?: ICategory[]
+}
+
+type CategoryFeedProps<T extends BaseItem> = ContentContextState<T> & {
+    Header?: ReactNode
+    FeedItems?: ReactNode
+    Footer?: ReactNode
 }
 
 const ContentContext = createContext<ContentContextState<BaseItem>>({
-    page: 0,
     items: [],
     cursors: {
         first: 0,
@@ -48,11 +47,13 @@ export function ContentFeed<T extends BaseItem>({
     items,
     cursors,
     pageSize,
-    page
+    page,
+    categories
 }: CategoryFeedProps<T>) {
     return (
         <ContentContext.Provider
             value={{
+                categories,
                 page,
                 items,
                 cursors,
