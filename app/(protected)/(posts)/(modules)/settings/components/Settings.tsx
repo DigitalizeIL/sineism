@@ -5,7 +5,6 @@ import {
 
 import { Button } from "@/components/Button"
 import { Input } from "@/components/Form/Input"
-import { ModalWithButton } from "@/components/Modal"
 import { TEXTS } from "@/app/(protected)/(posts)/(modules)/settings/components/texts"
 import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
 import { settingsService } from "@/app/(protected)/(posts)/(modules)/settings/lib/settings.service"
