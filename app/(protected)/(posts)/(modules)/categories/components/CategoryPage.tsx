@@ -59,7 +59,7 @@ export const CategoryPage: FC<PageProps> = async ({
             ))}
             Footer={
                 <Suspense>
-                    <div className="w-2/12">
+                    <div className="w-3/12 flex justify-end">
                         <PaginationControlles />
                     </div>
                 </Suspense>
