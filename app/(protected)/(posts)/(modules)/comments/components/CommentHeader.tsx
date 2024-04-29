@@ -1,17 +1,8 @@
-import { FC, Suspense } from "react"
-
-import {
-    PaginationControlles,
-} from "@/app/_core/components/Pagination/PaginationControlls"
+import { PaginationControlles } from "@/app/_core/components/Pagination/PaginationControlls"
 import { SubHeader } from "@/components/Layout"
+import { Suspense } from "react"
 
-type CategoryHeaderProps = {
-    page: number
-}
-
-export const CommentHeader: FC<CategoryHeaderProps> = async ({
-    page,
-}) => {
+export const CommentHeader = async ({}) => {
     return (
         <SubHeader
             title={"תגובות"}
