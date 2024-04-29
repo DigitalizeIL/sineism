@@ -8,7 +8,6 @@ import { Input } from "@/components/Form/Input"
 import { TEXTS } from "@/app/(protected)/(posts)/(modules)/settings/components/texts"
 import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
 import { settingsService } from "@/app/(protected)/(posts)/(modules)/settings/lib/settings.service"
-import toast from "react-hot-toast"
 
 function isSettingKey(key: string): key is SettingKey {
     return key in SettingKey

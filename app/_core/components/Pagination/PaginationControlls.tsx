@@ -7,21 +7,23 @@ import { Button } from "../Button"
 import { PAGINATION_URL_PARAM_KEY } from "../../consts/pagination.consts"
 import { TEXTS } from "./pagination.texts"
 import { useContent } from "../../views/ContentFeed"
+import { useRouter } from "next/navigation"
 
 export const PaginationControlles = () => {
     const {
         page,
         cursors: { next, previous, last, first },
     } = useContent()
+    const router = useRouter()
 
     const isLastPage = !next || page === next
     const isFirstPage = !page || page === first
 
     const goToNextPage = () => {
-        location.search = `?${PAGINATION_URL_PARAM_KEY}=${next || last}`
+        router.push(`?${PAGINATION_URL_PARAM_KEY}=${next || last}`)
     }
     const goToPrevPage = () => {
-        location.search = `?${PAGINATION_URL_PARAM_KEY}=${previous || first}`
+        router.push(`?${PAGINATION_URL_PARAM_KEY}=${previous || first}`)
     }
 
     return (
