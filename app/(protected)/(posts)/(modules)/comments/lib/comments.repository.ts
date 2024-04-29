@@ -8,26 +8,10 @@ import {
 import { BaseContentRepository } from "@/app/_core/lib/repository/baseContent.repository"
 import { COMMENTS_PROPERTY_FOR_CURSOR } from "@/app/_core/consts/pagination.consts"
 import { DBPagination } from "@/app/_core/lib/pagination.types"
-import { DEFAULT_PAGE_SIZE } from "../../categories/consts/pagination"
 import { PaginationCursorResponse } from "@/app/_core/types/pagination.types"
-import { SettingKey } from "../../settings/lib/settings.interface"
 import prisma from "@/lib/prisma"
-import { settingsService } from "../../settings/lib/settings.service"
 
 export class CommentsRepository extends BaseContentRepository {
-    constructor() {
-        super()
-        this.initSettings()
-    }
-
-    private async initSettings() {
-        this.itemsPerPage = await settingsService.getSettingValueByKey(
-            SettingKey.posts_per_page,
-            Number,
-            DEFAULT_PAGE_SIZE
-        )
-    }
-
     getAll = async (pagination?: DBPagination): Promise<IComment[]> => {
         return prisma.comment.findMany({
             ...(pagination && {

@@ -8,27 +8,11 @@ import {
 } from "@/app/(protected)/(posts)/lib/post.interface"
 
 import { BaseContentRepository } from "@/app/_core/lib/repository/baseContent.repository"
-import { DEFAULT_PAGE_SIZE } from "../(modules)/categories/consts/pagination"
 import { POST_PROPERTY_FOR_CURSOR } from "@/app/_core/consts/pagination.consts"
 import { PaginationCursorResponse } from "@/app/_core/types/pagination.types"
-import { SettingKey } from "../(modules)/settings/lib/settings.interface"
 import prisma from "@/lib/prisma"
-import { settingsService } from "../(modules)/settings/lib/settings.service"
 
 export class PostsDbRepository extends BaseContentRepository {
-    constructor() {
-        super()
-        this.initSettings()
-    }
-
-    private async initSettings() {
-        this.itemsPerPage = await settingsService.getSettingValueByKey(
-            SettingKey.posts_per_page,
-            Number,
-            DEFAULT_PAGE_SIZE
-        )
-    }
-
     private async getLowestAvailablePostNumber(
         categoryId: number
     ): Promise<number> {

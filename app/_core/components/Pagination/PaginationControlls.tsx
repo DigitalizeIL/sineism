@@ -9,7 +9,10 @@ import { TEXTS } from "./pagination.texts"
 import { useContent } from "../../views/ContentFeed"
 
 export const PaginationControlles = () => {
-    const { page, cursors: {next, previous, last, first} } = useContent()
+    const {
+        page,
+        cursors: { next, previous, last, first },
+    } = useContent()
 
     const isLastPage = !next || page === next
     const isFirstPage = !page || page === first

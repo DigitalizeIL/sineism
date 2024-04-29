@@ -1,8 +1,20 @@
 import { DEFAULT_PAGE_SIZE } from "@/app/(protected)/(posts)/(modules)/categories/consts/pagination"
 import { PaginationCursorResponse } from "../../types/pagination.types"
+import { SettingKey } from "@/app/(protected)/(posts)/(modules)/settings/lib/settings.interface"
+import { settingsService } from "@/app/(protected)/(posts)/(modules)/settings/lib/settings.service"
 
 export class BaseContentRepository {
-    constructor(public itemsPerPage: number = DEFAULT_PAGE_SIZE) {}
+    constructor(public itemsPerPage: number = DEFAULT_PAGE_SIZE) {
+        this.initSettings()
+    }
+
+    private async initSettings() {
+        this.itemsPerPage = await settingsService.getSettingValueByKey(
+            SettingKey.posts_per_page,
+            Number,
+            DEFAULT_PAGE_SIZE
+        )
+    }
 
     getPaginationCursors(
         cursors: number[],
