@@ -22,7 +22,9 @@ export const CategoryPage: FC<PageProps> = async ({
 }) => {
     const pageSize = await settingsService.getSettingValueByKey(
         SettingKey.posts_per_page,
-        Number
+        Number,
+        // @ts-ignore
+        null 
     )
 
     const category = await categoriesService.getCategory({

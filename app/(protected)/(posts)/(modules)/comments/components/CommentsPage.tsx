@@ -16,7 +16,8 @@ type PageProps = {
 export const CommentsPage: FC<PageProps> = async ({ paginationId }) => {
     const itemsPerPage = await settingsService.getSettingValueByKey(
         SettingKey.posts_per_page,
-        Number
+        Number,
+        DEFAULT_PAGE_SIZE
     )
 
     const comments = await commentsService.getAllComments({
@@ -24,19 +25,14 @@ export const CommentsPage: FC<PageProps> = async ({ paginationId }) => {
         perPage: itemsPerPage || DEFAULT_PAGE_SIZE,
     })
 
-    const paginationCursors =
-        await commentsService.getPaginationCursors()
+    const paginationCursors = await commentsService.getPaginationCursors()
 
     return (
         <ContentFeed
             pageSize={itemsPerPage}
             items={comments}
             cursors={paginationCursors}
-            Header={
-                <CommentHeader
-                    page={paginationId}
-                />
-            }
+            Header={<CommentHeader page={paginationId} />}
             FeedItems={comments.map((comment) => (
                 <Comment
                     page={paginationId}
