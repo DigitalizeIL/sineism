@@ -1,5 +1,5 @@
 export const TEXTS = {
     buyComments: "רכישת תגובות",
     youLeft: "נשאר לך",
-    comments: "תבוגות",
+    comments: "תגובות",
 }
