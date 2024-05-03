@@ -14,6 +14,9 @@ export default withAuth({
         authorized: ({ req, token }) => {
             const path = new URL(req.url).pathname
 
+            // @ts-ignore
+            req.userToken = token
+
             switch (path) {
                 case "/posts":
                 case "/management":
