@@ -23,8 +23,7 @@ export const CategoryPage: FC<PageProps> = async ({
     const pageSize = await settingsService.getSettingValueByKey(
         SettingKey.posts_per_page,
         Number,
-        // @ts-ignore
-        null 
+        DEFAULT_PAGE_SIZE
     )
 
     const category = await categoriesService.getCategory({
@@ -34,7 +33,7 @@ export const CategoryPage: FC<PageProps> = async ({
         withPosts: true,
         pagination: {
             id: paginationId,
-            perPage: pageSize || DEFAULT_PAGE_SIZE,
+            perPage: pageSize,
         },
     })
 
@@ -42,7 +41,10 @@ export const CategoryPage: FC<PageProps> = async ({
         return notFound()
     }
 
-    const paginationCursors = await postsService.getPaginationCursors(category.id, paginationId)
+    const paginationCursors = await postsService.getPaginationCursors(
+        category.id,
+        paginationId
+    )
 
     return (
         <ContentFeed
@@ -50,9 +52,7 @@ export const CategoryPage: FC<PageProps> = async ({
             pageSize={pageSize}
             cursors={paginationCursors}
             items={category.posts || []}
-            Header={
-                <CategoryHeader category={category} />
-            }
+            Header={<CategoryHeader category={category} />}
             FeedItems={category.posts?.map((post) => (
                 <PostFeedItem
                     key={post.id}
