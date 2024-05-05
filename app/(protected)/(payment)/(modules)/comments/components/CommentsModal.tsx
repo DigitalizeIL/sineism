@@ -21,7 +21,7 @@ export const CommentsModal: FC<CommentFormProps> = ({
         const response = createComment(formData)
         setIsCommentModalOpen(false)
 
-        return response;
+        return response
     }
 
     return (

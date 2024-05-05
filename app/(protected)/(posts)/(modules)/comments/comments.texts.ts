@@ -8,5 +8,5 @@ export const TEXTS = {
     commentContentLabel: "לתגובה על פוסט/ים",
     submit: "יצירת תגובה",
     commentedOnPosts: "הגיב על פוסט/ים:",
-    fromCategory: "מקטגוריה"
+    fromCategory: "מקטגוריה",
 }

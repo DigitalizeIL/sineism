@@ -38,7 +38,9 @@ export const PostCreateOrEditForm: FC<FormProps> = ({
     const [number, setNumber] = useState(post?.postNumber)
     const [title, setTitle] = useState(post?.title)
     const [content, setContent] = useState(post?.content)
-    const [category, setCategory] = useState(post?.categoryId || categories?.[0]?.id)
+    const [category, setCategory] = useState(
+        post?.categoryId || categories?.[0]?.id
+    )
 
     useEffect(() => {
         if (post) {

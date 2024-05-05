@@ -38,8 +38,14 @@ export class PostsService {
         await this.dbRepository.deleteItem(id)
     }
 
-    public async getPaginationCursors(categoryId: number, currentCursor?: number) {
-        return this.dbRepository.getPaginationCursor(categoryId, currentCursor || 1)
+    public async getPaginationCursors(
+        categoryId: number,
+        currentCursor?: number
+    ) {
+        return this.dbRepository.getPaginationCursor(
+            categoryId,
+            currentCursor || 1
+        )
     }
 }
 

@@ -54,7 +54,7 @@ export const CommentForm: FC<CommentFormProps> = ({
                 toast.error(response.error.message)
                 console.error(response)
 
-                return;
+                return
             }
 
             toast.success("Comment created")
@@ -63,7 +63,6 @@ export const CommentForm: FC<CommentFormProps> = ({
             setSelectedCategory(undefined)
             setCategoryKey(Math.random())
             setSelectValue([])
-
         } catch (e) {
             console.error(e)
             toast.error("Something went wrong")
@@ -77,8 +76,8 @@ export const CommentForm: FC<CommentFormProps> = ({
             !Array.isArray(selectValue) && "value" in selectValue
                 ? selectValue.value === EMPTY_COMMENT_ID
                 : selectValue?.some(
-                    (value) => value.value === EMPTY_COMMENT_ID
-                ),
+                      (value) => value.value === EMPTY_COMMENT_ID
+                  ),
         [selectValue]
     )
 
@@ -136,9 +135,9 @@ export const CommentForm: FC<CommentFormProps> = ({
                             value={
                                 isNoReference
                                     ? ({
-                                        label: TEXTS.allItems,
-                                        value: { EMPTY_COMMENT_ID },
-                                    } as any)
+                                          label: TEXTS.allItems,
+                                          value: { EMPTY_COMMENT_ID },
+                                      } as any)
                                     : selectValue
                             }
                             onChange={(id) => {

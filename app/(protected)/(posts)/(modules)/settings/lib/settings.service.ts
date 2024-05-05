@@ -19,8 +19,16 @@ export class SettingsService {
         return found as ISetting | null
     }
 
-    async getSettingValueByKey<T extends ValueParser>(key: SettingKey, parser: T, defaultValue: ReturnType<T> ): Promise<ReturnType<T>> 
-    async getSettingValueByKey<T extends ValueParser>(key: SettingKey, parser: T, defaultValue = null): Promise<ReturnType<T> | null> {
+    async getSettingValueByKey<T extends ValueParser>(
+        key: SettingKey,
+        parser: T,
+        defaultValue: ReturnType<T>
+    ): Promise<ReturnType<T>>
+    async getSettingValueByKey<T extends ValueParser>(
+        key: SettingKey,
+        parser: T,
+        defaultValue = null
+    ): Promise<ReturnType<T> | null> {
         const found = await prisma.settings.findUnique({
             where: { key },
         })

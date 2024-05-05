@@ -16,19 +16,20 @@
         "incremental": true,
         "plugins": [
             {
-                "name": "next",
-            },
+                "name": "next"
+            }
         ],
         "baseUrl": "./",
         "paths": {
+            "*": ["types/*.d.ts"],
             "@/*": ["./*"],
             "@/components/*": ["app/_core/components/*"],
             "@/pages/*": ["pages/*"],
             "@/app/*": ["app/*"],
             "@/lib/*": ["app/_core/lib/*"],
-            "@/styles/*": ["styles/*"],
-        },
+            "@/styles/*": ["styles/*"]
+        }
     },
     "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-    "exclude": ["node_modules"],
+    "exclude": ["node_modules"]
 }

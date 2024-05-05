@@ -1,28 +1,42 @@
 "use client"
 
-import { ReactNode, createContext, useContext } from "react"
+import {
+    ReactNode,
+    createContext,
+    useContext,
+    useEffect,
+    useMemo,
+    useState,
+} from "react"
 
 import { DEFAULT_PAGE_SIZE } from "@/app/(protected)/(posts)/(modules)/categories/consts/pagination"
 import { Footer } from "../components/Layout/Footer/Footer"
 import { ICategory } from "@/app/(protected)/(posts)/(modules)/categories/lib/category.interface"
-import { PaginationCursorResponse } from "../types/pagination.types"
+import { PAGINATION_URL_PARAM_KEY } from "../consts/pagination.consts"
 
-type BaseItem = { id: number }
-
-
+type BaseItem = { id: number; cursor: number }
 
 type ContentContextState<T = unknown> = {
-    items: T[],
-    cursors: PaginationCursorResponse,
-    page?: number,
-    pageSize: number
+    cursor?: number
     categories?: ICategory[]
+    pageSize: number
+    feedItems: Array<{
+        cursor: number
+        item: Omit<T, "cursor">
+        Component: ReactNode
+    }>
+    updateCursor: (cursor: number) => void
 }
 
-type CategoryFeedProps<T extends BaseItem> = ContentContextState<T> & {
+type ContextProps<T extends BaseItem> = Omit<
+    ContentContextState<T>,
+    "updateCursor"
+>
+
+type CategoryFeedProps<T extends BaseItem> = ContextProps<T> & {
     Header?: ReactNode
-    FeedItems?: ReactNode
     Footer?: ReactNode
+    forcedPage?: number
 }
 
 const ContentContext = createContext<ContentContextState<BaseItem>>({
@@ -31,10 +45,11 @@ const ContentContext = createContext<ContentContextState<BaseItem>>({
         first: 0,
         last: 0,
         next: 0,
-        previous: 0
+        previous: 0,
     },
-    pageSize: DEFAULT_PAGE_SIZE
-})
+    cursor: 0,
+    pageSize: DEFAULT_PAGE_SIZE,
+} as any)
 
 export const useContent = () => {
     return useContext(ContentContext)
@@ -42,32 +57,55 @@ export const useContent = () => {
 
 export function ContentFeed<T extends BaseItem>({
     Header,
-    FeedItems,
+    feedItems,
     Footer: FooterChildren,
-    items,
-    cursors,
     pageSize,
-    page,
-    categories
+    forcedPage: forcedCursor = 0,
+    categories,
 }: CategoryFeedProps<T>) {
+    const [cursor, setCursor] = useState(forcedCursor)
+
+    useEffect(() => {
+        setCursor(forcedCursor)
+    }, [forcedCursor])
+
+    const ItemsToRender = useMemo(() => {
+        const indexOfCursor = feedItems.findIndex(
+            (item) => item.cursor === cursor
+        )
+        const startIndex = indexOfCursor > 0 ? indexOfCursor : 0
+        const endIndex = startIndex + pageSize
+
+        return feedItems
+            .slice(startIndex, endIndex)
+            .map((item) => item.Component)
+    }, [cursor, feedItems, pageSize])
+
+    const updateCursor = (cursor: number) => {
+        history.pushState({}, "", `?${PAGINATION_URL_PARAM_KEY}=${cursor}`)
+        setCursor(cursor)
+    }
+
     return (
         <ContentContext.Provider
             value={{
+                updateCursor,
                 categories,
-                page,
-                items,
-                cursors,
-                pageSize: pageSize || DEFAULT_PAGE_SIZE
+                cursor: cursor,
+                feedItems,
+                pageSize: pageSize || DEFAULT_PAGE_SIZE,
             }}>
-            <div className="flex flex-col h-full">
-                <div>{Header}</div>
+            <div className="flex flex-col h-auto">
+                <div className="sticky top-0 w-full shadow-sm bg-neutral-50 z-10">
+                    {Header}
+                </div>
                 <div
                     className={
-                        "flex flex-col justify-start items-center w-full"
+                        "flex flex-grow flex-col justify-start items-center w-full mt-4 pb-20"
                     }>
-                    {FeedItems}
+                    {ItemsToRender}
                 </div>
-                <div className="mt-auto">
+                <div className="bottom-0 mt-10 w-full shadow-sm fixed bg-neutral-50 z-5">
                     <Footer>{FooterChildren}</Footer>
                 </div>
             </div>

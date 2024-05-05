@@ -26,6 +26,24 @@ export class CategoriesDbRepository {
             return null
         }
 
+        let paginationQuery: any = {}
+
+        if (pagination) {
+            paginationQuery.take = pagination.take
+
+            if (pagination.cursor) {
+                paginationQuery.where = {
+                    [POST_PROPERTY_FOR_CURSOR]: {
+                        gte: pagination.cursor || 0,
+                    },
+                }
+            }
+
+            if (pagination.skip) {
+                paginationQuery.skip = pagination.skip
+            }
+        }
+
         return prisma.category.findFirst({
             where: {
                 ...(filter.id && {
@@ -38,19 +56,7 @@ export class CategoriesDbRepository {
             include: {
                 posts: withPosts
                     ? {
-                          ...(pagination && {
-                              ...(pagination.cursor && {
-                                  where: {
-                                      [POST_PROPERTY_FOR_CURSOR]: {
-                                          gte: pagination.cursor || 0,
-                                      },
-                                  },
-                              }),
-                              ...(pagination.skip && {
-                                  skip: pagination.skip,
-                              }),
-                              take: pagination.take,
-                          }),
+                          ...paginationQuery,
                           orderBy: {
                               postNumber: "asc",
                           },

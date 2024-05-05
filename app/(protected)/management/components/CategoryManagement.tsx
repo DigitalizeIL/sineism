@@ -1,5 +1,8 @@
 import { Button } from "@/app/_core/components/Button"
-import { CreateCategory, ICategory } from "../../(posts)/(modules)/categories/lib/category.interface"
+import {
+    CreateCategory,
+    ICategory,
+} from "../../(posts)/(modules)/categories/lib/category.interface"
 import { Input } from "@/app/_core/components/Form/Input"
 import Link from "next/link"
 import { MANAGEMENT_PATH } from "@/app/_core/components/Layout/Header/consts"
@@ -26,7 +29,6 @@ export const CategoryManagement = async () => {
 
     const editCategory = async (formData: FormData) => {
         "use server"
-
 
         const category: ICategory = {
             id: Number(formData.get("categoryId") as string),
@@ -59,7 +61,10 @@ export const CategoryManagement = async () => {
                     </Link>
                     <div className="flex flex-row">
                         <ModalWithButton buttonText="Edit">
-                            <EditCategory category={category} editCategory={editCategory} />
+                            <EditCategory
+                                category={category}
+                                editCategory={editCategory}
+                            />
                         </ModalWithButton>
                         <ModalWithButton buttonText="Delete">
                             <div
