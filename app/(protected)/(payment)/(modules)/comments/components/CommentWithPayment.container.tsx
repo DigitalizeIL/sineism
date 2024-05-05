@@ -45,8 +45,7 @@ export const CommentWithPaymentContainer = async () => {
                     <>
                         <CommentFormContainer />
                         {price > 0 && (
-                            <div
-                                className={"m-2 flex items-center gap-1"}>
+                            <div className={"m-2 flex items-center gap-1"}>
                                 <span>{TEXTS.youLeft}</span>
                                 <span>{quotaObject?.quota}</span>
                                 <span>{TEXTS.comments}</span>

@@ -24,6 +24,14 @@ export const PaymentContainer = (props: {
             amount={props.amount}
             price={props.price}
             buttonContent={<BiComment />}
+            productDescription={
+                <span>
+                    {TEXTS.productDescription.replace(
+                        "{{comment_number}}",
+                        props.amount.toString()
+                    )}
+                </span>
+            }
         />
     )
 }

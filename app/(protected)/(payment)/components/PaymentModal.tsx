@@ -3,7 +3,6 @@
 import { Button, ButtonProps } from "@/components/Button"
 import { ReactNode, useState } from "react"
 
-import { BiComment } from "react-icons/bi"
 import { LoadingDots } from "@/components/LoadingDots"
 import { Modal } from "@/components/Modal"
 import { PaymentForm } from "@/app/(protected)/(payment)/components/PaymentForm"
@@ -14,6 +13,7 @@ import { usePayPalScriptReducer } from "@paypal/react-paypal-js"
 export const PaymentModal = (
     props: {
         title: string
+        productDescription?: ReactNode
         buttonContent: ReactNode
         buttonProps?: Omit<ButtonProps, "children">
     } & PaymentProps
@@ -57,6 +57,7 @@ export const PaymentModal = (
                             amount={props.amount}
                         />
                     </div>
+                    <p>{props.productDescription}</p>
                 </div>
             </Modal>
             <Button
