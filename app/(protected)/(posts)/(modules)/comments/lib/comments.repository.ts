@@ -13,20 +13,26 @@ import prisma from "@/lib/prisma"
 
 export class CommentsRepository extends BaseContentRepository {
     getAll = async (pagination?: DBPagination): Promise<IComment[]> => {
-        return prisma.comment.findMany({
-            ...(pagination && {
-                ...(pagination.cursor && {
-                    where: {
-                        [COMMENTS_PROPERTY_FOR_CURSOR]: {
-                            gte: pagination.cursor || 0,
-                        },
+        const paginationQuery: any = {}
+
+        if (pagination) {
+            paginationQuery.take = pagination.take
+
+            if (pagination.cursor) {
+                paginationQuery.where = {
+                    [COMMENTS_PROPERTY_FOR_CURSOR]: {
+                        gte: pagination.cursor || 0,
                     },
-                }),
-                ...(pagination.skip && {
-                    skip: pagination.skip,
-                }),
-                take: pagination.take,
-            }),
+                }
+            }
+
+            if (pagination.skip) {
+                paginationQuery.skip = pagination.skip
+            }
+        }
+
+        return prisma.comment.findMany({
+            ...paginationQuery,
             orderBy: {
                 commentNumber: "asc",
             },

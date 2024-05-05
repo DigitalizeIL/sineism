@@ -13,7 +13,7 @@ import {
     quotaRepository,
 } from "@/app/(protected)/(payment)/(modules)/comments/lib/quota.repository"
 
-import { Pagination } from "@/app/_core/lib/pagination.types"
+import { DBPagination, Pagination } from "@/app/_core/lib/pagination.types"
 import { SettingKey } from "@/app/(protected)/(posts)/(modules)/settings/lib/settings.interface"
 import { settingsService } from "@/app/(protected)/(posts)/(modules)/settings/lib/settings.service"
 
@@ -23,13 +23,15 @@ export class CommentsService {
         private readonly quotaService: QuotaRepository
     ) {}
 
-    getAllComments = async (pagination: Pagination): Promise<IComment[]> => {
-        return await this.commentsRepository.getAll({
-            ...(pagination && {
+    getAllComments = async (pagination?: Pagination): Promise<IComment[]> => {
+        
+
+        return await this.commentsRepository.getAll(
+            pagination && {
                 cursor: pagination.id,
                 take: pagination.perPage,
-            }),
-        })
+            }
+        )
     }
 
     getPostComments = async (postId: number): Promise<IComment[]> => {
@@ -70,7 +72,7 @@ export class CommentsService {
     count = (): Promise<number> => {
         return this.commentsRepository.count()
     }
-    
+
     public async getPaginationCursors(currentCursor?: number) {
         return this.commentsRepository.getPaginationCursor(currentCursor || 1)
     }
