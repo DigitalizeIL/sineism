@@ -21,7 +21,7 @@ export const SubHeader = async ({
     return (
         <div
             className={
-                "grid grid-cols-3 w-full border-b border-stone-200 h-14 mb-4"
+                "grid grid-cols-3 w-full border-b border-stone-200 h-14"
             }>
             <div className={"flex items-center"}>
                 <h2

@@ -9,12 +9,10 @@ import { PaginationCursorResponse } from "../types/pagination.types"
 
 type BaseItem = { id: number }
 
-
-
 type ContentContextState<T = unknown> = {
-    items: T[],
-    cursors: PaginationCursorResponse,
-    page?: number,
+    items: T[]
+    cursors: PaginationCursorResponse
+    page?: number
     pageSize: number
     categories?: ICategory[]
 }
@@ -31,9 +29,9 @@ const ContentContext = createContext<ContentContextState<BaseItem>>({
         first: 0,
         last: 0,
         next: 0,
-        previous: 0
+        previous: 0,
     },
-    pageSize: DEFAULT_PAGE_SIZE
+    pageSize: DEFAULT_PAGE_SIZE,
 })
 
 export const useContent = () => {
@@ -48,7 +46,7 @@ export function ContentFeed<T extends BaseItem>({
     cursors,
     pageSize,
     page,
-    categories
+    categories,
 }: CategoryFeedProps<T>) {
     return (
         <ContentContext.Provider
@@ -57,17 +55,19 @@ export function ContentFeed<T extends BaseItem>({
                 page,
                 items,
                 cursors,
-                pageSize: pageSize || DEFAULT_PAGE_SIZE
+                pageSize: pageSize || DEFAULT_PAGE_SIZE,
             }}>
-            <div className="flex flex-col h-full">
-                <div>{Header}</div>
+            <div className="flex flex-col h-auto">
+                <div className="sticky top-0 w-full shadow-sm bg-neutral-50 z-10">
+                    {Header}
+                </div>
                 <div
                     className={
-                        "flex flex-col justify-start items-center w-full"
+                        "flex flex-grow flex-col justify-start items-center w-full mt-4 pb-20"
                     }>
                     {FeedItems}
                 </div>
-                <div className="mt-auto">
+                <div className="bottom-0 mt-10 w-full shadow-sm fixed bg-neutral-50 z-5">
                     <Footer>{FooterChildren}</Footer>
                 </div>
             </div>

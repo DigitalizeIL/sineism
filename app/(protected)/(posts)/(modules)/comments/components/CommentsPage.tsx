@@ -44,7 +44,7 @@ export const CommentsPage: FC<PageProps> = async ({ paginationId }) => {
             ))}
             Footer={
                 <Suspense>
-                    <div className="w-2/12">
+                    <div className="w-3/12 flex justify-end">
                         <PaginationControlles />
                     </div>
                 </Suspense>
