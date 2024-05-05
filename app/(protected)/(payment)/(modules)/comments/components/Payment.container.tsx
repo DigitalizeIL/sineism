@@ -5,11 +5,19 @@ import { PaymentModal } from "@/app/(protected)/(payment)/components/PaymentModa
 import { TEXTS } from "../commentsPayment.texts"
 import { createOrder } from "../lib/createOrder.action"
 
-export const PaymentContainer = (props: {
+export const CommentsPaymentContainer = (props: {
     userId: number
     amount: number
     price: number
 }) => {
+    const productName = TEXTS.productName.replace(
+        "{{comment_number}}",
+        props.amount.toString()
+    )
+    const productDescription = TEXTS.productDescription.replace(
+        "{{comment_number}}",
+        props.amount.toString()
+    )
     return (
         <PaymentModal
             onSuccess={() => {
@@ -20,18 +28,11 @@ export const PaymentContainer = (props: {
             userId={props.userId}
             createOrder={createOrder}
             title={TEXTS.buyComments}
-            product="Comments"
+            product={productName}
             amount={props.amount}
             price={props.price}
             buttonContent={<BiComment />}
-            productDescription={
-                <span>
-                    {TEXTS.productDescription.replace(
-                        "{{comment_number}}",
-                        props.amount.toString()
-                    )}
-                </span>
-            }
+            productDescription={productDescription}
         />
     )
 }

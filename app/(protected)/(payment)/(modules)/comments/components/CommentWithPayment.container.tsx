@@ -1,5 +1,5 @@
 import { CommentFormContainer } from "@/app/(protected)/(posts)/(modules)/comments/components/CommentForm.container"
-import { PaymentContainer } from "./Payment.container"
+import { CommentsPaymentContainer } from "./Payment.container"
 import { SettingKey } from "@/app/(protected)/(posts)/(modules)/settings/lib/settings.interface"
 import { TEXTS } from "../commentsPayment.texts"
 import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
@@ -36,7 +36,7 @@ export const CommentWithPaymentContainer = async () => {
         <div>
             <div className={"flex items-center justify-end"}>
                 {shouldPay ? (
-                    <PaymentContainer
+                    <CommentsPaymentContainer
                         userId={session.user.id}
                         amount={amount}
                         price={price}
