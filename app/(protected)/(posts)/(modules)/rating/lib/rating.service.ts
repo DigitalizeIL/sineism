@@ -55,7 +55,7 @@ export class RatingService {
             posts.reduce((acc, post) => acc + (post.rating || 0), 0) /
             posts.length
 
-        return Math.round(rating * 2) / 2;
+        return Math.round(rating * 2) / 2
     }
 }
 

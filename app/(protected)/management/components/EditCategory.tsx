@@ -6,12 +6,14 @@ import { Input } from "@/app/_core/components/Form/Input"
 import { Label } from "@/app/_core/components/Form/Label"
 import { useState } from "react"
 
-
 type EditCategoryProps = {
     editCategory: (formData: FormData) => Promise<void>
     category: ICategory
 }
-export const EditCategory = async ({ editCategory, category }: EditCategoryProps) => {
+export const EditCategory = async ({
+    editCategory,
+    category,
+}: EditCategoryProps) => {
     const [editedCategory, setEditedCategory] = useState(category)
 
     return (
@@ -33,7 +35,12 @@ export const EditCategory = async ({ editCategory, category }: EditCategoryProps
                         name="name"
                         value={editedCategory.name}
                         type="text"
-                        onChange={(name) => setEditedCategory((category) => ({ ...category, name }))}
+                        onChange={(name) =>
+                            setEditedCategory((category) => ({
+                                ...category,
+                                name,
+                            }))
+                        }
                     />
                 </Label>
                 <Label text="Categotry Slug">
@@ -41,12 +48,16 @@ export const EditCategory = async ({ editCategory, category }: EditCategoryProps
                         name="path"
                         value={editedCategory.path}
                         type="text"
-                        onChange={(path) => setEditedCategory((category) => ({ ...category, path }))}
+                        onChange={(path) =>
+                            setEditedCategory((category) => ({
+                                ...category,
+                                path,
+                            }))
+                        }
                     />
                 </Label>
                 <Button fullWidth>Save</Button>
             </form>
         </div>
-
     )
 }

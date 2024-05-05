@@ -24,8 +24,6 @@ export class CommentsService {
     ) {}
 
     getAllComments = async (pagination?: Pagination): Promise<IComment[]> => {
-        
-
         return await this.commentsRepository.getAll(
             pagination && {
                 cursor: pagination.id,

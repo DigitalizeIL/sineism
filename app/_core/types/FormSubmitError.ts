@@ -1,4 +1,4 @@
 export type FormSubmitError = {
-    message: string,
+    message: string
     data?: Record<string, any>
 }
