@@ -9,7 +9,6 @@ import { PostFeedItem } from "@/app/(protected)/(posts)/components/PostsFeed/Pos
 import { SettingKey } from "../../settings/lib/settings.interface"
 import { categoriesService } from "@/app/(protected)/(posts)/(modules)/categories/lib/categories.service"
 import { notFound } from "next/navigation"
-import { postsService } from "../../../lib/posts.service"
 import { settingsService } from "../../settings/lib/settings.service"
 
 type PageProps = {
@@ -42,16 +41,11 @@ export const CategoryPage: FC<PageProps> = async ({
         <ContentFeed
             pageSize={pageSize}
             forcedPage={paginationId}
-            items={
-                category.posts?.map((post) => ({
-                    ...post,
-                    cursor: post[POST_PROPERTY_FOR_CURSOR],
-                })) || []
-            }
             Header={<CategoryHeader category={category} />}
             feedItems={
                 category.posts?.map((post) => ({
                     cursor: post[POST_PROPERTY_FOR_CURSOR],
+                    item: post,
                     Component: (
                         <PostFeedItem
                             key={post.id}

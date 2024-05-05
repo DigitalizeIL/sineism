@@ -12,29 +12,28 @@ import {
 import { DEFAULT_PAGE_SIZE } from "@/app/(protected)/(posts)/(modules)/categories/consts/pagination"
 import { Footer } from "../components/Layout/Footer/Footer"
 import { ICategory } from "@/app/(protected)/(posts)/(modules)/categories/lib/category.interface"
-import { PaginationCursorResponse } from "../types/pagination.types"
+import { PAGINATION_URL_PARAM_KEY } from "../consts/pagination.consts"
 
-type BaseItem = { id: number, cursor: number }
+type BaseItem = { id: number; cursor: number }
 
 type ContentContextState<T = unknown> = {
-    items: T[]
-    cursors?: PaginationCursorResponse
     cursor?: number
-    pageSize: number
     categories?: ICategory[]
-    updatePage: (page: number) => void
+    pageSize: number
+    feedItems: Array<{
+        cursor: number
+        item: Omit<T, "cursor">
+        Component: ReactNode
+    }>
+    updateCursor: (cursor: number) => void
 }
 
 type ContextProps<T extends BaseItem> = Omit<
     ContentContextState<T>,
-    "updatePage"
+    "updateCursor"
 >
 
 type CategoryFeedProps<T extends BaseItem> = ContextProps<T> & {
-    feedItems: {
-        cursor: number
-        Component: ReactNode
-    }[]
     Header?: ReactNode
     Footer?: ReactNode
     forcedPage?: number
@@ -60,8 +59,6 @@ export function ContentFeed<T extends BaseItem>({
     Header,
     feedItems,
     Footer: FooterChildren,
-    items,
-    cursors,
     pageSize,
     forcedPage: forcedCursor = 0,
     categories,
@@ -72,23 +69,30 @@ export function ContentFeed<T extends BaseItem>({
         setCursor(forcedCursor)
     }, [forcedCursor])
 
-    const itemsToRender = useMemo(() => {
+    const ItemsToRender = useMemo(() => {
+        const indexOfCursor = feedItems.findIndex(
+            (item) => item.cursor === cursor
+        )
+        const startIndex = indexOfCursor > 0 ? indexOfCursor : 0
+        const endIndex = startIndex + pageSize
+
         return feedItems
-            .filter(
-                (item) =>
-                    item.cursor >= cursor && item.cursor < cursor + pageSize
-            )
+            .slice(startIndex, endIndex)
             .map((item) => item.Component)
     }, [cursor, feedItems, pageSize])
+
+    const updateCursor = (cursor: number) => {
+        history.pushState({}, "", `?${PAGINATION_URL_PARAM_KEY}=${cursor}`)
+        setCursor(cursor)
+    }
 
     return (
         <ContentContext.Provider
             value={{
-                updatePage: setCursor,
+                updateCursor,
                 categories,
                 cursor: cursor,
-                items,
-                cursors,
+                feedItems,
                 pageSize: pageSize || DEFAULT_PAGE_SIZE,
             }}>
             <div className="flex flex-col h-auto">
@@ -99,7 +103,7 @@ export function ContentFeed<T extends BaseItem>({
                     className={
                         "flex flex-grow flex-col justify-start items-center w-full mt-4 pb-20"
                     }>
-                    {itemsToRender}
+                    {ItemsToRender}
                 </div>
                 <div className="bottom-0 mt-10 w-full shadow-sm fixed bg-neutral-50 z-5">
                     <Footer>{FooterChildren}</Footer>
