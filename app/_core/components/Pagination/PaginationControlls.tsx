@@ -1,29 +1,33 @@
 "use client"
 
-import { FC, useEffect, useMemo } from "react"
 import { FcNext, FcPrevious } from "react-icons/fc"
 
 import { Button } from "../Button"
-import { PAGINATION_URL_PARAM_KEY } from "../../consts/pagination.consts"
 import { TEXTS } from "./pagination.texts"
 import { useContent } from "../../views/ContentFeed"
 import { useRouter } from "next/navigation"
+import { PAGINATION_URL_PARAM_KEY } from "../../consts/pagination.consts"
 
 export const PaginationControlles = () => {
-    const {
-        page,
-        cursors: { next, previous, last, first },
-    } = useContent()
+    const { cursor: page = 0, pageSize, items, updatePage } = useContent()
+
     const router = useRouter()
 
-    const isLastPage = !next || page === next
+    const first = items[0]?.cursor || 0
+    const last = items[items.length - 1]?.cursor || 0
+    const next = items[page + (pageSize - 1)]?.cursor || 0
+    const previous = items[page - (pageSize + 1)]?.cursor || 0
+
+    const isLastPage = page === last
     const isFirstPage = !page || page === first
 
     const goToNextPage = () => {
         router.push(`?${PAGINATION_URL_PARAM_KEY}=${next || last}`)
+        updatePage(next || last)
     }
     const goToPrevPage = () => {
         router.push(`?${PAGINATION_URL_PARAM_KEY}=${previous || first}`)
+        updatePage(previous || first)
     }
 
     return (

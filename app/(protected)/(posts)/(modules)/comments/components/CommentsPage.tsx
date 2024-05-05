@@ -30,12 +30,12 @@ export const CommentsPage: FC<PageProps> = async ({ paginationId }) => {
 
     return (
         <ContentFeed
-            page={paginationId}
+            cursor={paginationId}
             pageSize={itemsPerPage}
             items={comments}
             cursors={paginationCursors}
             Header={<CommentHeader />}
-            FeedItems={comments.map((comment) => (
+            feedItems={comments.map((comment) => (
                 <Comment
                     page={paginationId}
                     comment={comment}

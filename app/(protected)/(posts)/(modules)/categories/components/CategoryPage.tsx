@@ -3,6 +3,7 @@ import { FC, Suspense } from "react"
 import { CategoryHeader } from "./CategoryHeader"
 import { ContentFeed } from "@/app/_core/views/ContentFeed"
 import { DEFAULT_PAGE_SIZE } from "../consts/pagination"
+import { POST_PROPERTY_FOR_CURSOR } from "@/app/_core/consts/pagination.consts"
 import { PaginationControlles } from "@/app/_core/components/Pagination/PaginationControlls"
 import { PostFeedItem } from "@/app/(protected)/(posts)/components/PostsFeed/PostFeedItem"
 import { SettingKey } from "../../settings/lib/settings.interface"
@@ -31,34 +32,34 @@ export const CategoryPage: FC<PageProps> = async ({
             path: categorySlug,
         },
         withPosts: true,
-        pagination: {
-            id: paginationId,
-            perPage: pageSize,
-        },
     })
 
     if (!category?.id) {
         return notFound()
     }
 
-    const paginationCursors = await postsService.getPaginationCursors(
-        category.id,
-        paginationId
-    )
-
     return (
         <ContentFeed
-            page={paginationId}
             pageSize={pageSize}
-            cursors={paginationCursors}
-            items={category.posts || []}
+            forcedPage={paginationId}
+            items={
+                category.posts?.map((post) => ({
+                    ...post,
+                    cursor: post[POST_PROPERTY_FOR_CURSOR],
+                })) || []
+            }
             Header={<CategoryHeader category={category} />}
-            FeedItems={category.posts?.map((post) => (
-                <PostFeedItem
-                    key={post.id}
-                    post={post}
-                />
-            ))}
+            feedItems={
+                category.posts?.map((post) => ({
+                    cursor: post[POST_PROPERTY_FOR_CURSOR],
+                    Component: (
+                        <PostFeedItem
+                            key={post.id}
+                            post={post}
+                        />
+                    ),
+                })) || []
+            }
             Footer={
                 <Suspense>
                     <div className="w-3/12 flex justify-end">
