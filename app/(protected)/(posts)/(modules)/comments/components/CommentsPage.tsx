@@ -9,7 +9,6 @@ import { SettingKey } from "../../settings/lib/settings.interface"
 import { commentsService } from "../lib/comments.service"
 import { settingsService } from "../../settings/lib/settings.service"
 import { COMMENTS_PROPERTY_FOR_CURSOR } from "@/app/_core/consts/pagination.consts"
-import { IComment } from "../lib/comment.interface"
 
 type PageProps = {
     paginationId: number
