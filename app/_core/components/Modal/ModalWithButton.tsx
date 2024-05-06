@@ -10,6 +10,7 @@ export const ModalWithButton = (props: {
     isOpen?: boolean
     onClose?: () => void
     onOpen?: () => void
+    className?: string
 }) => {
     const [isOpen, setIsOpen] = useState(props.isOpen || false)
 
@@ -28,7 +29,7 @@ export const ModalWithButton = (props: {
     }
 
     return (
-        <div>
+        <div className={props.className}>
             <Button
                 onClick={open}
                 type="ghost"

@@ -23,6 +23,7 @@ type FormProps = {
     categories: ICategory[]
     createPost: (post: CreatePostDto) => Promise<IPost>
     editPost: (postId: number, post: EditPostDto) => Promise<void>
+    className?: string
 }
 
 export const PostCreateOrEditForm: FC<FormProps> = ({
@@ -30,6 +31,7 @@ export const PostCreateOrEditForm: FC<FormProps> = ({
     categories,
     createPost,
     editPost,
+    className,
 }) => {
     const { data } = useSession()
     const [isOpen, setIsOpen] = useState(false)
@@ -96,6 +98,7 @@ export const PostCreateOrEditForm: FC<FormProps> = ({
 
     return (
         <ModalWithButton
+            className={className}
             onClose={() => setIsOpen(false)}
             onOpen={() => setIsOpen(true)}
             buttonText={post ? <AiOutlineEdit /> : "Create Post"}

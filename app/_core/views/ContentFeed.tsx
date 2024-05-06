@@ -105,7 +105,7 @@ export function ContentFeed<T extends BaseItem>({
                     }>
                     {ItemsToRender}
                 </div>
-                <div className="bottom-0 mt-10 w-full shadow-sm fixed bg-neutral-50 z-5">
+                <div className="bottom-0 mt-10 w-full shadow-sm fixed bg-neutral-50 z-10">
                     <Footer>{FooterChildren}</Footer>
                 </div>
             </div>

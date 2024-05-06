@@ -55,8 +55,8 @@ export const Modal = (props: {
 
                 <button
                     onClick={props.onClose}
-                    className="absolute top-0 right-0 m-4">
-                    <CgClose size={40} />
+                    className="absolute top-0 right-0 m-4 p-2 bg-gray-400 rounded-full">
+                    <CgClose color="white" size={40} />
                 </button>
             </div>
         </div>

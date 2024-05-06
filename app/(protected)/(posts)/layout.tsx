@@ -29,9 +29,6 @@ export default async function Layout({ children }: LayoutProps) {
         <>
             <Header />
             {children}
-            <PostsFloatingQuickActions>
-                <PostCreateOrEditFormContainer />
-            </PostsFloatingQuickActions>
         </>
     )
 }
