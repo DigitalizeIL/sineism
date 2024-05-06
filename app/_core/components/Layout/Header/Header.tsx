@@ -16,7 +16,7 @@ export const Header = async () => {
     return (
         <div
             dir={"ltr"}
-            className={"grid grid-cols-3 px-4 bg-primary shadow h-14"}>
+            className={"grid grid-cols-3 px-4 sticky top-0 z-10 bg-primary shadow h-14"}>
             <div className={"flex items-center justify-start"}>
                 <Logo />
             </div>

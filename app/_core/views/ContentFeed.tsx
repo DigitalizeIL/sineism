@@ -96,7 +96,7 @@ export function ContentFeed<T extends BaseItem>({
                 pageSize: pageSize || DEFAULT_PAGE_SIZE,
             }}>
             <div className="flex flex-col h-auto">
-                <div className="sticky top-0 w-full shadow-sm bg-neutral-50 z-10">
+                <div className="sticky top-14 w-full shadow-sm bg-neutral-50 z-10">
                     {Header}
                 </div>
                 <div
