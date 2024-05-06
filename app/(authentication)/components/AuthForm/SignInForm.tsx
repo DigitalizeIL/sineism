@@ -74,8 +74,7 @@ export const SignInForm = () => {
                     href={REGISTER_URL}
                     className="font-semibold text-white pl-1">
                     {TEXTS.signUp}
-                </Link>{" "}
-                {TEXTS.forFree}
+                </Link>
             </p>
         </form>
     )
