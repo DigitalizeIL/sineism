@@ -47,6 +47,10 @@ export const RatingContainer = async ({ commentId, postId }: RatingProps) => {
             })
         }
 
+        await new Promise((res: any) => {
+            setTimeout(() => res(1), 2000)
+        })
+
         revalidatePath(path)
     }
 
