@@ -9,10 +9,18 @@ import { PostCreateOrEditForm } from "@/app/(protected)/(posts)/components/PostC
 import { categoriesService } from "@/app/(protected)/(posts)/(modules)/categories/lib/categories.service"
 import { postsService } from "@/app/(protected)/(posts)/lib/posts.service"
 import { revalidatePath } from "next/cache"
+import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
+import { UserRole } from "@/app/(authentication)/lib/types/userRole.types"
 
 export const PostCreateOrEditFormContainer = async (props: {
     post?: IPost
 }) => {
+    const session = await getAppServerSession()
+
+    if (session?.user?.role !== UserRole.admin) {
+        return null;
+    }
+
     const categories = await categoriesService.getAllCategories()
 
     const create = async (post: CreatePostDto) => {

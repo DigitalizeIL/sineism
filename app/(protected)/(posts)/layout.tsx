@@ -2,7 +2,6 @@ import { Metadata, Viewport } from "next"
 
 import { Header } from "@/components/Layout"
 import { METADATA } from "@/app/(protected)/(posts)/posts.consts"
-import { PostCreateOrEditFormContainer } from "@/app/(protected)/(posts)/components/PostCreateOrEditForm.container"
 import { PostsFloatingQuickActions } from "@/app/(protected)/(posts)/components/PostsFloatingQuickActions"
 import { ReactNode } from "react"
 

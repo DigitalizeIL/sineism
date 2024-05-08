@@ -12,6 +12,7 @@ import { TEXTS } from "../register.texts"
 import { createRegistrationOrder } from "../lib/createRegistrationOrder.action"
 import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
 import { settingsService } from "@/app/(protected)/(posts)/(modules)/settings/lib/settings.service"
+import { SignoutText } from "@/app/(authentication)/components/SignoutText"
 
 export default async function RegisterPaymentPage() {
     const session = await getAppServerSession()
@@ -26,8 +27,8 @@ export default async function RegisterPaymentPage() {
 
     return (
         <div className="w-screen h-screen flex justify-center items-center flex-col">
-            <h2>{TEXTS.welcome}</h2>
-            <div className="w-24">
+            <h2 className="text-lg bold mb-4">{TEXTS.welcome}</h2>
+            <div className="flex flex-col items-center gap-2">
                 {shouldPay ? (
                     <RegisterPaymentModal
                         createOrder={createRegistrationOrder}
@@ -37,6 +38,7 @@ export default async function RegisterPaymentPage() {
                 ) : (
                     <CompleteRegistrationButton />
                 )}
+                <SignoutText />
             </div>
         </div>
     )
