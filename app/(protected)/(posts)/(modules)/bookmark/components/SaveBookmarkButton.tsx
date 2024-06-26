@@ -1,12 +1,11 @@
 "use client"
 
-import { BsBookmarkPlus } from "react-icons/bs"
 import { Button } from "@/components/Button"
-import { useActionState, useState } from "react"
-import { saveBookmark } from "../lib/saveBookmark.action"
-import { BookmarkReference } from "../lib/bookmark.interface"
-import { useFormStatus } from "react-dom"
 import { usePathname } from "next/navigation"
+import { useFormStatus } from "react-dom"
+import { BsBookmarkPlus } from "react-icons/bs"
+import { BookmarkReference } from "../lib/bookmark.interface"
+import { saveBookmark } from "../lib/saveBookmark.action"
 
 type SaveBookmarkButtonProps = {
     isActive: boolean
