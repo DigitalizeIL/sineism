@@ -55,10 +55,9 @@ model Category {
 
 model Bookmark {
   id               Int    @id @default(autoincrement())
-  page             Int
   userId           Int
   user             User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  bookmarkedItemId String
+  bookmarkedItemId Int
   referenceType    String
 
   @@unique(fields: [userId, referenceType], name: "identifiers")
