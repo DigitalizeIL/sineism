@@ -1,15 +1,12 @@
 import { FC, Suspense } from "react"
 
-import { Comment } from "./Comment"
-import { ContentFeed } from "@/app/_core/views/ContentFeed"
-import { DEFAULT_PAGE_SIZE } from "../../categories/consts/pagination"
-import { PaginationControlles } from "@/app/_core/components/Pagination/PaginationControlls"
-import { SettingKey } from "../../settings/lib/settings.interface"
-import { commentsService } from "../lib/comments.service"
-import { settingsService } from "../../settings/lib/settings.service"
-import { COMMENTS_PROPERTY_FOR_CURSOR } from "@/app/_core/consts/pagination.consts"
 import { SubHeader } from "@/app/_core/components/Layout"
+import { PaginationControlles } from "@/app/_core/components/Pagination/PaginationControlls"
+import { COMMENTS_PROPERTY_FOR_CURSOR } from "@/app/_core/consts/pagination.consts"
+import { ContentFeed } from "@/app/_core/views/ContentFeed"
 import { bookmarkService } from "../../bookmark/lib/bookmark.service"
+import { commentsService } from "../lib/comments.service"
+import { Comment } from "./Comment"
 
 type PageProps = {
     paginationId: number
