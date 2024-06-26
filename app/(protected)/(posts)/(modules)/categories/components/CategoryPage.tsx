@@ -1,18 +1,15 @@
 import { FC, Suspense } from "react"
 
-import { ContentFeed } from "@/app/_core/views/ContentFeed"
-import { DEFAULT_PAGE_SIZE } from "../consts/pagination"
-import { POST_PROPERTY_FOR_CURSOR } from "@/app/_core/consts/pagination.consts"
-import { PaginationControlles } from "@/app/_core/components/Pagination/PaginationControlls"
-import { PostFeedItem } from "@/app/(protected)/(posts)/(modules)/categories/components/PostFeedItem"
-import { SettingKey } from "../../settings/lib/settings.interface"
-import { categoriesService } from "@/app/(protected)/(posts)/(modules)/categories/lib/categories.service"
-import { notFound } from "next/navigation"
-import { settingsService } from "../../settings/lib/settings.service"
-import { bookmarkService } from "../../bookmark/lib/bookmark.service"
 import { CommentWithPaymentContainer } from "@/app/(protected)/(payment)/(modules)/comments/components/CommentWithPayment.container"
+import { PostFeedItem } from "@/app/(protected)/(posts)/(modules)/categories/components/PostFeedItem"
+import { categoriesService } from "@/app/(protected)/(posts)/(modules)/categories/lib/categories.service"
 import { SubHeader } from "@/app/_core/components/Layout"
+import { PaginationControlles } from "@/app/_core/components/Pagination/PaginationControlls"
+import { POST_PROPERTY_FOR_CURSOR } from "@/app/_core/consts/pagination.consts"
+import { ContentFeed } from "@/app/_core/views/ContentFeed"
+import { notFound } from "next/navigation"
 import { PostCreateOrEditForm } from "../../../components/PostCreateOrEditForm"
+import { bookmarkService } from "../../bookmark/lib/bookmark.service"
 
 type PageProps = {
     categorySlug: string

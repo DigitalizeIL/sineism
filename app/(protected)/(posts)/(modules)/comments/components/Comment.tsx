@@ -1,25 +1,17 @@
 "use client"
 
-import { AiFillDelete } from "react-icons/ai"
-import { Box } from "@/components/Box"
+import { PopulatedComment } from "@/app/(protected)/(posts)/(modules)/comments/lib/comment.interface"
 import { Button } from "@/app/_core/components/Button"
 import { COMMENTS_PROPERTY_FOR_CURSOR } from "@/app/_core/consts/pagination.consts"
-import { EMPTY_COMMENT_ID } from "../comments.consts"
-import {
-    IComment,
-    PopulatedComment,
-} from "@/app/(protected)/(posts)/(modules)/comments/lib/comment.interface"
-import React, { FC } from "react"
-import { TEXTS } from "../comments.texts"
-import { commentsService } from "@/app/(protected)/(posts)/(modules)/comments/lib/comments.service"
-import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
-import { postsService } from "@/app/(protected)/(posts)/lib/posts.service"
-import { revalidatePath } from "next/cache"
-import { usersService } from "@/app/(authentication)/lib/services/users.service"
+import { Box } from "@/components/Box"
+import { useSession } from "next-auth/react"
+import { FC } from "react"
+import { AiFillDelete } from "react-icons/ai"
 import { SaveBookmarkButton } from "../../bookmark/components/SaveBookmarkButton"
 import { Rating } from "../../rating/components/Rating"
 import { deleteComment } from "../actions/deleteComment.action"
-import { useSession } from "next-auth/react"
+import { EMPTY_COMMENT_ID } from "../comments.consts"
+import { TEXTS } from "../comments.texts"
 
 type CommentProps = {
     comment: PopulatedComment
