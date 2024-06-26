@@ -6,13 +6,13 @@ import { EMPTY_COMMENT_ID } from "../comments.consts"
 import { IComment } from "@/app/(protected)/(posts)/(modules)/comments/lib/comment.interface"
 import { RatingContainer } from "@/app/(protected)/(posts)/(modules)/rating/components/Rating.container"
 import React from "react"
-import { SaveBookmarkButtonContainer } from "../../bookmark/components/SaveBookmarkButton.container"
 import { TEXTS } from "../comments.texts"
 import { commentsService } from "@/app/(protected)/(posts)/(modules)/comments/lib/comments.service"
 import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
 import { postsService } from "@/app/(protected)/(posts)/lib/posts.service"
 import { revalidatePath } from "next/cache"
 import { usersService } from "@/app/(authentication)/lib/services/users.service"
+import { SaveBookmarkButton } from "../../bookmark/components/SaveBookmarkButton"
 
 type CommentProps = {
     comment: IComment
@@ -53,16 +53,11 @@ export const Comment = async ({ page, comment }: CommentProps) => {
                 )}
 
                 {session?.user?.id && (
-                    <SaveBookmarkButtonContainer
-                        pathForRevalidation={`/comments`}
-                        ids={{
-                            referenceType: "comment",
-                            userId: session.user.id,
-                        }}
-                        itemIdToBookmark={comment[
-                            COMMENTS_PROPERTY_FOR_CURSOR
-                        ].toString()}
-                        page={page || 1}
+                    <SaveBookmarkButton
+                        // pathForRevalidation={`/comments`}
+                        reference="comment"
+                        itemId={comment[COMMENTS_PROPERTY_FOR_CURSOR]}
+                        isActive={false}
                     />
                 )}
 

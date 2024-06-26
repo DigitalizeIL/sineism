@@ -13,12 +13,14 @@ import { DEFAULT_PAGE_SIZE } from "@/app/(protected)/(posts)/(modules)/categorie
 import { Footer } from "../components/Layout/Footer/Footer"
 import { ICategory } from "@/app/(protected)/(posts)/(modules)/categories/lib/category.interface"
 import { PAGINATION_URL_PARAM_KEY } from "../consts/pagination.consts"
+import { IBookmark } from "@/app/(protected)/(posts)/(modules)/bookmark/lib/bookmark.interface"
 
 type BaseItem = { id: number; cursor: number }
 
 type ContentContextState<T = unknown> = {
     cursor?: number
     categories?: ICategory[]
+    activeBookmark?: IBookmark | null
     pageSize: number
     feedItems: Array<{
         cursor: number
@@ -62,6 +64,7 @@ export function ContentFeed<T extends BaseItem>({
     pageSize,
     forcedPage: forcedCursor = 0,
     categories,
+    activeBookmark,
 }: CategoryFeedProps<T>) {
     const [cursor, setCursor] = useState(forcedCursor)
 
@@ -94,6 +97,7 @@ export function ContentFeed<T extends BaseItem>({
                 cursor: cursor,
                 feedItems,
                 pageSize: pageSize || DEFAULT_PAGE_SIZE,
+                activeBookmark,
             }}>
             <div className="flex flex-col h-auto">
                 <div className="sticky top-14 w-full shadow-sm bg-neutral-50 z-10">

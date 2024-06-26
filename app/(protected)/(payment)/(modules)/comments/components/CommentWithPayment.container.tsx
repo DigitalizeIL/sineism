@@ -7,8 +7,7 @@ import { quotaRepository } from "@/app/(protected)/(payment)/(modules)/comments/
 import { settingsService } from "@/app/(protected)/(posts)/(modules)/settings/lib/settings.service"
 
 export const CommentWithPaymentContainer = async () => {
-    const session = await getAppServerSession()
-    if (!session?.user) return
+    const session = await getAppServerSession(true)
 
     const quotaObject = await quotaRepository.getQuota(session.user.id)
     const amountSetting = await settingsService.getSettingByKey(

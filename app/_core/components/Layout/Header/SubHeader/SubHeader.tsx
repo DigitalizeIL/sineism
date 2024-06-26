@@ -1,22 +1,22 @@
-import { ReactNode, Suspense } from "react"
+"use client"
 
-import { BookmarkIdentifiers } from "@/app/(protected)/(posts)/(modules)/bookmark/lib/bookmark.interface"
-import { CommentWithPaymentContainer } from "@/app/(protected)/(payment)/(modules)/comments/components/CommentWithPayment.container"
+import { PropsWithChildren, ReactNode } from "react"
+
 import { MoveToBookmarkButton } from "@/app/(protected)/(posts)/(modules)/bookmark/components/MoveToBookmarkButton"
-import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
+import { useContent } from "@/app/_core/views/ContentFeed"
 
 type CategoryHeaderProps = {
     title?: string
-    bookmarkReferenceType?: BookmarkIdentifiers["referenceType"]
     Pagination?: ReactNode
+    CenterItems?: ReactNode
 }
 
-export const SubHeader = async ({
+export const SubHeader = ({
     title,
-    bookmarkReferenceType,
     Pagination,
+    CenterItems,
 }: CategoryHeaderProps) => {
-    const session = await getAppServerSession()
+    const { activeBookmark } = useContent()
 
     return (
         <div
@@ -31,19 +31,12 @@ export const SubHeader = async ({
                     {title}
                 </h2>
 
-                <Suspense>
-                    {session?.user && bookmarkReferenceType && (
-                        <MoveToBookmarkButton
-                            referenceType={bookmarkReferenceType}
-                            userId={session.user.id}
-                        />
-                    )}
-                </Suspense>
+                {activeBookmark && (
+                    <MoveToBookmarkButton activeBookmark={activeBookmark} />
+                )}
             </div>
             <div className={"flex items-center justify-center"}>
-                <Suspense>
-                    <CommentWithPaymentContainer />
-                </Suspense>
+                {CenterItems}
             </div>
             {Pagination && (
                 <div className={"flex items-center justify-end"}>

@@ -3,26 +3,31 @@
 import { BsBookmarkPlus } from "react-icons/bs"
 import { Button } from "@/components/Button"
 import { useState } from "react"
+import { saveBookmark } from "../lib/saveBookmark.action"
+import { BookmarkReference } from "../lib/bookmark.interface"
 
 type SaveBookmarkButtonProps = {
     isActive: boolean
-    onSaveClick?: () => Promise<void>
+    itemId: number
+    reference: BookmarkReference
 }
 
 export const SaveBookmarkButton = ({
     isActive,
-    onSaveClick,
+    reference,
+    itemId,
 }: SaveBookmarkButtonProps) => {
     const [isLoading, setIsLoading] = useState(false)
 
-    const onClick = async () => {
-        await onSaveClick?.()
-        setIsLoading(false)
-    }
+    const saveBookMarkWithArgs = saveBookmark.bind(null, {
+        itemId,
+        isActive,
+        reference,
+    })
 
     return (
         <form
-            action={onClick}
+            action={saveBookMarkWithArgs}
             onSubmit={() => {
                 setIsLoading(true)
             }}>

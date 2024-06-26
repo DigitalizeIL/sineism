@@ -1,23 +1,26 @@
-import React, { Suspense } from "react"
+import { Suspense } from "react"
 
-import { Card } from "@/components/Card"
-import { DeletePostButton } from "@/app/(protected)/(posts)/components/DeletePostButton"
-import { IPost } from "@/app/(protected)/(posts)/lib/post.interface"
-import { LoadingDots } from "@/app/_core/components/LoadingDots"
-import { POST_PROPERTY_FOR_CURSOR } from "@/app/_core/consts/pagination.consts"
-import { PostCreateOrEditFormContainer } from "@/app/(protected)/(posts)/components/PostCreateOrEditForm.container"
-import { Rating } from "../../rating/components/Rating"
-import { RatingContainer } from "@/app/(protected)/(posts)/(modules)/rating/components/Rating.container"
-import { SaveBookmarkButtonContainer } from "@/app/(protected)/(posts)/(modules)/bookmark/components/SaveBookmarkButton.container"
 import { UserRole } from "@/app/(authentication)/lib/types/userRole.types"
 import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
+import { RatingContainer } from "@/app/(protected)/(posts)/(modules)/rating/components/Rating.container"
+import { DeletePostButton } from "@/app/(protected)/(posts)/components/DeletePostButton"
+import { PostCreateOrEditFormContainer } from "@/app/(protected)/(posts)/components/PostCreateOrEditForm.container"
+import { IPost } from "@/app/(protected)/(posts)/lib/post.interface"
+import { POST_PROPERTY_FOR_CURSOR } from "@/app/_core/consts/pagination.consts"
+import { Card } from "@/components/Card"
+import { SaveBookmarkButton } from "../../bookmark/components/SaveBookmarkButton"
+import { Rating } from "../../rating/components/Rating"
 
 type PostFeedItemProps = {
     post: IPost
     page?: number
+    isItemBookmarked: boolean
 }
 
-export const PostFeedItem = async ({ post, page }: PostFeedItemProps) => {
+export const PostFeedItem = async ({
+    post,
+    isItemBookmarked,
+}: PostFeedItemProps) => {
     const session = await getAppServerSession()
 
     return (
@@ -39,30 +42,21 @@ export const PostFeedItem = async ({ post, page }: PostFeedItemProps) => {
                     </div>
 
                     <div className={"flex flex-row"}>
-                        <Suspense fallback={<LoadingDots height={40} />}>
-                            {session?.user?.id && (
-                                <SaveBookmarkButtonContainer
-                                    pathForRevalidation={`/categories/${post.categoryId}`}
-                                    ids={{
-                                        referenceType:
-                                            post.categoryId.toString(),
-                                        userId: session.user.id,
-                                    }}
-                                    itemIdToBookmark={post[
-                                        POST_PROPERTY_FOR_CURSOR
-                                    ].toString()}
-                                    page={page || 1}
-                                />
-                            )}
-                        </Suspense>
+                        {session?.user?.id && (
+                            <SaveBookmarkButton
+                                itemId={post[POST_PROPERTY_FOR_CURSOR]}
+                                isActive={isItemBookmarked}
+                                reference={post.categoryId.toString()}
+                            />
+                        )}
                     </div>
                     <Suspense>
-                        {session?.user?.role === UserRole.admin ? (
+                        {session?.user?.role === UserRole.admin && (
                             <>
                                 <DeletePostButton postId={post.id} />
                                 <PostCreateOrEditFormContainer post={post} />
                             </>
-                        ) : null}
+                        )}
                     </Suspense>
                     <Suspense
                         fallback={

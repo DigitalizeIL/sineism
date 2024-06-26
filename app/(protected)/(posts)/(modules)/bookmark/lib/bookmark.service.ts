@@ -2,11 +2,13 @@ import "server-only"
 
 import {
     BookmarkIdentifiers,
+    BookmarkReference,
     CreateBookmark,
     IBookmark,
 } from "@/app/(protected)/(posts)/(modules)/bookmark/lib/bookmark.interface"
 
 import prisma from "@/lib/prisma"
+import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
 
 export const createBookmarkService = () => {
     const getBookmarkById = async (id: number): Promise<IBookmark | null> => {
@@ -16,11 +18,19 @@ export const createBookmarkService = () => {
     }
 
     const getBookmark = async (
-        ids: BookmarkIdentifiers
+        reference?: BookmarkReference
     ): Promise<IBookmark | null> => {
+        const session = await getAppServerSession()
+        if (!reference || !session?.user?.id) {
+            return null
+        }
+
         return prisma.bookmark.findUnique({
             where: {
-                identifiers: ids,
+                identifiers: {
+                    referenceType: reference,
+                    userId: session.user.id,
+                },
             },
         })
     }
