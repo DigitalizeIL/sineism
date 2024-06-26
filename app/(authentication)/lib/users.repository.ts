@@ -3,7 +3,7 @@ import "server-only"
 import { INewUser } from "@/app/(authentication)/lib/user.interface"
 import { LoginCredentials } from "@/app/(authentication)/lib/types/authentication.types"
 import { User } from "@/app/(authentication)/lib/user.model"
-import prisma from "@/app/_core/lib/prisma"
+import prisma from "@/lib/prisma"
 
 export class UsersDbRepository {
     getUsers() {

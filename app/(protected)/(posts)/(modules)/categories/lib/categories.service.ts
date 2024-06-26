@@ -11,6 +11,7 @@ import {
 } from "@/app/(protected)/(posts)/(modules)/categories/lib/category.interface"
 
 import { Pagination } from "@/app/_core/lib/pagination.types"
+import prisma from "@/lib/prisma"
 
 export type GetCategoryFilter = {
     id?: number
@@ -37,7 +38,8 @@ export class CategoriesService {
         withPosts?: boolean
         pagination?: Pagination
     }): Promise<ICategory | null> {
-        return await this.dbRepository.get(
+        await prisma?.$connect()
+        const result = await this.dbRepository.get(
             data.filter,
             data.withPosts,
             data.pagination && {
@@ -45,6 +47,8 @@ export class CategoriesService {
                 take: data.pagination.perPage,
             }
         )
+        prisma?.$disconnect()
+        return result
     }
 
     async createCategory(category: CreateCategory): Promise<ICategory> {
