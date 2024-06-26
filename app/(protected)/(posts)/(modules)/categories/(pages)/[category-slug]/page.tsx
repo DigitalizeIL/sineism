@@ -1,8 +1,5 @@
-import { CategoryPage } from "../../components/CategoryPage"
-import { LoadingDotsOverlay } from "@/app/_core/components/LoadingDots"
 import { PAGINATION_URL_PARAM_KEY } from "@/app/_core/consts/pagination.consts"
-import { REQUEST_CONTEXT_KEYS } from "@/app/_core/lib/context"
-import { Suspense } from "react"
+import { CategoryPage } from "../../components/CategoryPage"
 
 type PageProps = {
     params: {
