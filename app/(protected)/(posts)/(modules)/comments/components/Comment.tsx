@@ -16,10 +16,9 @@ import { SaveBookmarkButton } from "../../bookmark/components/SaveBookmarkButton
 
 type CommentProps = {
     comment: IComment
-    page?: number
 }
 
-export const Comment = async ({ page, comment }: CommentProps) => {
+export const Comment = async ({ comment }: CommentProps) => {
     const { content, id, postIds, userId, commentNumber } = comment
     const author = await usersService.getUserById(userId)
     const posts = await postsService.getAllPosts({ ids: postIds })
