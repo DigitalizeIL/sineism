@@ -6,8 +6,6 @@ type GlobalErrorProps = {
 }
 
 export default function GlobalError({ error, reset }: GlobalErrorProps) {
-    console.log("Error", error)
-
     return (
         <html>
             <body>
