@@ -54,7 +54,6 @@ export const Comment = async ({ page, comment }: CommentProps) => {
 
                 {session?.user?.id && (
                     <SaveBookmarkButton
-                        // pathForRevalidation={`/comments`}
                         reference="comment"
                         itemId={comment[COMMENTS_PROPERTY_FOR_CURSOR]}
                         isActive={false}

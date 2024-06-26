@@ -15,13 +15,11 @@ export type SaveBookmarkArgs = {
     isActive: boolean
     reference: BookmarkReference
     itemId: number
-    pathForRevalidation?: string
 }
 
 export const saveBookmark = async ({
     isActive,
     itemId,
-    pathForRevalidation,
     reference,
 }: SaveBookmarkArgs) => {
     const session = await getAppServerSession(true)
@@ -35,6 +33,4 @@ export const saveBookmark = async ({
             bookmarkedItemId: itemId,
         })
     }
-
-    pathForRevalidation && revalidatePath(pathForRevalidation)
 }
