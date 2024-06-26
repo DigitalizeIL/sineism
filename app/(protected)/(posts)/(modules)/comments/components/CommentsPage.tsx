@@ -9,6 +9,7 @@ import { commentsService } from "../lib/comments.service"
 import { settingsService } from "../../settings/lib/settings.service"
 import { COMMENTS_PROPERTY_FOR_CURSOR } from "@/app/_core/consts/pagination.consts"
 import { SubHeader } from "@/app/_core/components/Layout"
+import { bookmarkService } from "../../bookmark/lib/bookmark.service"
 
 type PageProps = {
     paginationId: number
@@ -23,10 +24,13 @@ export const CommentsPage: FC<PageProps> = async ({ paginationId }) => {
 
     const comments = await commentsService.getAllComments()
 
+    const activeBookmark = await bookmarkService.getBookmark("comment")
+
     return (
         <ContentFeed
             cursor={paginationId}
             pageSize={itemsPerPage}
+            activeBookmark={activeBookmark}
             Header={
                 <SubHeader
                     title={"תגובות"}
@@ -43,6 +47,9 @@ export const CommentsPage: FC<PageProps> = async ({ paginationId }) => {
                     item: comment,
                     Component: (
                         <Comment
+                            isBookmarked={
+                                comment.id === activeBookmark?.bookmarkedItemId
+                            }
                             comment={comment}
                             key={comment.id}
                         />

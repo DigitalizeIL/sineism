@@ -16,9 +16,10 @@ import { SaveBookmarkButton } from "../../bookmark/components/SaveBookmarkButton
 
 type CommentProps = {
     comment: IComment
+    isBookmarked: boolean
 }
 
-export const Comment = async ({ comment }: CommentProps) => {
+export const Comment = async ({ comment, isBookmarked }: CommentProps) => {
     const { content, id, postIds, userId, commentNumber } = comment
     const author = await usersService.getUserById(userId)
     const posts = await postsService.getAllPosts({ ids: postIds })
@@ -55,7 +56,7 @@ export const Comment = async ({ comment }: CommentProps) => {
                     <SaveBookmarkButton
                         reference="comment"
                         itemId={comment[COMMENTS_PROPERTY_FOR_CURSOR]}
-                        isActive={false}
+                        isActive={isBookmarked}
                     />
                 )}
 
