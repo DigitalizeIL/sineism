@@ -51,11 +51,6 @@ export const CategoryPage: FC<PageProps> = async ({
             Header={
                 <SubHeader
                     title={category.name}
-                    Pagination={
-                        <Suspense>
-                            <PaginationControlles />
-                        </Suspense>
-                    }
                     CenterItems={
                         <Suspense>
                             <CommentWithPaymentContainer />

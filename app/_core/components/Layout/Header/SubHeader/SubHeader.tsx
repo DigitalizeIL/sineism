@@ -1,21 +1,17 @@
 "use client"
 
-import { PropsWithChildren, ReactNode } from "react"
+import { ReactNode } from "react"
 
 import { MoveToBookmarkButton } from "@/app/(protected)/(posts)/(modules)/bookmark/components/MoveToBookmarkButton"
 import { useContent } from "@/app/_core/views/ContentFeed"
+import { PaginationControlles } from "../../../Pagination/PaginationControlls"
 
 type CategoryHeaderProps = {
     title?: string
-    Pagination?: ReactNode
     CenterItems?: ReactNode
 }
 
-export const SubHeader = ({
-    title,
-    Pagination,
-    CenterItems,
-}: CategoryHeaderProps) => {
+export const SubHeader = ({ title, CenterItems }: CategoryHeaderProps) => {
     const { activeBookmark } = useContent()
 
     return (
@@ -38,11 +34,9 @@ export const SubHeader = ({
             <div className={"flex items-center justify-center"}>
                 {CenterItems}
             </div>
-            {Pagination && (
-                <div className={"flex items-center justify-end"}>
-                    {Pagination}
-                </div>
-            )}
+            <div className={"flex items-center justify-end"}>
+                <PaginationControlles />
+            </div>
         </div>
     )
 }

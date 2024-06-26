@@ -31,16 +31,7 @@ export const CommentsPage: FC<PageProps> = async ({ paginationId }) => {
             cursor={paginationId}
             pageSize={itemsPerPage}
             activeBookmark={activeBookmark}
-            Header={
-                <SubHeader
-                    title={"תגובות"}
-                    Pagination={
-                        <Suspense>
-                            <PaginationControlles />
-                        </Suspense>
-                    }
-                />
-            }
+            Header={<SubHeader title={"תגובות"} />}
             feedItems={
                 comments?.map((comment) => ({
                     cursor: comment[COMMENTS_PROPERTY_FOR_CURSOR],
