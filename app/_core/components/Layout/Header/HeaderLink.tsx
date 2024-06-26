@@ -26,7 +26,6 @@ export const HeaderLink = (props: {
                 "text-center",
                 props.className,
             ])}
-            prefetch={true}
             href={props.href}>
             {props.label}
             {props.icon ? (
