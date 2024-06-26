@@ -16,11 +16,9 @@ export default async function Page(props: PageProps) {
     if (isNaN(paginationId)) paginationId = 1
 
     return (
-        <Suspense fallback={<LoadingDotsOverlay />}>
-            <CategoryPage
-                paginationId={paginationId}
-                categorySlug={props.params["category-slug"]}
-            />
-        </Suspense>
+        <CategoryPage
+            paginationId={paginationId}
+            categorySlug={props.params["category-slug"]}
+        />
     )
 }
