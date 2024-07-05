@@ -9,10 +9,7 @@ type RatingProps = {
 }
 
 export const RatingContainer = async ({ commentId, postId }: RatingProps) => {
-    const session = await getAppServerSession()
-    if (!session?.user || !(postId || commentId)) {
-        return
-    }
+    const session = await getAppServerSession(true)
 
     const rating = await ratingService.getRating({
         filter: {
@@ -30,10 +27,6 @@ export const RatingContainer = async ({ commentId, postId }: RatingProps) => {
     const updateRating = async (ratingNumber: number | null, path: string) => {
         "use server"
 
-        if (!session?.user?.id) {
-            return
-        }
-
         if (rating) {
             await ratingService.updateRating(rating?.id, {
                 rating: ratingNumber,
@@ -43,13 +36,9 @@ export const RatingContainer = async ({ commentId, postId }: RatingProps) => {
                 rating: ratingNumber,
                 commentId: commentId || null,
                 postId: postId || null,
-                userId: session?.user?.id,
+                userId: session.user.id,
             })
         }
-
-        await new Promise((res: any) => {
-            setTimeout(() => res(1), 2000)
-        })
 
         revalidatePath(path)
     }

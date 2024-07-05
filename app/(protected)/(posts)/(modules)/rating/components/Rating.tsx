@@ -1,7 +1,7 @@
 "use client"
 
 import { LoadingDots } from "@/app/_core/components/LoadingDots"
-import { CircularProgress, Rating as MuiRating } from "@mui/material"
+import { Rating as MuiRating } from "@mui/material"
 import { SyntheticEvent, useState, useTransition } from "react"
 
 type RatingProps = {
@@ -14,7 +14,10 @@ export const Rating = ({ userRating, totalRating, onChange }: RatingProps) => {
     const [isPending, startTransition] = useTransition()
     const [isLoading, setIsLoading] = useState(false)
 
-    const handleChange = (event: SyntheticEvent<Element, Event>, value: number | null) => {
+    const handleChange = (
+        event: SyntheticEvent<Element, Event>,
+        value: number | null
+    ) => {
         setIsLoading(true)
         startTransition(async () => {
             await onChange?.(value, window.location.pathname)
@@ -33,10 +36,14 @@ export const Rating = ({ userRating, totalRating, onChange }: RatingProps) => {
                 value={userRating}
                 onChange={handleChange}
             />
-            {isLoading ? <LoadingDots /> :
-                totalRating !== null && !isNaN(totalRating) && (
+            {isLoading ? (
+                <LoadingDots />
+            ) : (
+                totalRating !== null &&
+                !isNaN(totalRating) && (
                     <span className={"text-stone-700 "}>{totalRating}</span>
-                )}
+                )
+            )}
         </div>
     )
 }
