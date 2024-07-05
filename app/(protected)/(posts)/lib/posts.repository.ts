@@ -13,6 +13,7 @@ import { POST_PROPERTY_FOR_CURSOR } from "@/app/_core/consts/pagination.consts"
 import { PaginationCursorResponse } from "@/app/_core/types/pagination.types"
 import prisma from "@/lib/prisma"
 import { IRating } from "../(modules)/rating/lib/rating.interface"
+import { ratingRepository } from "../(modules)/rating/lib/rating.repository"
 
 export class PostsDbRepository extends BaseContentRepository {
     private async getLowestAvailablePostNumber(
@@ -117,7 +118,7 @@ export class PostsDbRepository extends BaseContentRepository {
 
         return posts.map((post) => ({
             post,
-            rating: this.calculateRatingFromReviews(post?.reviews),
+            rating: ratingRepository.calculateRatingFromReviews(post.reviews),
         }))
     }
 
@@ -135,17 +136,8 @@ export class PostsDbRepository extends BaseContentRepository {
 
         return {
             post,
-            rating: this.calculateRatingFromReviews(post?.reviews),
+            rating: ratingRepository.calculateRatingFromReviews(post.reviews),
         }
-    }
-
-    public calculateRatingFromReviews = (reviews: IRating[] = []) => {
-        const totalRating = reviews?.reduce(
-            (acc, rating) => acc + (rating.rating || 0),
-            0
-        )
-
-        return totalRating / reviews.length
     }
 
     public async create(item: CreatePostDto): Promise<IPost> {

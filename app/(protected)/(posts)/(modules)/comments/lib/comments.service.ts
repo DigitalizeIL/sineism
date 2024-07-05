@@ -5,6 +5,7 @@ import {
     commentsRepository,
 } from "@/app/(protected)/(posts)/(modules)/comments/lib/comments.repository"
 import {
+    CommentWithRating,
     CreateComment,
     IComment,
 } from "@/app/(protected)/(posts)/(modules)/comments/lib/comment.interface"
@@ -25,6 +26,17 @@ export class CommentsService {
 
     getAllComments = async (pagination?: Pagination): Promise<IComment[]> => {
         return await this.commentsRepository.getAll(
+            pagination && {
+                cursor: pagination.id,
+                take: pagination.perPage,
+            }
+        )
+    }
+
+    getAllCommentsWithRating = async (
+        pagination?: Pagination
+    ): Promise<CommentWithRating[]> => {
+        return await this.commentsRepository.getAllWithRating(
             pagination && {
                 cursor: pagination.id,
                 take: pagination.perPage,

@@ -59,7 +59,7 @@ export const PostFeedItem = ({
                         </>
                     )}
                     <Rating
-                        totalRating={rating || 0}
+                        totalRating={rating || null}
                         userRating={userRating}
                         postId={post.id}
                     />

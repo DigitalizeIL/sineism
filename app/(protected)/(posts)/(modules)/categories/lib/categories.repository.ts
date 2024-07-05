@@ -11,6 +11,7 @@ import { GetCategoryFilter } from "@/app/(protected)/(posts)/(modules)/categorie
 import { POST_PROPERTY_FOR_CURSOR } from "@/app/_core/consts/pagination.consts"
 import prisma from "@/lib/prisma"
 import { postsDbRepository } from "../../../lib/posts.repository"
+import { ratingRepository } from "../../rating/lib/rating.repository"
 
 export type CategoryWithoutPosts = Omit<ICategory, "posts">
 
@@ -106,7 +107,7 @@ export class CategoriesDbRepository {
             category.posts.map((post) => {
                 return {
                     post,
-                    rating: postsDbRepository.calculateRatingFromReviews(
+                    rating: ratingRepository.calculateRatingFromReviews(
                         (post as any).reviews
                     ),
                 }

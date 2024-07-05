@@ -16,28 +16,22 @@ type PageProps = {
 }
 
 export const CommentsPage: FC<PageProps> = async ({ paginationId }) => {
-    const itemsPerPage = await settingsService.getSettingValueByKey(
-        SettingKey.posts_per_page,
-        Number,
-        DEFAULT_PAGE_SIZE
-    )
-
-    const comments = await commentsService.getAllComments()
+    const comments = await commentsService.getAllCommentsWithRating()
 
     const activeBookmark = await bookmarkService.getBookmark("comment")
 
     return (
         <ContentFeed
             cursor={paginationId}
-            pageSize={itemsPerPage}
             activeBookmark={activeBookmark}
             Header={<SubHeader title={"תגובות"} />}
             feedItems={
-                comments?.map((comment) => ({
+                comments?.map(({ comment, rating }) => ({
                     cursor: comment[COMMENTS_PROPERTY_FOR_CURSOR],
                     item: comment,
                     Component: (
                         <Comment
+                            rating={rating}
                             isBookmarked={
                                 comment.id === activeBookmark?.bookmarkedItemId
                             }

@@ -1,6 +1,7 @@
 import "server-only"
 
 import {
+    CommentWithRating,
     CreateComment,
     IComment,
 } from "@/app/(protected)/(posts)/(modules)/comments/lib/comment.interface"
@@ -10,10 +11,20 @@ import { COMMENTS_PROPERTY_FOR_CURSOR } from "@/app/_core/consts/pagination.cons
 import { DBPagination } from "@/app/_core/lib/pagination.types"
 import { PaginationCursorResponse } from "@/app/_core/types/pagination.types"
 import prisma from "@/lib/prisma"
+import { ratingRepository } from "../../rating/lib/rating.repository"
 
 export class CommentsRepository extends BaseContentRepository {
-    getAll = async (pagination?: DBPagination): Promise<IComment[]> => {
-        const paginationQuery: any = {}
+    preparePaginationQuery(pagination?: DBPagination) {
+        const paginationQuery: {
+            take?: number
+            skip?: number
+            where?: Record<
+                string,
+                {
+                    gte: number
+                }
+            >
+        } = {}
 
         if (pagination) {
             paginationQuery.take = pagination.take
@@ -31,11 +42,38 @@ export class CommentsRepository extends BaseContentRepository {
             }
         }
 
+        return paginationQuery
+    }
+
+    getAll = async (pagination?: DBPagination): Promise<IComment[]> => {
         return prisma.comment.findMany({
-            ...paginationQuery,
+            ...this.preparePaginationQuery(pagination),
             orderBy: {
                 commentNumber: "asc",
             },
+        })
+    }
+
+    getAllWithRating = async (
+        pagination?: DBPagination
+    ): Promise<CommentWithRating[]> => {
+        const coments = await prisma.comment.findMany({
+            ...this.preparePaginationQuery(pagination),
+            orderBy: {
+                commentNumber: "asc",
+            },
+            include: {
+                reviews: true,
+            },
+        })
+
+        return coments.map((comment) => {
+            return {
+                comment,
+                rating: ratingRepository.calculateRatingFromReviews(
+                    comment.reviews
+                ),
+            }
         })
     }
 
@@ -61,7 +99,7 @@ export class CommentsRepository extends BaseContentRepository {
         })
     }
 
-    update = async (id: number, item: IComment): Promise<IComment> => {
+    update = async (id: number, item: CreateComment): Promise<IComment> => {
         return prisma.comment.update({
             where: { id },
             data: item,
