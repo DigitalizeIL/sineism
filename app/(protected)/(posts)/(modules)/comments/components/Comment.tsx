@@ -9,7 +9,7 @@ import {
     IComment,
     PopulatedComment,
 } from "@/app/(protected)/(posts)/(modules)/comments/lib/comment.interface"
-import React from "react"
+import React, { FC } from "react"
 import { TEXTS } from "../comments.texts"
 import { commentsService } from "@/app/(protected)/(posts)/(modules)/comments/lib/comments.service"
 import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
@@ -27,7 +27,11 @@ type CommentProps = {
     rating: number
 }
 
-export const Comment = ({ comment, rating, isBookmarked }: CommentProps) => {
+export const Comment: FC<CommentProps> = ({
+    comment,
+    rating,
+    isBookmarked,
+}) => {
     const {
         content,
         id,
