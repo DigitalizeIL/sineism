@@ -4,6 +4,7 @@ import {
     CommentWithRating,
     CreateComment,
     IComment,
+    PopulatedComment,
 } from "@/app/(protected)/(posts)/(modules)/comments/lib/comment.interface"
 
 import { BaseContentRepository } from "@/app/_core/lib/repository/baseContent.repository"
@@ -12,6 +13,8 @@ import { DBPagination } from "@/app/_core/lib/pagination.types"
 import { PaginationCursorResponse } from "@/app/_core/types/pagination.types"
 import prisma from "@/lib/prisma"
 import { ratingRepository } from "../../rating/lib/rating.repository"
+import { postsService } from "../../../lib/posts.service"
+import { UserRole } from "@/app/(authentication)/lib/types/userRole.types"
 
 export class CommentsRepository extends BaseContentRepository {
     preparePaginationQuery(pagination?: DBPagination) {
@@ -54,20 +57,44 @@ export class CommentsRepository extends BaseContentRepository {
         })
     }
 
-    getAllWithRating = async (
+    getAllPopulatedWithRating = async (
         pagination?: DBPagination
     ): Promise<CommentWithRating[]> => {
-        const coments = await prisma.comment.findMany({
+        const comments = await prisma.comment.findMany({
             ...this.preparePaginationQuery(pagination),
             orderBy: {
                 commentNumber: "asc",
             },
             include: {
                 reviews: true,
+                user: true,
             },
         })
 
-        return coments.map((comment) => {
+        const commentsPopulated: PopulatedComment[] = []
+
+        for (const comment of comments) {
+            const postsWithRating = await postsService.getAllPosts({
+                ids: comment.postIds,
+            })
+            const posts = postsWithRating.map(({ post }) => post)
+
+            commentsPopulated.push({
+                commentNumber: comment.commentNumber,
+                content: comment.content,
+                id: comment.id,
+                postIds: comment.postIds,
+                reviews: comment.reviews,
+                user: {
+                    ...comment.user,
+                    role: comment.user.role as unknown as UserRole,
+                },
+                userId: comment.commentNumber,
+                posts,
+            })
+        }
+
+        return commentsPopulated.map((comment) => {
             return {
                 comment,
                 rating: ratingRepository.calculateRatingFromReviews(

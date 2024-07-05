@@ -16,7 +16,7 @@ type PageProps = {
 }
 
 export const CommentsPage: FC<PageProps> = async ({ paginationId }) => {
-    const comments = await commentsService.getAllCommentsWithRating()
+    const comments = await commentsService.getAllPopulatedCommentsWithRating()
 
     const activeBookmark = await bookmarkService.getBookmark("comment")
 

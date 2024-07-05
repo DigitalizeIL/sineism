@@ -1,3 +1,5 @@
+import { IUser } from "@/app/(authentication)/lib/user.interface"
+import { IPost } from "../../../lib/post.interface"
 import { IRating } from "../../rating/lib/rating.interface"
 
 export interface IComment {
@@ -6,11 +8,16 @@ export interface IComment {
     postIds: number[]
     userId: number
     commentNumber: number
-    reviews?: IRating[]
+}
+
+export type PopulatedComment = IComment & {
+    reviews: IRating[]
+    posts: IPost[]
+    user: IUser
 }
 
 export type CommentWithRating = {
-    comment: IComment
+    comment: PopulatedComment
     rating: number
 }
 

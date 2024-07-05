@@ -33,10 +33,10 @@ export class CommentsService {
         )
     }
 
-    getAllCommentsWithRating = async (
+    getAllPopulatedCommentsWithRating = async (
         pagination?: Pagination
     ): Promise<CommentWithRating[]> => {
-        return await this.commentsRepository.getAllWithRating(
+        return await this.commentsRepository.getAllPopulatedWithRating(
             pagination && {
                 cursor: pagination.id,
                 take: pagination.perPage,
