@@ -6,6 +6,7 @@ import { useActionState, useState } from "react"
 import { saveBookmark } from "../lib/saveBookmark.action"
 import { BookmarkReference } from "../lib/bookmark.interface"
 import { useFormStatus } from "react-dom"
+import { usePathname } from "next/navigation"
 
 type SaveBookmarkButtonProps = {
     isActive: boolean
@@ -18,12 +19,14 @@ export const SaveBookmarkButton = ({
     reference,
     itemId,
 }: SaveBookmarkButtonProps) => {
+    const pathname = usePathname()
     return (
         <form
             action={saveBookmark.bind(null, {
                 itemId,
                 isActive,
                 reference,
+                pathname
             })}>
             <ButtonWithLoading isActive={isActive} />
         </form>
