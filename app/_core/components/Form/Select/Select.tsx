@@ -22,33 +22,39 @@ type SelectProps = {
 
 export const Select = (props: SelectProps) => {
     if (props.isMulti) {
-        return (
-            <Select2
-                isMulti
-                isSearchable
-                defaultValue={props.options.find(
-                    (option) => option.value === props.defaultValue
-                )}
-                options={props.options}
-                placeholder={props.placeholder}
-                name={props.name}
-                styles={{
-                    option: (base) => ({
-                        ...base,
-                        textAlign: "right",
-                        // paddingInlineStart: "10px",
-                    }),
-                    placeholder: (base) => ({
-                        ...base,
-                        textAlign: "right",
-                    }),
-                }}
-            />
-        )
+        return <Select2Abstraction {...props} />
     }
 
     return <VanilaSelect {...props} />
 }
+
+const Select2Abstraction = ({
+    isMulti,
+    options,
+    defaultValue,
+    placeholder,
+    name,
+}: SelectProps) => (
+    <Select2
+        isMulti={isMulti}
+        isSearchable
+        defaultValue={options.find((option) => option.value === defaultValue)}
+        options={options}
+        placeholder={placeholder}
+        name={name}
+        styles={{
+            option: (base) => ({
+                ...base,
+                textAlign: "right",
+                // paddingInlineStart: "10px",
+            }),
+            placeholder: (base) => ({
+                ...base,
+                textAlign: "right",
+            }),
+        }}
+    />
+)
 
 const VanilaSelect = ({
     value: _value,
