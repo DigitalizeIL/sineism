@@ -23,12 +23,6 @@ export const CategoryPage: FC<PageProps> = async ({
     categorySlug,
     paginationId,
 }) => {
-    const pageSize = await settingsService.getSettingValueByKey(
-        SettingKey.posts_per_page,
-        Number,
-        DEFAULT_PAGE_SIZE
-    )
-
     const category = await categoriesService.getCategory({
         filter: {
             path: categorySlug,
@@ -46,7 +40,6 @@ export const CategoryPage: FC<PageProps> = async ({
 
     return (
         <ContentFeed
-            pageSize={pageSize}
             forcedPage={paginationId}
             Header={
                 <SubHeader

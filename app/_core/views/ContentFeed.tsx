@@ -14,6 +14,7 @@ import { Footer } from "../components/Layout/Footer/Footer"
 import { ICategory } from "@/app/(protected)/(posts)/(modules)/categories/lib/category.interface"
 import { PAGINATION_URL_PARAM_KEY } from "../consts/pagination.consts"
 import { IBookmark } from "@/app/(protected)/(posts)/(modules)/bookmark/lib/bookmark.interface"
+import { useSettings } from "@/app/(protected)/(posts)/(modules)/settings/context/SettingsContext"
 
 type BaseItem = { id: number; cursor: number }
 
@@ -35,7 +36,10 @@ type ContextProps<T extends BaseItem> = Omit<
     "updateCursor"
 >
 
-type CategoryFeedProps<T extends BaseItem> = ContextProps<T> & {
+type CategoryFeedProps<T extends BaseItem> = Omit<
+    ContextProps<T>,
+    "pageSize"
+> & {
     Header?: ReactNode
     Footer?: ReactNode
     forcedPage?: number
@@ -61,11 +65,11 @@ export function ContentFeed<T extends BaseItem>({
     Header,
     feedItems,
     Footer: FooterChildren,
-    pageSize,
     forcedPage: forcedCursor = 0,
     categories,
     activeBookmark,
 }: CategoryFeedProps<T>) {
+    const { posts_per_page } = useSettings()
     const [cursor, setCursor] = useState(forcedCursor)
 
     useEffect(() => {
@@ -77,12 +81,12 @@ export function ContentFeed<T extends BaseItem>({
             (item) => item.cursor === cursor
         )
         const startIndex = indexOfCursor > 0 ? indexOfCursor : 0
-        const endIndex = startIndex + pageSize
+        const endIndex = startIndex + posts_per_page
 
         return feedItems
             .slice(startIndex, endIndex)
             .map((item) => item.Component)
-    }, [cursor, feedItems, pageSize])
+    }, [cursor, feedItems, posts_per_page])
 
     const updateCursor = (cursor: number) => {
         history.pushState({}, "", `?${PAGINATION_URL_PARAM_KEY}=${cursor}`)
@@ -96,7 +100,7 @@ export function ContentFeed<T extends BaseItem>({
                 categories,
                 cursor: cursor,
                 feedItems,
-                pageSize: pageSize || DEFAULT_PAGE_SIZE,
+                pageSize: posts_per_page || DEFAULT_PAGE_SIZE,
                 activeBookmark,
             }}>
             <div className="flex flex-col h-auto">
