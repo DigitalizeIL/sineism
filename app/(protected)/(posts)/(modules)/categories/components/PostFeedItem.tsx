@@ -4,12 +4,12 @@ import { UserRole } from "@/app/(authentication)/lib/types/userRole.types"
 import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
 import { RatingContainer } from "@/app/(protected)/(posts)/(modules)/rating/components/Rating.container"
 import { DeletePostButton } from "@/app/(protected)/(posts)/components/DeletePostButton"
-import { PostCreateOrEditFormContainer } from "@/app/(protected)/(posts)/components/PostCreateOrEditForm.container"
 import { IPost } from "@/app/(protected)/(posts)/lib/post.interface"
 import { POST_PROPERTY_FOR_CURSOR } from "@/app/_core/consts/pagination.consts"
 import { Card } from "@/components/Card"
 import { SaveBookmarkButton } from "../../bookmark/components/SaveBookmarkButton"
 import { Rating } from "../../rating/components/Rating"
+import { PostCreateOrEditForm } from "../../../components/PostCreateOrEditForm"
 
 type PostFeedItemProps = {
     post: IPost
@@ -50,14 +50,12 @@ export const PostFeedItem = async ({
                             />
                         )}
                     </div>
-                    <Suspense>
-                        {session?.user?.role === UserRole.admin && (
-                            <>
-                                <DeletePostButton postId={post.id} />
-                                <PostCreateOrEditFormContainer post={post} />
-                            </>
-                        )}
-                    </Suspense>
+                    {session?.user?.role === UserRole.admin && (
+                        <>
+                            <DeletePostButton postId={post.id} />
+                            <PostCreateOrEditForm post={post} />
+                        </>
+                    )}
                     <Suspense
                         fallback={
                             <Rating

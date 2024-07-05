@@ -9,10 +9,10 @@ import { SettingKey } from "../../settings/lib/settings.interface"
 import { categoriesService } from "@/app/(protected)/(posts)/(modules)/categories/lib/categories.service"
 import { notFound } from "next/navigation"
 import { settingsService } from "../../settings/lib/settings.service"
-import { PostCreateOrEditFormContainer } from "@/app/(protected)/(posts)/components/PostCreateOrEditForm.container"
 import { bookmarkService } from "../../bookmark/lib/bookmark.service"
 import { CommentWithPaymentContainer } from "@/app/(protected)/(payment)/(modules)/comments/components/CommentWithPayment.container"
 import { SubHeader } from "@/app/_core/components/Layout"
+import { PostCreateOrEditForm } from "../../../components/PostCreateOrEditForm"
 
 type PageProps = {
     categorySlug: string
@@ -23,6 +23,7 @@ export const CategoryPage: FC<PageProps> = async ({
     categorySlug,
     paginationId,
 }) => {
+    const categories = await categoriesService.getAllCategories()
     const category = await categoriesService.getCategory({
         filter: {
             path: categorySlug,
@@ -41,6 +42,7 @@ export const CategoryPage: FC<PageProps> = async ({
     return (
         <ContentFeed
             forcedPage={paginationId}
+            categories={categories}
             Header={
                 <SubHeader
                     title={category.name}
@@ -69,7 +71,7 @@ export const CategoryPage: FC<PageProps> = async ({
             }
             Footer={
                 <Suspense>
-                    <PostCreateOrEditFormContainer />
+                    <PostCreateOrEditForm />
                     <div className="flex flex-1 justify-end">
                         <PaginationControlles />
                     </div>

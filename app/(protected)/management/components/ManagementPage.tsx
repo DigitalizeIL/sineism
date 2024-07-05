@@ -1,17 +1,16 @@
-import { Button } from "@/app/_core/components/Button"
-import { CategoryManagement } from "./CategoryManagement"
 import { LOGIN_REDIRECT_URL } from "@/app/(authentication)/components/AuthForm/auth.consts"
-import Link from "next/link"
-import { ModalWithButton } from "@/components/Modal"
-import { PostCreateOrEditFormContainer } from "@/app/(protected)/(posts)/components/PostCreateOrEditForm.container"
 import { Settings } from "@/app/(protected)/(posts)/(modules)/settings/components/Settings"
+import { Button } from "@/app/_core/components/Button"
+import Link from "next/link"
+import { PostCreateOrEditForm } from "../../(posts)/components/PostCreateOrEditForm"
+import { CategoryManagement } from "./CategoryManagement"
 
 export const ManagementPage = async () => {
     return (
         <>
             <h3 className="text-2xl font-bold">Actions</h3>
             <div className="flex flex-row gap-4">
-                <PostCreateOrEditFormContainer />
+                <PostCreateOrEditForm />
                 <Link
                     passHref
                     href={LOGIN_REDIRECT_URL}>
