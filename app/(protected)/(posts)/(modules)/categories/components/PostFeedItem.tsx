@@ -1,8 +1,5 @@
-import { Suspense } from "react"
-
+"use client"
 import { UserRole } from "@/app/(authentication)/lib/types/userRole.types"
-import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
-import { RatingContainer } from "@/app/(protected)/(posts)/(modules)/rating/components/Rating.container"
 import { DeletePostButton } from "@/app/(protected)/(posts)/components/DeletePostButton"
 import { IPost } from "@/app/(protected)/(posts)/lib/post.interface"
 import { POST_PROPERTY_FOR_CURSOR } from "@/app/_core/consts/pagination.consts"
@@ -10,19 +7,24 @@ import { Card } from "@/components/Card"
 import { SaveBookmarkButton } from "../../bookmark/components/SaveBookmarkButton"
 import { Rating } from "../../rating/components/Rating"
 import { PostCreateOrEditForm } from "../../../components/PostCreateOrEditForm"
+import { useSession } from "next-auth/react"
 
 type PostFeedItemProps = {
     post: IPost
     page?: number
+    rating?: number
     isItemBookmarked: boolean
 }
 
-export const PostFeedItem = async ({
+export const PostFeedItem = ({
     post,
+    rating,
     isItemBookmarked,
 }: PostFeedItemProps) => {
-    const session = await getAppServerSession()
-
+    const { data: session } = useSession()
+    const userRating = post.reviews?.find(
+        (review) => review.userId === session?.user?.id
+    )
     return (
         <Card
             className={
@@ -56,15 +58,11 @@ export const PostFeedItem = async ({
                             <PostCreateOrEditForm post={post} />
                         </>
                     )}
-                    <Suspense
-                        fallback={
-                            <Rating
-                                totalRating={0}
-                                userRating={0}
-                            />
-                        }>
-                        <RatingContainer postId={post.id} />
-                    </Suspense>
+                    <Rating
+                        totalRating={rating || 0}
+                        userRating={userRating}
+                        postId={post.id}
+                    />
                 </div>
             }
         />

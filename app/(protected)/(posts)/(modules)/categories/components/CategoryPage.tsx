@@ -24,11 +24,10 @@ export const CategoryPage: FC<PageProps> = async ({
     paginationId,
 }) => {
     const categories = await categoriesService.getAllCategories()
-    const category = await categoriesService.getCategory({
+    const category = await categoriesService.getCategoryWithPosts({
         filter: {
             path: categorySlug,
         },
-        withPosts: true,
     })
 
     if (!category?.id) {
@@ -55,7 +54,7 @@ export const CategoryPage: FC<PageProps> = async ({
             }
             activeBookmark={activeBookmark}
             feedItems={
-                category.posts?.map((post) => ({
+                category.posts?.map(({ post, rating }) => ({
                     cursor: post[POST_PROPERTY_FOR_CURSOR],
                     item: post,
                     Component: (
@@ -63,6 +62,7 @@ export const CategoryPage: FC<PageProps> = async ({
                             isItemBookmarked={
                                 activeBookmark?.bookmarkedItemId === post.id
                             }
+                            rating={rating}
                             key={post.id}
                             post={post}
                         />

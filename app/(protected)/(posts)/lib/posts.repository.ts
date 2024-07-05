@@ -5,12 +5,14 @@ import {
     EditPostDto,
     GetAllPostsQuery,
     IPost,
+    PostWithRating,
 } from "@/app/(protected)/(posts)/lib/post.interface"
 
 import { BaseContentRepository } from "@/app/_core/lib/repository/baseContent.repository"
 import { POST_PROPERTY_FOR_CURSOR } from "@/app/_core/consts/pagination.consts"
 import { PaginationCursorResponse } from "@/app/_core/types/pagination.types"
 import prisma from "@/lib/prisma"
+import { IRating } from "../(modules)/rating/lib/rating.interface"
 
 export class PostsDbRepository extends BaseContentRepository {
     private async getLowestAvailablePostNumber(
@@ -96,8 +98,8 @@ export class PostsDbRepository extends BaseContentRepository {
         return this.getPaginationCursors(cursors, currentCursor)
     }
 
-    public async getAll(query?: GetAllPostsQuery): Promise<IPost[]> {
-        return prisma.post.findMany({
+    public async getAll(query?: GetAllPostsQuery): Promise<PostWithRating[]> {
+        const posts = await prisma.post.findMany({
             where: {
                 ...(query?.ids && {
                     id: {
@@ -105,16 +107,45 @@ export class PostsDbRepository extends BaseContentRepository {
                     },
                 }),
             },
+            include: {
+                reviews: true,
+            },
             orderBy: {
                 postNumber: "asc",
             },
         })
+
+        return posts.map((post) => ({
+            post,
+            rating: this.calculateRatingFromReviews(post?.reviews),
+        }))
     }
 
-    public async get(id: number): Promise<IPost | null> {
-        return prisma.post.findUnique({
+    public async get(id: number): Promise<PostWithRating | null> {
+        const post = await prisma.post.findUnique({
             where: { id },
+            include: {
+                reviews: true,
+            },
         })
+
+        if (!post) {
+            return null
+        }
+
+        return {
+            post,
+            rating: this.calculateRatingFromReviews(post?.reviews),
+        }
+    }
+
+    public calculateRatingFromReviews = (reviews: IRating[] = []) => {
+        const totalRating = reviews?.reduce(
+            (acc, rating) => acc + (rating.rating || 0),
+            0
+        )
+
+        return totalRating / reviews.length
     }
 
     public async create(item: CreatePostDto): Promise<IPost> {

@@ -1,6 +1,9 @@
 import { CommentsModal } from "@/app/(protected)/(payment)/(modules)/comments/components/CommentsModal"
 import { CreateComment } from "@/app/(protected)/(posts)/(modules)/comments/lib/comment.interface"
-import { IPost } from "@/app/(protected)/(posts)/lib/post.interface"
+import {
+    IPost,
+    PostWithRating,
+} from "@/app/(protected)/(posts)/lib/post.interface"
 import { categoriesService } from "../../categories/lib/categories.service"
 import { commentsService } from "@/app/(protected)/(posts)/(modules)/comments/lib/comments.service"
 import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
@@ -15,7 +18,7 @@ type CommentFormContainerProps = {
 export const CommentFormContainer = async (
     props: CommentFormContainerProps
 ) => {
-    let posts: IPost[] = []
+    let posts: PostWithRating[] = []
     const session = await getAppServerSession()
 
     if (!session?.user) {
@@ -61,7 +64,9 @@ export const CommentFormContainer = async (
             categories={categories}
             post={props.specificPost}
             createComment={createComment}
-            posts={posts}
+            posts={
+                posts.map(({ post }) => post).filter((post) => post) as IPost[]
+            }
         />
     )
 }

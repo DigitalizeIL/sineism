@@ -72,9 +72,12 @@ export const Comment = async ({ comment, isBookmarked }: CommentProps) => {
                     className={"flex flex-row gap-2"}
                     dir={"rtl"}>
                     <span>{TEXTS.commentedOnPosts}</span>
-                    {posts.map((post) => (
-                        <span key={post.id}>{post.postNumber}, </span>
-                    ))}
+                    {posts.map(
+                        ({ post }) =>
+                            post && (
+                                <span key={post.id}>{post.postNumber}, </span>
+                            )
+                    )}
                 </div>
             )}
             <div className="text-gray-700">{content}</div>

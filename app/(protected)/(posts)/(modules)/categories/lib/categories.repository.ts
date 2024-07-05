@@ -3,12 +3,14 @@ import "server-only"
 import {
     CreateCategory,
     ICategory,
+    ICategoryWithPosts,
 } from "@/app/(protected)/(posts)/(modules)/categories/lib/category.interface"
 
 import { DBPagination } from "@/app/_core/lib/pagination.types"
 import { GetCategoryFilter } from "@/app/(protected)/(posts)/(modules)/categories/lib/categories.service"
 import { POST_PROPERTY_FOR_CURSOR } from "@/app/_core/consts/pagination.consts"
 import prisma from "@/lib/prisma"
+import { postsDbRepository } from "../../../lib/posts.repository"
 
 export type CategoryWithoutPosts = Omit<ICategory, "posts">
 
@@ -17,15 +19,7 @@ export class CategoriesDbRepository {
         return prisma.category.findMany()
     }
 
-    async get(
-        filter: GetCategoryFilter,
-        withPosts?: boolean,
-        pagination?: DBPagination
-    ): Promise<ICategory | null> {
-        if (!filter.id && !filter.path) {
-            return null
-        }
-
+    preparePagination(pagination?: DBPagination) {
         let paginationQuery: any = {}
 
         if (pagination) {
@@ -44,7 +38,19 @@ export class CategoriesDbRepository {
             }
         }
 
-        return prisma.category.findFirst({
+        return paginationQuery
+    }
+
+    async get(
+        filter: GetCategoryFilter,
+        withPosts?: boolean,
+        pagination?: DBPagination
+    ): Promise<ICategory | null> {
+        if (!filter.id && !filter.path) {
+            return null
+        }
+
+        const category = await prisma.category.findFirst({
             where: {
                 ...(filter.id && {
                     id: filter.id,
@@ -53,17 +59,63 @@ export class CategoriesDbRepository {
                     path: filter.path,
                 }),
             },
-            include: {
-                posts: withPosts
-                    ? {
-                          ...paginationQuery,
-                          orderBy: {
-                              postNumber: "asc",
-                          },
-                      }
-                    : false,
-            },
         })
+
+        return category
+    }
+
+    async getWithPosts(
+        filter: GetCategoryFilter,
+        pagination?: DBPagination
+    ): Promise<ICategoryWithPosts | null> {
+        if (!filter.id && !filter.path) {
+            return null
+        }
+
+        let paginationQuery = this.preparePagination(pagination)
+
+        let postQuery = {
+            posts: {
+                ...paginationQuery,
+                orderBy: {
+                    postNumber: "asc",
+                },
+                include: {
+                    reviews: true,
+                },
+            },
+        }
+
+        const category = await prisma.category.findFirst({
+            where: {
+                ...(filter.id && {
+                    id: filter.id,
+                }),
+                ...(filter.path && {
+                    path: filter.path,
+                }),
+            },
+            include: postQuery,
+        })
+
+        if (!category) {
+            return null
+        }
+
+        const posts =
+            category.posts.map((post) => {
+                return {
+                    post,
+                    rating: postsDbRepository.calculateRatingFromReviews(
+                        (post as any).reviews
+                    ),
+                }
+            }) || []
+
+        return {
+            ...category,
+            posts,
+        }
     }
 
     async create(item: CreateCategory): Promise<ICategory> {

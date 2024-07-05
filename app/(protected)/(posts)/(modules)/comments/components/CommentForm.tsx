@@ -7,7 +7,10 @@ import Select2, { MultiValue } from "react-select"
 import { Button } from "@/components/Button"
 import { EMPTY_COMMENT_ID } from "../comments.consts"
 import { ICategory } from "../../categories/lib/category.interface"
-import { IPost } from "@/app/(protected)/(posts)/lib/post.interface"
+import {
+    IPost,
+    PostWithRating,
+} from "@/app/(protected)/(posts)/lib/post.interface"
 import { Label } from "@/app/_core/components/Form/Label"
 import { TEXTS } from "../comments.texts"
 import { TextArea } from "@/components/Form/TextArea"

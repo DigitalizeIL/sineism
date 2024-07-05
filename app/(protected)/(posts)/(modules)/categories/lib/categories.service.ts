@@ -8,6 +8,7 @@ import {
 import {
     CreateCategory,
     ICategory,
+    ICategoryWithPosts,
 } from "@/app/(protected)/(posts)/(modules)/categories/lib/category.interface"
 
 import { Pagination } from "@/app/_core/lib/pagination.types"
@@ -35,19 +36,24 @@ export class CategoriesService {
 
     async getCategory(data: {
         filter: GetCategoryFilter
-        withPosts?: boolean
-        pagination?: Pagination
     }): Promise<ICategory | null> {
-        await prisma?.$connect()
-        const result = await this.dbRepository.get(
+        const result = await this.dbRepository.get(data.filter)
+
+        return result
+    }
+
+    async getCategoryWithPosts(data: {
+        filter: GetCategoryFilter
+        pagination?: Pagination
+    }): Promise<ICategoryWithPosts | null> {
+        const result = await this.dbRepository.getWithPosts(
             data.filter,
-            data.withPosts,
             data.pagination && {
                 cursor: data.pagination.id,
                 take: data.pagination.perPage,
             }
         )
-        prisma?.$disconnect()
+
         return result
     }
 

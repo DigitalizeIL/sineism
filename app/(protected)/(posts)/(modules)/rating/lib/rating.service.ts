@@ -49,11 +49,11 @@ export class RatingService {
     }
 
     async getRatingAverage(filter: GetAllRatingsFilter) {
-        const posts = await this.dbRepository.getAll(filter)
+        const ratings = await this.dbRepository.getAll(filter)
 
         const rating =
-            posts.reduce((acc, post) => acc + (post.rating || 0), 0) /
-            posts.length
+            ratings.reduce((acc, rating) => acc + (rating.rating || 0), 0) /
+            ratings.length
 
         return Math.round(rating * 2) / 2
     }
