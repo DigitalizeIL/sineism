@@ -13,7 +13,12 @@ if [ -z "$POSTGRES_CONNECTION_STRING" ]; then
     exit 1
 fi
 
-BACKUP_FILE="sineism_db_backup.sql"
+# Backup file name with date
+BACKUP_DIR="../backups"
+BACKUP_FILE="${BACKUP_DIR}/backup_$(date +%Y%m%d_%H%M%S).sql"
+
+# Create backup directory if it doesn't exist
+mkdir -p "$BACKUP_DIR"
 
 # Run pg_dump with the connection string using psql
 psql "$POSTGRES_CONNECTION_STRING" -c "\! pg_dump \"$POSTGRES_CONNECTION_STRING\" -f \"$BACKUP_FILE\""
