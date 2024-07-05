@@ -1,49 +1,67 @@
+"use client"
+
 import { AiFillDelete } from "react-icons/ai"
 import { Box } from "@/components/Box"
 import { Button } from "@/app/_core/components/Button"
 import { COMMENTS_PROPERTY_FOR_CURSOR } from "@/app/_core/consts/pagination.consts"
 import { EMPTY_COMMENT_ID } from "../comments.consts"
-import { IComment } from "@/app/(protected)/(posts)/(modules)/comments/lib/comment.interface"
-import { RatingContainer } from "@/app/(protected)/(posts)/(modules)/rating/components/Rating.container"
-import React from "react"
-import { SaveBookmarkButtonContainer } from "../../bookmark/components/SaveBookmarkButton.container"
+import {
+    IComment,
+    PopulatedComment,
+} from "@/app/(protected)/(posts)/(modules)/comments/lib/comment.interface"
+import React, { FC } from "react"
 import { TEXTS } from "../comments.texts"
 import { commentsService } from "@/app/(protected)/(posts)/(modules)/comments/lib/comments.service"
 import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
 import { postsService } from "@/app/(protected)/(posts)/lib/posts.service"
 import { revalidatePath } from "next/cache"
 import { usersService } from "@/app/(authentication)/lib/services/users.service"
+import { SaveBookmarkButton } from "../../bookmark/components/SaveBookmarkButton"
+import { Rating } from "../../rating/components/Rating"
+import { deleteComment } from "../actions/deleteComment.action"
+import { useSession } from "next-auth/react"
 
 type CommentProps = {
-    comment: IComment
-    page?: number
+    comment: PopulatedComment
+    isBookmarked: boolean
+    rating: number
 }
 
-export const Comment = async ({ page, comment }: CommentProps) => {
-    const { content, id, postIds, userId, commentNumber } = comment
-    const author = await usersService.getUserById(userId)
-    const posts = await postsService.getAllPosts({ ids: postIds })
-    const session = await getAppServerSession()
+export const Comment: FC<CommentProps> = ({
+    comment,
+    rating,
+    isBookmarked,
+}) => {
+    const {
+        content,
+        id,
+        commentNumber,
+        posts,
+        postIds,
+        user,
+        userId,
+        reviews,
+    } = comment
+    const { data: session } = useSession()
 
-    const deletePost = async () => {
-        "use server"
-        if (!id) return null
-        await commentsService.deleteComment(id)
-
-        revalidatePath("/posts")
-    }
+    const userRating = reviews?.find(
+        (review) => review.userId === session?.user?.id
+    )
 
     const isNoReference = postIds.includes(EMPTY_COMMENT_ID)
     const canDelete =
         session?.user?.id === userId || session?.user?.role === "ADMIN"
 
-    if (!author) return null
+    if (!user) return null
 
     return (
         <Box>
             <div className="absolute top-4 left-4 flex flex-row gap-4">
                 {canDelete && (
-                    <form action={deletePost}>
+                    <form
+                        action={deleteComment.bind(null, {
+                            id,
+                        })}>
                         <Button
                             htmlType="submit"
                             type={["warning-outline"]}>
@@ -53,25 +71,23 @@ export const Comment = async ({ page, comment }: CommentProps) => {
                 )}
 
                 {session?.user?.id && (
-                    <SaveBookmarkButtonContainer
-                        pathForRevalidation={`/comments`}
-                        ids={{
-                            referenceType: "comment",
-                            userId: session.user.id,
-                        }}
-                        itemIdToBookmark={comment[
-                            COMMENTS_PROPERTY_FOR_CURSOR
-                        ].toString()}
-                        page={page || 1}
+                    <SaveBookmarkButton
+                        reference="comment"
+                        itemId={comment[COMMENTS_PROPERTY_FOR_CURSOR]}
+                        isActive={isBookmarked}
                     />
                 )}
 
-                <RatingContainer commentId={id} />
+                <Rating
+                    commentId={id}
+                    totalRating={rating}
+                    userRating={userRating}
+                />
             </div>
             <div className="flex items-center mb-2 text-xl font-bold gap-1">
                 {/*<div className="bg-gray-300 rounded-full w-8 h-8 mr-2"></div>*/}
                 <span>{commentNumber} |</span>
-                <div>{author?.name}</div>
+                <div>{user?.name}</div>
             </div>
             {!isNoReference && (
                 <div

@@ -4,11 +4,13 @@ import { FC, ReactNode, useMemo } from "react"
 
 import { LoadingDots } from "@/components/LoadingDots"
 import clsx from "clsx"
+import { useFormStatus } from "react-dom"
 
 type ButtonType = keyof typeof typesStyle
 
 export type ButtonProps = {
     loading?: boolean
+    useFormLoading?: boolean
     children: ReactNode | ReactNode[]
     type?: ButtonType | ButtonType[]
     htmlType?: "button" | "submit" | "reset"
@@ -27,7 +29,10 @@ export const Button: FC<ButtonProps> = ({
     className,
     fullWidth,
     onClick,
+    useFormLoading = loading === undefined,
 }) => {
+    const { pending } = useFormStatus()
+
     const styleClassnames = useMemo(() => {
         if (!type) return ""
 
@@ -50,7 +55,11 @@ export const Button: FC<ButtonProps> = ({
                 fullWidth && "w-full",
                 isDisabled ? "bg-gray-200 hover:bg-gray-200" : styleClassnames,
             ])}>
-            {loading ? <LoadingDots color="#808080" /> : children}
+            {loading || (useFormLoading && pending) ? (
+                <LoadingDots color="#808080" />
+            ) : (
+                children
+            )}
         </button>
     )
 }

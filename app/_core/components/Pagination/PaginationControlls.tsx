@@ -2,10 +2,10 @@
 
 import { FcNext, FcPrevious } from "react-icons/fc"
 
+import { useMemo } from "react"
+import { useContent } from "../../views/ContentFeed"
 import { Button } from "../Button"
 import { TEXTS } from "./pagination.texts"
-import { useContent } from "../../views/ContentFeed"
-import { useEffect, useMemo } from "react"
 
 const DEFAULT_NUMBER = 0
 

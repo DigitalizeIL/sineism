@@ -1,25 +1,30 @@
-import React, { Suspense } from "react"
-
-import { Card } from "@/components/Card"
+"use client"
+import { UserRole } from "@/app/(authentication)/lib/types/userRole.types"
 import { DeletePostButton } from "@/app/(protected)/(posts)/components/DeletePostButton"
 import { IPost } from "@/app/(protected)/(posts)/lib/post.interface"
-import { LoadingDots } from "@/app/_core/components/LoadingDots"
 import { POST_PROPERTY_FOR_CURSOR } from "@/app/_core/consts/pagination.consts"
-import { PostCreateOrEditFormContainer } from "@/app/(protected)/(posts)/components/PostCreateOrEditForm.container"
+import { Card } from "@/components/Card"
+import { SaveBookmarkButton } from "../../bookmark/components/SaveBookmarkButton"
 import { Rating } from "../../rating/components/Rating"
-import { RatingContainer } from "@/app/(protected)/(posts)/(modules)/rating/components/Rating.container"
-import { SaveBookmarkButtonContainer } from "@/app/(protected)/(posts)/(modules)/bookmark/components/SaveBookmarkButton.container"
-import { UserRole } from "@/app/(authentication)/lib/types/userRole.types"
-import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
+import { PostCreateOrEditForm } from "../../../components/PostCreateOrEditForm"
+import { useSession } from "next-auth/react"
 
 type PostFeedItemProps = {
     post: IPost
     page?: number
+    rating?: number
+    isItemBookmarked: boolean
 }
 
-export const PostFeedItem = async ({ post, page }: PostFeedItemProps) => {
-    const session = await getAppServerSession()
-
+export const PostFeedItem = ({
+    post,
+    rating,
+    isItemBookmarked,
+}: PostFeedItemProps) => {
+    const { data: session } = useSession()
+    const userRating = post.reviews?.find(
+        (review) => review.userId === session?.user?.id
+    )
     return (
         <Card
             className={
@@ -39,40 +44,25 @@ export const PostFeedItem = async ({ post, page }: PostFeedItemProps) => {
                     </div>
 
                     <div className={"flex flex-row"}>
-                        <Suspense fallback={<LoadingDots height={40} />}>
-                            {session?.user?.id && (
-                                <SaveBookmarkButtonContainer
-                                    pathForRevalidation={`/categories/${post.categoryId}`}
-                                    ids={{
-                                        referenceType:
-                                            post.categoryId.toString(),
-                                        userId: session.user.id,
-                                    }}
-                                    itemIdToBookmark={post[
-                                        POST_PROPERTY_FOR_CURSOR
-                                    ].toString()}
-                                    page={page || 1}
-                                />
-                            )}
-                        </Suspense>
-                    </div>
-                    <Suspense>
-                        {session?.user?.role === UserRole.admin ? (
-                            <>
-                                <DeletePostButton postId={post.id} />
-                                <PostCreateOrEditFormContainer post={post} />
-                            </>
-                        ) : null}
-                    </Suspense>
-                    <Suspense
-                        fallback={
-                            <Rating
-                                totalRating={0}
-                                userRating={0}
+                        {session?.user?.id && (
+                            <SaveBookmarkButton
+                                itemId={post[POST_PROPERTY_FOR_CURSOR]}
+                                isActive={isItemBookmarked}
+                                reference={post.categoryId.toString()}
                             />
-                        }>
-                        <RatingContainer postId={post.id} />
-                    </Suspense>
+                        )}
+                    </div>
+                    {session?.user?.role === UserRole.admin && (
+                        <>
+                            <DeletePostButton postId={post.id} />
+                            <PostCreateOrEditForm post={post} />
+                        </>
+                    )}
+                    <Rating
+                        totalRating={rating || null}
+                        userRating={userRating}
+                        postId={post.id}
+                    />
                 </div>
             }
         />

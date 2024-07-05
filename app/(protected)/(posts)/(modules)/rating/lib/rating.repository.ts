@@ -61,6 +61,15 @@ export class RatingRepository {
     async count(): Promise<number> {
         return prisma.rating.count()
     }
+
+    public calculateRatingFromReviews = (reviews: IRating[] = []) => {
+        const totalRating = reviews?.reduce(
+            (acc, rating) => acc + (rating.rating || 0),
+            0
+        )
+
+        return totalRating / reviews.length
+    }
 }
 
 export const ratingRepository = new RatingRepository()

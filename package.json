@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "seed": "ts-node --compiler-options {\\\"module\\\":\\\"CommonJS\\\"} prisma/seed.ts",
-    "init-db": "prisma db push --accept-data-loss && npm run seed",
+    "init-db": "prisma generate && prisma db push --accept-data-loss && npm run seed",
     "build-prod": "npm run init-db && npm run build",
     "dev": "next dev",
     "build": "next build",
@@ -49,6 +49,7 @@
     "@types/react-dom": "18.3.0",
     "@typescript-eslint/eslint-plugin": "^7.14.1",
     "bun-types": "^1.1.17",
+    "dotenv": "^16.4.5",
     "eslint": "9.5.0",
     "eslint-config-next": "14.2.4",
     "eslint-config-prettier": "^9.1.0",

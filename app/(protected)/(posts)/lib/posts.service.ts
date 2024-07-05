@@ -5,6 +5,7 @@ import {
     EditPostDto,
     GetAllPostsQuery,
     IPost,
+    PostWithRating,
 } from "@/app/(protected)/(posts)/lib/post.interface"
 import {
     PostsDbRepository,
@@ -18,11 +19,11 @@ export class PostsService {
         this.dbRepository = dependencies.dbRepository
     }
 
-    public getAllPosts(query?: GetAllPostsQuery): Promise<IPost[]> {
+    public getAllPosts(query?: GetAllPostsQuery): Promise<PostWithRating[]> {
         return this.dbRepository.getAll(query)
     }
 
-    public getPost(id: number): Promise<IPost | null> {
+    public getPost(id: number): Promise<PostWithRating | null> {
         return this.dbRepository.get(id)
     }
 

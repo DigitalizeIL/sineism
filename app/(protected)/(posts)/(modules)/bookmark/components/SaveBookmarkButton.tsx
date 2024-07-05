@@ -2,37 +2,49 @@
 
 import { BsBookmarkPlus } from "react-icons/bs"
 import { Button } from "@/components/Button"
-import { useState } from "react"
+import { useActionState, useState } from "react"
+import { saveBookmark } from "../lib/saveBookmark.action"
+import { BookmarkReference } from "../lib/bookmark.interface"
+import { useFormStatus } from "react-dom"
+import { usePathname } from "next/navigation"
 
 type SaveBookmarkButtonProps = {
     isActive: boolean
-    onSaveClick?: () => Promise<void>
+    itemId: number
+    reference: BookmarkReference
 }
 
 export const SaveBookmarkButton = ({
     isActive,
-    onSaveClick,
+    reference,
+    itemId,
 }: SaveBookmarkButtonProps) => {
-    const [isLoading, setIsLoading] = useState(false)
-
-    const onClick = async () => {
-        await onSaveClick?.()
-        setIsLoading(false)
-    }
-
+    const pathname = usePathname()
     return (
         <form
-            action={onClick}
-            onSubmit={() => {
-                setIsLoading(true)
-            }}>
-            <Button
-                loading={isLoading}
-                htmlType="submit"
-                type={isActive ? "primary" : "ghost"}
-                className="bg-blue-500 hover:bg-blue-600">
-                <BsBookmarkPlus />
-            </Button>
+            action={saveBookmark.bind(null, {
+                itemId,
+                isActive,
+                reference,
+                pathname
+            })}>
+            <ButtonWithLoading isActive={isActive} />
         </form>
+    )
+}
+
+const ButtonWithLoading = ({
+    isActive,
+}: Pick<SaveBookmarkButtonProps, "isActive">) => {
+    const { pending } = useFormStatus()
+
+    return (
+        <Button
+            loading={pending}
+            htmlType="submit"
+            type={isActive ? "primary" : "ghost"}
+            className="bg-blue-500 hover:bg-blue-600">
+            <BsBookmarkPlus />
+        </Button>
     )
 }

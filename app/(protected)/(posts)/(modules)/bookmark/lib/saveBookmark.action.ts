@@ -1,36 +1,40 @@
 "use server"
 
-import { BookmarkIdentifiers, IBookmark } from "./bookmark.interface"
+import { getServerSession } from "next-auth"
+import {
+    BookmarkIdentifiers,
+    BookmarkReference,
+    IBookmark,
+} from "./bookmark.interface"
 
 import { bookmarkService } from "./bookmark.service"
 import { revalidatePath } from "next/cache"
+import { getAppServerSession } from "@/app/(authentication)/lib/utils/session"
 
 export type SaveBookmarkArgs = {
     isActive: boolean
-    ids: BookmarkIdentifiers
-    itemIdToBookmark: string
-    page: number
-    pathForRevalidation?: string
-    activeBookmark?: IBookmark | null
+    reference: BookmarkReference
+    itemId: number
+    pathname: string
 }
 
 export const saveBookmark = async ({
-    ids,
     isActive,
-    itemIdToBookmark,
-    page,
-    activeBookmark,
-    pathForRevalidation,
+    itemId,
+    reference,
+    pathname,
 }: SaveBookmarkArgs) => {
-    if (isActive && activeBookmark?.id) {
-        await bookmarkService.deleteBookmark(activeBookmark?.id)
+    const session = await getAppServerSession(true)
+
+    if (isActive) {
+        await bookmarkService.deleteBookmark(itemId)
     } else {
         await bookmarkService.upsertBookmark({
-            ...ids,
-            bookmarkedItemId: itemIdToBookmark,
-            page,
+            userId: session.user.id,
+            referenceType: reference,
+            bookmarkedItemId: itemId,
         })
     }
 
-    pathForRevalidation && revalidatePath(pathForRevalidation)
+    revalidatePath(pathname)
 }

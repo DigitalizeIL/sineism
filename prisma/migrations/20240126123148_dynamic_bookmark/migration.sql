@@ -20,7 +20,7 @@ DROP INDEX "Bookmark_userId_categoryId_key";
 -- AlterTable
 ALTER TABLE "Bookmark" DROP COLUMN "categoryId",
 DROP COLUMN "postId",
-ADD COLUMN     "bookmarkedItemId" TEXT NOT NULL,
+ADD COLUMN     "bookmarkedItemId" INTEGER NOT NULL,
 ADD COLUMN     "referenceType" TEXT NOT NULL;
 
 -- CreateIndex
